@@ -8,6 +8,11 @@
 var express = require('express');
 var router = express.Router();
 
+
+var db = require("../models/db");//les acces a la base de données
+
+
+
 /* GET page d'acceuil. */
 router.get('/', function(req, res, next) {
   res.render('dash',{
