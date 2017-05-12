@@ -14,6 +14,12 @@ var admin = require("./routes/admin");
 var api = require('./routes/api');
 var login = require('./routes/login');
 
+//debug only /////////////////////////
+var test = require("./routes/test");
+//debug only /////////////////////////
+
+
+
 var app = express();
 
 // view engine setup
@@ -34,6 +40,13 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use('/', login);//par defaut, arrive sur une page d'authentification
 app.use('/api', api);//les api rest pour l'application mobile
 app.use("/admin", admin);//administration du site
+
+//debug only  //////////////////////
+app.use("/test",test);
+//debug only ///////////////////////
+
+
+
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

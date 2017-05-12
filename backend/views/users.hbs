@@ -15,26 +15,26 @@
                             <div class="well">
                                 <h3>{{title}}</h3>
                                 <p>{{slogan}}</p>
-                                <p>Actuellement, il y a <strong>{{count}}</strong> ingrédients en base de données.</p>
-                                <a type="button" href="{{edit_link}}" class="btn btn-success btn-lg btn-block addnew-btn">{{addnew_label}}</a>
+                                <p>Actuellement, il y a <strong>{{count}}</strong> utilisateurs inscripts sur l'application.</p>
+                                
                             </div>
                                 <thead>
                                     <tr>
                                         <th>Nom</th>
-                                        <th>Type</th>
-                                        <th>Description</th>
-                                        <th>Active</th>
+                                        <th>télèphone</th>
+                                        <th>e-mail</th>
+                                        <th>nbr Commandes</th>
+                                        <th>nbr Messages</th>
                                     </tr>
                                 </thead>
                                 <tbody>
                                     {{#each products}}
                                     <tr class="odd gradeX">
-                                        <td><a href="/admin/pizzas/{{id}}" title="Cliquez pour editer cet ingredient">{{nom}}</a></td>
-                                        <td>{{type}}</td>
-                                        <td>{{description}}</td>
-                                        <td class="center"><label>
-                                                    <input type="checkbox" data-toggle="toggle" {{#ifEq dispo true}}checked="true"{{/ifEq}}>
-                                                </label></td>
+                                        <td><a href="/admin/pizzas/{{id}}" title="Cliquez pour voir les details de cet utilisateur">{{prenom}} {{nom}}</a></td>
+                                        <td>{{tel}}</td>
+                                        <td>{{mail}}</td>
+                                        <td>{{commandesCount}}</td>
+                                        <td>{{commentsCount}}</td>
                                     </tr>
                                     {{/each}}
                                     

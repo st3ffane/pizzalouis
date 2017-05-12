@@ -8,7 +8,7 @@ var sequelize = require("sequelize");
 
 //define a new model
 var category = SEQ.define('category',{
-    nom:{type:sequelize.STRING},
+    nom:{type:sequelize.STRING,primaryKey: true},
     description:{type:sequelize.STRING},
     }, 
     {
@@ -16,8 +16,6 @@ var category = SEQ.define('category',{
         timestamps: false
     }
 );
-console.log("Category model:");
-console.log(category)
 
 
 module.exports = category;

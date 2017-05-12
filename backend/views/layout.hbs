@@ -17,6 +17,12 @@
     <!-- MetisMenu CSS -->
     <link href="/stylesheets/metisMenu.min.css" rel="stylesheet">
 
+    <!-- DataTables CSS -->
+    <link href="/stylesheets/dataTables.bootstrap.css" rel="stylesheet">
+
+    <!-- DataTables Responsive CSS -->
+    <link href="/stylesheets/dataTables.responsive.css" rel="stylesheet">
+
     <!-- Custom CSS -->
     <link href="/stylesheets/sb-admin-2.min.css" rel="stylesheet">
 
@@ -25,7 +31,7 @@
 
     <!-- Custom Fonts -->
     <link href="/stylesheets/font-awesome.min.css" rel="stylesheet" type="text/css">
-
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/rateYo/2.3.2/jquery.rateyo.min.css">
     <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
     <!--[if lt IE 9]>
@@ -33,7 +39,7 @@
         <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
     <![endif]-->
     <link rel='stylesheet' href='/stylesheets/style.css'>
-
+    <link href="https://gitcdn.github.io/bootstrap-toggle/2.2.2/css/bootstrap-toggle.min.css" rel="stylesheet">
 </head>
 
 <body>
@@ -133,6 +139,12 @@
     <!-- Metis Menu Plugin JavaScript -->
     <script src="/javascripts/metisMenu.min.js"></script>
 
+    <!-- DataTables JavaScript -->
+    <script src="/javascripts/jquery.dataTables.min.js"></script>
+    <script src="/javascripts/dataTables.bootstrap.min.js"></script>
+    <script src="/javascripts/dataTables.responsive.js"></script>
+
+
     <!-- Morris Charts JavaScript -->
     <script src="/javascripts/raphael.min.js"></script>
     <script src="/javascripts/morris.min.js"></script>
@@ -141,8 +153,21 @@
     <!-- Custom Theme JavaScript -->
     <script src="/javascripts/sb-admin-2.min.js"></script>
 
+    <script src="https://gitcdn.github.io/bootstrap-toggle/2.2.2/js/bootstrap-toggle.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/rateYo/2.3.2/jquery.rateyo.min.js"></script>
     <script src="/javascripts/admin.js"></script>
-
+     <script>
+    $(document).ready(function() {
+        $('#products').DataTable({
+            "filter": true,
+            "pagingType": "simple_numbers",
+            "orderClasses": false,
+            "order": [[0, "asc"]],
+            "info": false,
+            responsive: true
+        });
+    });
+    </script>
 </body>
 
 </html>

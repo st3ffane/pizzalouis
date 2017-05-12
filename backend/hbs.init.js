@@ -11,15 +11,24 @@ hbs.registerHelper('isTop', function(v1, options) {
 });
 
 
+hbs.registerHelper('linearizeArray', function(v, options) {
+ 
+  if(v && v.length) {
+     let t=v.join(",");
+    return options.fn(t);
+  }
+  return options.inverse(this);
+});
 
 
 
 
 
 hbs.registerHelper('ifEq', function(v1, v2, options) {
-  console.log("ici")
+ 
   console.log(v1,v2)
-  if(v1 === v2) {
+  if(v1 == v2) {
+    console.log("ok")
     return options.fn(this);
   }
   return options.inverse(this);

@@ -16,7 +16,8 @@ var pizzas = SEQ.define('pizzas',{
     long_desc:{type:sequelize.STRING},//description
     prix_small:{type:sequelize.NUMERIC},//prix taille "small"
     prix_big:{type:sequelize.NUMERIC},//prix taille "big"
-    picture:{type:sequelize.STRING}//l'image/photo de la recette   
+    picture:{type:sequelize.STRING},
+    active:{type:sequelize.BOOLEAN}//l'image/photo de la recette   
     }, 
     {
         tableName: 'pizzas',
