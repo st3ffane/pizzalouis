@@ -5,8 +5,14 @@ var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 
-var index = require('./routes/index');
-var users = require('./routes/users');
+
+
+
+
+
+var admin = require("./routes/admin");
+var api = require('./routes/api');
+var login = require('./routes/login');
 
 var app = express();
 
@@ -14,6 +20,7 @@ var app = express();
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'hbs');
 
+require("./hbs.init");
 // uncomment after placing your favicon in /public
 //app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
 app.use(logger('dev'));
@@ -22,8 +29,9 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
-app.use('/', index);
-app.use('/users', users);
+app.use('/', login);//par defaut, arrive sur une page d'authentification
+app.use('/api', api);//les api rest pour l'application mobile
+app.use("/admin", admin);//administration du site
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

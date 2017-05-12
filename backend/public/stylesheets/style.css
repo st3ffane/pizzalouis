@@ -5,4 +5,50 @@ body {
 
 a {
   color: #00B7FF;
+  text-decoration: none;
+}
+
+.addnew-btn{
+      margin: 15px 0 15px 0;
+}
+.pizzas-infos-content{
+  display: flex;
+  flex-direction: row;
+}
+
+.pizzas-infos-content img {
+  flex: 0 0 0;
+  height: 82px;
+  width: auto;
+}
+.pizzas-infos-content  .content{
+  flex: 1 1 0;
+
+  margin-left: 20px;
+}
+.pizzas-infos-content  .content  h3,h4{
+  display: inline-block;
+
+}
+.pizzas-infos-content  .content  h4{
+  margin-left: 5px;
+}
+.pizzas-infos{
+ transition: background-color 0.2s ease;
+  color: #3E3E3E;
+  align-items: center;
+}
+.pizzas-infos:hover{
+  background-color: #337ab7;
+  text-decoration: none;
+  color: white!important;
+}
+.custom-search-form{
+  margin: 15px;
+  padding-right: 30px!important;
+}
+
+
+.top{
+  border-left: 5px solid red;
 }
