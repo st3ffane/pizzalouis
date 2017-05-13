@@ -1,0 +1,115 @@
+<div class="row">
+    {{#if msg}}<p>{{msg}}</p>{{/if}}
+<div class="col-lg-12">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h3>{{title}}</h3>
+            </div>
+            <div class="panel-body">
+                <div class="row">
+                    <div class="col-lg-12">
+                        {{#if product.id}}
+                        <p>Mise à jour d'une recette</p>
+                        {{else}}
+                        <p>Ce formulaire vous permet de créer de nouvelles recettes....</p>
+                        {{/if}}
+
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-lg-12">
+                        
+
+                        
+                        <form role="form" method="POST" action="/admin/pizzas">
+                            {{#if product.id}}<input type="hidden" name="id" value="{{product.id}}">{{/if}}
+
+                            <div class="form-group">
+                                <label>Nom de la recette</label>
+                                <input class="form-control" name="nom" required value="{{product.nom}}">
+                                <p class="help-block">La napolitaine, ...</p>
+                            </div>
+                            <div class="form-group">
+                                <label>Slogan</label>
+                                <input class="form-control" name="slogan" required value="{{product.slogan}}">
+                                <p class="help-block">Une courte phrase d'accroche pour cette recette</p>
+                            </div>
+                            <div class="form-group">
+                                <label>Description</label>
+                                <textarea class="form-control" rows="3" name="long_desc">{{product.long_desc}}</textarea>
+                                <p class="help-block">Une description rapide de l'ingrédient.</p>
+                            </div>
+                            <div class="form-group">
+                                <label>Prix 'size small'</label>
+                                <input type="number" min="1.00"  class="form-control" name="prix_small" required value="{{product.prix_small}}">
+                                <p class="help-block">Prix de la recette pour le petit format (25cm)</p>
+                            </div>
+                            <div class="form-group">
+                                <label>Prix 'size big'</label>
+                                <input type="number" min="1.00"  class="form-control" name="prix_big" required value="{{product.prix_big}}">
+                                <p class="help-block">Prix de la recette pour le grand format (33cm)</p>
+                            </div>
+                            <div class="form-group">
+                                <label>Catégorie.</label>
+                                <select class="form-control" name="id_category" value="{{product.id_category}}">
+                                    {{#each category}}
+                                        <option value="{{this}}" {{#ifEq this ../product.id_category}}selected="true"{{/ifEq}} >{{this}}</option>
+                                    {{/each}}
+                                                                
+                                </select>
+                            </div>
+
+                            <!-- la base de la pizza -->
+                            <div class="form-group">
+                                <label>Base de la pizza</label>
+                                {{#each bases}}
+                                <div class="radio">
+                                    <label>
+                                        <input type="radio" name="id_base"  value="{{id}}" {{#ifEq id ../product.id_base }}checked="true"{{/ifEq}}>{{nom}}
+                                    </label>
+                                </div>
+                                {{/each}}
+                            </div>
+                            <!-- liste des ingredients -->
+                            <div class="form-group">
+                                <label>Les ingredients de la recette</label>
+                                {{#each ingredients}}
+                                <div class="checkbox">
+                                    <label>
+                                        <input type="checkbox" name="ingredients" {{#ifIn id ../product.ingredients }}checked="true"{{/ifIn}} value="{{id}}">{{nom}}
+                                    </label>
+                                </div>
+                                {{/each}}
+                            </div>
+
+
+
+                            <div class="form-group">
+                                <div class="checkbox">
+                                    <label>
+                                        <input name="active" type="checkbox" data-toggle="toggle" value="true" {{#ifEq product.active true}}checked="true"{{/ifEq}}>Cette recette est actuellement à la carte.
+                                    </label>
+                                </div>
+                            </div>
+
+                             <div class="form-group">
+                                <label>File input</label>
+                                <input type="file">
+                            </div>
+
+                            <div class="form-group">
+                                <button type="submit" class="btn btn-primary btn-lg">Enregistrer</button>
+                                <button type="reset" class="btn btn-default btn-lg">Abandonner</button>
+                                {{#if product.id}}<a href="/admin/ingredients/delete/{{product.id}}" class="btn btn-danger btn-lg">Supprimer</a>{{/if}}
+                            </div>
+                        </form>
+                    </div>
+                    
+                </div>
+                <!-- /.row (nested) -->
+            </div>
+            <!-- /.panel-body -->
+        </div>
+        <!-- /.panel -->
+    </div>
+</div>

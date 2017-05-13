@@ -31,8 +31,27 @@ require("./hbs.init");
 //app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
 app.use(logger('dev'));
 app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: false }));
-app.use(expressValidator()); // this line must be immediately after any of the bodyParser middlewares!
+// app.use(bodyParser.urlencoded({ extended: false }));
+app.use(bodyParser.urlencoded({ extended: true }));
+app.use(expressValidator({
+  customValidators: {
+     isArray: function(value) {
+        return Array.isArray(value);
+     },
+     notEmpty: function(array) {
+        return array.length > 0;
+     },
+     isArrayOfId: function(value) {
+       
+        if(!Array.isArray(value)) return false;
+        if(value.length == 0) return false;
+        for(let v of value){
+          if(!Number.isInteger(+v)) return false;
+        }
+        return true;
+     }
+  }
+})); // this line must be immediately after any of the bodyParser middlewares!
 
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));

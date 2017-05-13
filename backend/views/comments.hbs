@@ -15,33 +15,26 @@
                             <div class="well">
                                 <h3>{{title}}</h3>
                                 <p>{{slogan}}</p>
-                                <p>Il y a actuellement <strong>{{count}}</strong> pizzas en base de données!</p>
-                                <a type="button" href="{{edit_link}}" class="btn btn-success btn-lg btn-block addnew-btn">{{addnew_label}}</a>
+                                
                             </div>
                                 <thead>
                                     <tr>
-                                        <th>Nom</th>
-                                        <th>Base</th>
-                                        <th>Ingredients</th>
-                                        <th>Catégorie</th>
-                                        <th>Prix small</th>
-                                        <th>Prix Big</th>
-                                        <th>Note</th>
-                                        <th>Active</th>
+                                        <th>Date</th>
+                                        <th>titre</th>
+                                        <th>Contenu</th>
+                                        <th>auteur</th>
+                                        <th>Activer</th>
                                     </tr>
                                 </thead>
                                 <tbody>
                                     {{#each products}}
                                     <tr class="odd gradeX">
-                                        <td><a href="/admin/pizzaedit/{{id}}" title="Cliquez pour editer cette recette">{{nom}}</a></td>
-                                        <td>{{base}}</td>
-                                        <td>{{#linearizeArray ingredients}}{{this}}{{/linearizeArray}}</td>
-                                        <td>{{id_category}}</td>
-                                        <td class="center">{{this.prix_small}}</td>
-                                        <td class="center">{{prix_big}}</td>
-                                        <td class="center">{{note}}</td>
+                                        <td>{{date}}</td>
+                                        <td>{{titre}}</td>
+                                        <td>{{texte}}</td>
+                                        <td>{{user.prenom}} {{user.nom}}</td>
                                         <td class="center"><label>
-                                                    <input type="checkbox" data-toggle="toggle" {{#ifEq active true}}checked="true"{{/ifEq}}>
+                                                    <input type="checkbox" data-toggle="toggle" {{#ifEq etat 'published'}}checked="true"{{/ifEq}}>
                                                 </label></td>
                                     </tr>
                                     {{/each}}

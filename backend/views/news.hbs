@@ -1,6 +1,6 @@
 
 <div class="row">
-   {{#if msg}}<p>{{msg}}</p>{{/if}}
+   &nbsp;
 </div>
 <div class="row">
                 <div class="col-lg-12">
@@ -15,26 +15,24 @@
                             <div class="well">
                                 <h3>{{title}}</h3>
                                 <p>{{slogan}}</p>
-                                <p>Actuellement, il y a <strong>{{count}}</strong> ingrédients en base de données.</p>
-                                <a type="button" href="{{edit_link}}" class="btn btn-success btn-lg btn-block addnew-btn">{{addnew_label}}</a>
+                                <p>Actuellement, il y a <strong>{{count}}</strong> utilisateurs inscripts sur l'application.</p>
+                                
                             </div>
                                 <thead>
                                     <tr>
-                                        <th>Nom</th>
-                                        <th>Type</th>
-                                        <th>Description</th>
-                                        <th>Active</th>
+                                        <th>Publication</th>
+                                        <th>Titre</th>
+                                        <th>Texte</th>
+                                        
+                                        <th>nbr Commentaires</th>
                                     </tr>
                                 </thead>
                                 <tbody>
                                     {{#each products}}
                                     <tr class="odd gradeX">
-                                        <td><a href="/admin/ingredientedit/{{id}}" title="Cliquez pour editer cet ingredient">{{nom}}</a></td>
-                                        <td>{{type}}</td>
-                                        <td>{{description}}</td>
-                                        <td class="center"><label>
-                                                    <input type="checkbox" data-toggle="toggle" {{#ifEq dispo true}}checked="true"{{/ifEq}}>
-                                                </label></td>
+                                        <td><a href="/admin/news/{{id}}" title="Cliquez pour voir les details de cette news">{{title}}</a></td>
+                                        <td>{{texte}}</td>
+                                        <td>{{commentsCount}}</td>
                                     </tr>
                                     {{/each}}
                                     

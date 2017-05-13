@@ -68,9 +68,44 @@ router.get('/pizzas',db.listAllPizzasSnapshot, function(req,res,next){
 
     
 });
+router.post('/pizzas',db.saveOrUpdatePizzas, db.listAllPizzasSnapshot, function(req,res,next){
+    res.render('pizzas',{
+        title:'Pizza Louis - les recettes',
+        slogan:'La liste de toutes les pizzas',
+        addnew_label:"Créer une nouvelle recette!",
+        view_link:"/admin/pizzas/",
+        edit_link:"/admin/pizzaedit",
+        count: req._pizzas.count,
+        msg:req._msg,
+        products: req._pizzas.pizzas
+    });
+
+
+    
+});
+router.get("/pizzaedit",db.getCategoryPizzaSNapshot, db.getIngredientsByType,function(req,res,next){
+    res.render("forms/pizzas",{
+        error_msg: req._error_msg,
+        title:"Création d'une nouvelle Pizza!",
+        product:{},
+        category: req._category,
+        ingredients:req._ingredients,
+        bases: req._bases
+    });
+});
+router.get("/pizzaedit/:id",db.getCategoryPizzaSNapshot,db.getPizzaDetails,db.getIngredientsByType,function(req,res,next){
+    res.render("forms/pizzas",{
+        error_msg: req._error_msg,
+        title:"Création d'une nouvelle Pizza!",
+        product:req._pizza,
+        category: req._category,
+        ingredients:req._ingredients,
+        bases: req._bases
+    });
+});
 
 //affichage de la liste des ingredients 
-router.get("/ingredients",db.listAllIngredientsSnapshot, function(req,res,next){
+function renderIngredients(req,res,next){
     res.render("ingredients",{
         title:"Liste des ingredients",
         slogan:"Tous les ingredients pour les pizzas",
@@ -78,62 +113,56 @@ router.get("/ingredients",db.listAllIngredientsSnapshot, function(req,res,next){
         view_link:"/admin/ingredients/",
         edit_link:"/admin/ingredientedit",
         count: req._ingredients.count,
+        msg: req._msg,
         products:req._ingredients.ingredients
     });
-    console.log(req._ingredients.ingredients)
+}
+//liste les ingredients 
+router.get("/ingredients",db.listAllIngredientsSnapshot,renderIngredients );
+//sauvegarde ou met a jour un ingredient
+router.post('/ingredients',db.saveOrUpdateIngredient,db.listAllIngredientsSnapshot,renderIngredients);
+
+router.get("/ingredients/delete/:id",db.deleteIngredientById,db.listAllIngredientsSnapshot,renderIngredients);
+
+
+
+router.get("/ingredientedit", function(req,res,next){
+    res.render("forms/ingredients",{
+        error_msg: req._error_msg,
+        title:"Création d'un nouvel ingrédient",
+        product:{}
+    });
+});
+router.get("/ingredientedit/:id",db.getIngredientDetails, function(req,res,next){
+    res.render("forms/ingredients",{
+        error_msg: req._error_msg,
+        title:"Modification d'un ingrédient",
+        product:req._ingredient
+    });
 });
 
+
+
+
+
+
 //affiche la liste des news
-router.get("/news", function(req,res,next){
+router.get("/news",db.listAllNewsSwnapshot, function(req,res,next){
     res.render("pizzas",{
         title:"Les news",
         slogan:"Les dernieres news publiées",
         addnew_label:"Créer une nouvelle news",
         view_link:"/admin/news/",
         edit_link:"/admin/newsedit",
-        products:[
-            {
-                id:"anid",
-                nom:"un nom",
-                long_desc:"Une longue description",
-                dispo: true,
-                top:true,
-                picture:"test.jpg"
-            },
-            {
-                id:"anid",
-                nom:"un nom",
-                long_desc:"Une longue description",
-                dispo: false,
-                top:false,
-                picture:"test.jpg"
-            },
-        ]
+        products:req._news
     })
 });
 //affiche la liste des commentaires 
-router.get("/comments", function(req,res,next){
-    res.render("pizzas",{
+router.get("/comments",db.listAllCommentsSwnapshot, function(req,res,next){
+    res.render("comments",{
         title:"Les derniers commentaires",
         slogan:"Tenez vous informé de ce que disent vos clients!",
-        products:[
-            {
-                id:"anid",
-                nom:"un nom",
-                long_desc:"Une longue description",
-                dispo: true,
-                top:true,
-                picture:"test.jpg"
-            },
-            {
-                id:"anid",
-                nom:"un nom",
-                long_desc:"Une longue description",
-                dispo: false,
-                top:false,
-                picture:"test.jpg"
-            },
-        ]
+        products:req._comments
     })
 });
 //affiche la liste des clients

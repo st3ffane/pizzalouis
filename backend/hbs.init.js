@@ -26,9 +26,8 @@ hbs.registerHelper('linearizeArray', function(v, options) {
 
 hbs.registerHelper('ifEq', function(v1, v2, options) {
  
-  console.log(v1,v2)
+  
   if(v1 == v2) {
-    console.log("ok")
     return options.fn(this);
   }
   return options.inverse(this);
@@ -36,7 +35,7 @@ hbs.registerHelper('ifEq', function(v1, v2, options) {
 hbs.registerHelper('ifSupp', function(v1, v2, options) {
   
   if(+v1 >= +v2) {
-    console.log("Supp")
+    
     return options.fn(this);
   }
   return options.inverse(this);
@@ -49,11 +48,10 @@ hbs.registerHelper('ifEmptyList', function (list,options){
   return (list == undefined || list.length===undefined || list.length==0) ? options.fn(this) : options.inverse(this);
 });
 hbs.registerHelper('ifIn', function(elem, list, options) {
-  
+ 
   if(list){
     for(var l of list){
-      
-      if(""+l._id == ""+elem){
+      if(""+l.id == ""+elem){
         
         return options.fn(this);
       }
