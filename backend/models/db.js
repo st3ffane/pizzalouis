@@ -492,7 +492,16 @@ function getIngredientDetails(req,res,next){
 }
 
 
+/**
+ * select count(cn.id)+count(cp.id) from comments_news as cn
+join comments_pizzas as cp
+on (cp.id_user = cn.id_user)
+where cp.id_user = 5;
 
+
+
+bug: user 5 donne 2 messages?????
+ */
 
 function listAllUsersSnapshot(req,res,next){
     //findAndCountAll ne fonctionne pas avec group by!!!! Tant pis
@@ -500,7 +509,7 @@ function listAllUsersSnapshot(req,res,next){
         req._users = {count:dt};
         
         return users.findAll({
-            attributes:["users.id","nom","prenom","tel","mail", [sequelize.fn("COUNT", sequelize.col("commandes.id")), "commandesCount"]
+            attributes:["id","nom","prenom","tel","mail", [sequelize.fn("COUNT", sequelize.col("commandes.id")), "commandesCount"]
             , [sequelize.fn("COUNT", sequelize.col("comments.id")), "commentsCount"]],
             include:[
                 {
@@ -583,19 +592,80 @@ function saveNews(req,res,next){
 
 
 
-
+/**
+ * Recupere la liste des commentaires
+ * query params:
+ *      from_user: id users
+ *      from_news: id 
+ *      from_pizza: id
+ *      etat: all | waiting
+ */
 function listAllCommentsSwnapshot(req,res,next){
-    comments.findAll({
-        attributes:["id","date","texte","etat"],
-        include:[
-            {
-                model:users,
-                attributes:['id','nom','prenom']
+    //origine des comments, defaut: all 
+    req.checkQuery("from_user").optional().isInt();
+    req.checkQuery("from_news").optional().isInt();
+    req.checkQuery("from_pizza").optional().isInt();
+
+    req.checkQuery("etat").optional().isCommentWaiting();
+
+    req.getValidationResult().then(result=>{
+        //requete par defaut: only waiting 
+        
+        if(!result.isEmpty()){
+            //a voir....
+            let errors =  result.array();
+            for(let err of errors){
+                req.query[err.param] = null;//annule le parametre
             }
-        ]
+        }
+        
+       //limite a 1 utilisateur
+        let user_limit = req.query.from_user ? {
+                id : req.query.from_user  //si limite a 1 utilisateur en particulier
+            } : null;
+
+        //limite a 1 pizza
+        let source= [
+                {
+                    model:users,
+                    attributes:['id','nom','prenom'],
+                    where: user_limit
+                }
+            ];
+        
+        if(req.query.from_pizza){
+            source.push({
+                model: pizza,
+                attributes:[],
+                where:{
+                    id:req.query.from_pizza
+                }
+            });
+            req.query.etat = "all";
+
+
+        }else if(req.query.from_news){
+            source.push({
+                model: news,
+                attributes:[],
+                where:{
+                    id:req.query.from_news
+                }
+            });
+            req.query.etat = "all";
+        }
+
+        let params = user_limit || req.query.etat == "all" ?  null : {etat:"waiting"};
+
+
+
+        return comments.findAll({
+            attributes:["id","date","texte","etat"],
+            where:params,
+            include: source
+        });
     }).then(dt=>{
-        req._comments = dt.map(el=>{
-            
+        req._comments = dt.map(el=>{            
             return el.dataValues
         });
         next();

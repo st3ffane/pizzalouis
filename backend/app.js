@@ -49,6 +49,9 @@ app.use(expressValidator({
           if(!Number.isInteger(+v)) return false;
         }
         return true;
+     },
+     isCommentWaiting: function(value){
+        return value == "all";//unquement ceux en attente par defaut
      }
   }
 })); // this line must be immediately after any of the bodyParser middlewares!

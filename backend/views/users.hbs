@@ -30,11 +30,11 @@
                                 <tbody>
                                     {{#each products}}
                                     <tr class="odd gradeX">
-                                        <td><a href="/admin/pizzas/{{id}}" title="Cliquez pour voir les details de cet utilisateur">{{prenom}} {{nom}}</a></td>
+                                        <td><a href="/admin/users/{{id}}" title="Cliquez pour voir les details de cet utilisateur">{{prenom}} {{nom}}</a></td>
                                         <td>{{tel}}</td>
                                         <td>{{mail}}</td>
                                         <td>{{commandesCount}}</td>
-                                        <td>{{commentsCount}}</td>
+                                        <td><a href="/admin/comments?from_user={{id}}">{{commentsCount}}</a></td>
                                     </tr>
                                     {{/each}}
                                     
