@@ -533,14 +533,57 @@ function listAllUsersSnapshot(req,res,next){
 
 
 //news: permet la création et publication?
+/*
+select id,title,date_pub,texte,counts.count
+from news
+left outer join (
+ select id_news, count(id_news) from comments_news group by(id_news)) as counts
+on id=counts.id_news;
+
+*/
 function listAllNewsSwnapshot(req,res,next){
-    news.findAll({
-        order:[["date_pub","DESC"]]
-    }).then(dt=>{
-        req._news = dt.map(el=>el.dataValues);
+    SEQ.query(`select id,title,date_pub,texte,counts.count
+        from news
+        left outer join (
+        select id_news, count(id_news) from comments_news group by(id_news)) as counts
+        on id=counts.id_news;`).then(dt=>{
+    console.log(dt[0]);
+        req._news = dt[0];
+        console.log(req._news);
         next();
     }).catch(err=>next(err));
 }
+function saveNews(req,res,next){
+    req.checkBody("title").notEmpty();//titre obligatoire
+    req.checkBody('texte').notEmpty();
+
+    console.log("Validating datas....")
+    req.getValidationResult().then(result=>{
+        if(!result.isEmpty()){
+            //error
+            console.log("ine couille")
+            next("Invalid datas");
+        }
+        let infos = {
+            title: req.body.title,
+            texte: req.body.texte,
+            picture: "test.jpg"
+        }
+        console.log(infos)
+        news.create(infos).then(dt=>{
+            req._msg="Creation de la news OK";
+            next();
+        }).catch(err=>next(err));
+    });
+    
+}
+
+
+
+
+
+
+
 function listAllCommentsSwnapshot(req,res,next){
     comments.findAll({
         attributes:["id","date","texte","etat"],
@@ -614,7 +657,7 @@ module.exports = {
     
     
     listAllUsersSnapshot:listAllUsersSnapshot,
-    listAllNewsSwnapshot: listAllNewsSwnapshot,
+    
     listAllCommentsSwnapshot: listAllCommentsSwnapshot,
 
     listAllIngredientsSnapshot: listAllIngredientsSnapshot,
@@ -629,6 +672,8 @@ module.exports = {
     saveOrUpdatePizzas: saveOrUpdatePizzas,
     getPizzaDetails : getPizzaDetails,
 
+    listAllNewsSwnapshot: listAllNewsSwnapshot,
+    saveNews: saveNews,
 
     getpizzacount : getPizzasCount,
 

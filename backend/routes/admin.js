@@ -148,7 +148,7 @@ router.get("/ingredientedit/:id",db.getIngredientDetails, function(req,res,next)
 
 //affiche la liste des news
 router.get("/news",db.listAllNewsSwnapshot, function(req,res,next){
-    res.render("pizzas",{
+    res.render("news",{
         title:"Les news",
         slogan:"Les dernieres news publiées",
         addnew_label:"Créer une nouvelle news",
@@ -157,6 +157,22 @@ router.get("/news",db.listAllNewsSwnapshot, function(req,res,next){
         products:req._news
     })
 });
+router.post("/news",db.saveNews,db.listAllNewsSwnapshot, function(req,res,next){
+    res.render("news",{
+        title:"Les news",
+        slogan:"Les dernieres news publiées",
+        addnew_label:"Créer une nouvelle news",
+        view_link:"/admin/news/",
+        edit_link:"/admin/newsedit",
+        products:req._news,
+        msg:req._msg
+    })
+});
+router.get("/newsedit",function(req,res,next){
+    res.render("forms/news",{
+        title:"Création d'une News"
+    });//le plus simple de l'appli!!!
+})
 //affiche la liste des commentaires 
 router.get("/comments",db.listAllCommentsSwnapshot, function(req,res,next){
     res.render("comments",{

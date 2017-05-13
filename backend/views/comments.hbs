@@ -20,8 +20,7 @@
                                 <thead>
                                     <tr>
                                         <th>Date</th>
-                                        <th>titre</th>
-                                        <th>Contenu</th>
+                                        <th>Message</th>
                                         <th>auteur</th>
                                         <th>Activer</th>
                                     </tr>
@@ -30,9 +29,8 @@
                                     {{#each products}}
                                     <tr class="odd gradeX">
                                         <td>{{date}}</td>
-                                        <td>{{titre}}</td>
                                         <td>{{texte}}</td>
-                                        <td>{{user.prenom}} {{user.nom}}</td>
+                                        <td><a href="/admin/users/{{user.id}}" title="Voir les informations de cet utilisateur">{{user.prenom}} {{user.nom}}</a></td>
                                         <td class="center"><label>
                                                     <input type="checkbox" data-toggle="toggle" {{#ifEq etat 'published'}}checked="true"{{/ifEq}}>
                                                 </label></td>
