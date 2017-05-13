@@ -1,5 +1,8 @@
 
 var hbs = require("hbs");
+var moment = require("moment");
+
+
 hbs.registerPartials(__dirname+"/views/partials");
 
 hbs.registerHelper('isTop', function(v1, options) {
@@ -20,7 +23,17 @@ hbs.registerHelper('linearizeArray', function(v, options) {
   return options.inverse(this);
 });
 
-
+hbs.registerHelper("formatDate", function(datetime, format) {
+  if (moment) {
+    console.log("hello");
+    // can use other formats like 'lll' too
+    
+    return moment(datetime).format(format);//"dddd DD.MM.YYYY HH:mm");
+  }
+  else {
+    return datetime;
+  }
+});
 
 
 

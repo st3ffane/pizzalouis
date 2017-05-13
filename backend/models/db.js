@@ -17,6 +17,8 @@ var ingredients = require("./ingredients");
 var category = require("./category");
 var commandes = require("./commands");
 var news = require("./news");
+var cp = require("./commandes_pizzas");
+
 
 //defini qqs tables en plus
 var pizza_ingredient = SEQ.define('pizza_ingredient',{
@@ -49,8 +51,13 @@ pizza.belongsTo(category,{foreignKey:"id_category"});
 users.hasMany(commandes,{foreignKey:"id_client"});
 
 // //une commande a des pizzas
-commandes.belongsToMany(pizza,{through:"commandes_pizzas", foreignKey:"id_pizza"});
-pizza.belongsToMany(commandes,{through:"commandes_pizzas", foreignKey:"id_commande"});
+// commandes.belongsToMany(pizza,{through:"commandes_pizzas", foreignKey:"id_pizza"});
+// pizza.belongsToMany(commandes,{through:"commandes_pizzas", foreignKey:"id_commande"});
+cp.belongsTo(commandes,{foreignKey:"id_commande"});
+cp.belongsTo(pizza,{foreignKey:"id_pizza"});
+pizza.hasMany(cp,{foreignKey:"id_pizza"});
+commandes.hasMany(cp,{foreignKey:"id_commande"});
+
 
 // //les news ont des commentaires aussi 
 news.belongsToMany(comments,{through:"comments_news", foreignKey:"id_news"});
@@ -493,14 +500,16 @@ function getIngredientDetails(req,res,next){
 
 
 /**
- * select count(cn.id)+count(cp.id) from comments_news as cn
-join comments_pizzas as cp
-on (cp.id_user = cn.id_user)
-where cp.id_user = 5;
+ * SELECT "users"."id", "users"."nom", "users"."prenom", "users"."login", "users"."passwrd", "users"."tel", "users"."mail",
+ *        "commandes"."id" AS "commandes.id", "commandes"."date_cmd" AS "commandes.date_cmd", "commandes"."payement_id" AS "commandes.payement_id",
+ *        "commandes"."message" AS "commandes.message", "commandes"."date_retrait" AS "commandes.date_retrait", "commandes"."location" AS "commandes.location",
+ *        "commandes"."id_client" AS "commandes.id_client", 
+ * 
+ *        "commandes.news"."id" AS "commandes.news.id", "commandes.news"."qtte" AS "commandes.news.qtte",
+ *        "commandes.news"."size" AS "commandes.news.size", "commandes.news.pizza"."id" AS "commandes.news.pizza.id",
+ *        "commandes.news.pizza"."nom" AS "commandes.news.pizza.nom" 
+ *        FROM "users" AS "users" LEFT OUTER JOIN "commandes" AS "commandes" ON "users"."id" = "commandes"."id_client" LEFT OUTER JOIN "news" AS "commandes.news" ON "commandes"."id" = "commandes.news"."id_commande" LEFT OUTER JOIN "pizzas" AS "commandes.news.pizza" ON "commandes.news"."id_pizza" = "commandes.news.pizza"."id" WHERE "users"."id" = '7';
 
-
-
-bug: user 5 donne 2 messages?????
  */
 
 function listAllUsersSnapshot(req,res,next){
@@ -536,7 +545,70 @@ function listAllUsersSnapshot(req,res,next){
         next();
     }).catch(err=>next(err));
 }
+//recupere les infos sur un utilisateur 
+//ainsi que ces commandes et ses messages 
+function getUserDetails(req,res,next){
+    req.checkParams('id').isInt();
+    req.getValidationResult().then(result=>{
+        if(!result.isEmpty()){
+            //la liste des users 
+            res.redirect("/admin/users");
+            return;
+        }
+        return users.find({
+            include:[
+                
+                {
+                    model:comments,
+                    
+                },
+                {
+                    model:commandes,
+                    include:[
+                        {
+                            model: cp,
+                            attributes:["qtte","size"],
+                            include:[{
+                                model:pizza,
+                                attributes:["nom"]
+                            }]
+                        }
+                    ]
+                }
+            ],
+            where:{
+                id: req.params.id
+            }
+        });
+    }).then( dt=>{
 
+        let client = dt.dataValues;
+        console.log(client)
+        client.commandes = client.commandes.map(el=>{
+            let e = el.dataValues;
+            console.log(e);
+            
+            e.pizzas = el.commandes_pizzas.map(p=>{
+                let dv = p.dataValues;
+                let pz = {
+                    qtte: dv.qtte,
+                    size: dv.size,
+                    pizza: dv.pizza.dataValues.nom
+                };
+                return pz;
+                
+            
+            });
+            return e;
+        });
+        client.comments = client.comments.map(el=>el.dataValues);
+        req._user= client;
+        
+        next();
+    }).catch(err=>next(err));
+    
+    
+}
 
 
 
@@ -725,9 +797,6 @@ function listUsers(req,res,next){
 module.exports = {
     //administration du site
     
-    
-    listAllUsersSnapshot:listAllUsersSnapshot,
-    
     listAllCommentsSwnapshot: listAllCommentsSwnapshot,
 
     listAllIngredientsSnapshot: listAllIngredientsSnapshot,
@@ -744,6 +813,12 @@ module.exports = {
 
     listAllNewsSwnapshot: listAllNewsSwnapshot,
     saveNews: saveNews,
+
+    listAllUsersSnapshot:listAllUsersSnapshot,
+    getUserDetails:getUserDetails,
+
+
+
 
     getpizzacount : getPizzasCount,
 

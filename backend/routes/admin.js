@@ -182,7 +182,7 @@ router.get("/comments",db.listAllCommentsSwnapshot, function(req,res,next){
     })
 });
 //affiche la liste des clients
-router.get("/clients",db.listAllUsersSnapshot, function(req,res,next){
+router.get("/users",db.listAllUsersSnapshot, function(req,res,next){
     res.render("users",{
         title:"Liste des utilisateurs de l'application",
         slogan:"La liste des inscripts",
@@ -190,6 +190,13 @@ router.get("/clients",db.listAllUsersSnapshot, function(req,res,next){
         products:req._users.users
     })
 });
+router.get('/users/:id',db.getUserDetails,function(req,res,next){
+    res.render("details/user",{
+        title:"Informations client",
+       user:req._user 
+    });
+});
+
 
 //affichage des infos sur une pizza en particulier
 router.get('/pizzas/:id', function(req,res,next){

@@ -28,7 +28,7 @@
                                 <tbody>
                                     {{#each products}}
                                     <tr class="odd gradeX">
-                                        <td>{{date}}</td>
+                                        <td>{{#formatDate date "HH:mm:ss DD-MM-YYYY"}}{{this}}{{/formatDate}}</td>
                                         <td>{{texte}}</td>
                                         <td><a href="/admin/users/{{user.id}}" title="Voir les informations de cet utilisateur">{{user.prenom}} {{user.nom}}</a></td>
                                         <td class="center"><label>

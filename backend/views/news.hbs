@@ -29,10 +29,10 @@
                                 <tbody>
                                     {{#each products}}
                                     <tr class="odd gradeX">
-                                        <td>{{date_pub}}</td>
+                                        <td>{{#formatDate date_pub "HH:mm:ss DD-MM-YYYY"}}{{this}}{{/formatDate}}</td>
                                         <td>{{title}}</td>
                                         <td>{{texte}}</td>
-                                        <td><a href="/admin/comments?news={{id}}" title="Voir tous les commentaires pour cette news">{{count}}</a></td>
+                                        <td><a href="/admin/comments?from_news={{id}}" title="Voir tous les commentaires pour cette news">{{count}}</a></td>
                                     </tr>
                                     {{/each}}
                                     
