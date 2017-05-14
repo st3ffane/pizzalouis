@@ -1,0 +1,123 @@
+<div class="row">
+                <div class="col-lg-12">
+                    <h1 class="page-header">Statistiques</h1>
+                </div>
+                <!-- /.col-lg-12 -->
+            </div>
+            <!-- /.row -->
+            <!-- qqs infos sur les données de l'application -->
+            <div class="row">
+                    <!-- meilleur commandes -->
+                    {{> infos.block commandes_count}}
+                    {{> infos.block bestsell}}
+                    {{> infos.block beststar}}
+                    {{> infos.block ingredient_sell}}
+                    {{> infos.block base_sell}}
+                    
+            </div>
+            <!-- /.row -->
+            <div class="row">
+                <div class="col-lg-12">
+               <!-- graph de ventes -->
+               <div class="panel panel-default">
+                        <div class="panel-heading">
+                            Ventes 30 derniers jours
+                        </div>
+                        <!-- /.panel-heading -->
+                        <div class="panel-body">
+                            <div id="morris-sells" style="position: relative; -webkit-tap-highlight-color: rgba(0, 0, 0, 0);">
+                            </div>
+
+                            <script>
+                                //initialisation du graph Morris
+                                    $(function() {
+
+                                        Morris.Bar({
+                                            element: 'morris-sells',
+                                            data: [
+                                            {{#each sell_datas.datas}}
+                                                {
+                                                    y: "{{#formatDate this.serie 'DD:MM:YY'}}{{this}}{{/formatDate}}",
+                                                    a: {{this.count}}
+                                                },
+                                            {{/each}}
+                                            ],
+                                            xkey: 'y',
+                                            ykeys: 'a',
+                                            labels: ["Total des ventes"],
+                                            pointSize: 2,
+                                            hideHover: 'auto',
+                                            resize: true
+                                        });
+                                    });
+                            </script>
+                        </div>
+                        <!-- /.panel-body -->
+                    </div>
+                </div>
+            </div>
+
+
+            <div class="row">
+                <div class="col-lg-12">
+                    
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+                           Géolocatisation des commandes
+                        </div>
+                        <div class="panel-body">
+                            <div id="map" class="map"></div>
+                            <div id="marker" title="Pizza Louis">
+                                <img src="/images/marker.png">
+                            </div>
+                            <script type="text/javascript">
+                            
+                            //generer le tableau de features
+                            var data = new ol.source.Vector();
+                            console.log("genere le tableau de features");
+                                {{#each geoloc}}
+                                    data.addFeature(
+                                        new ol.Feature({
+                                          geometry:new ol.geom.Point(ol.proj.fromLonLat([{{location.y}},{{location.x}}])),
+                                          weight:10
+                                        })
+                                    );
+
+                                {{/each}}
+                            
+                            var vector = new ol.layer.Heatmap({
+                                source:data,
+                                blur: 20,
+                                radius:15
+                            });
+                            var map = new ol.Map({
+                                target: 'map',
+                                layers: [
+                                new ol.layer.Tile({
+                                    source: new ol.source.OSM()
+                                }),
+                                vector
+                                ],
+                                view: new ol.View({
+                                center: ol.proj.fromLonLat([-1.105356,43.669070]),
+                                zoom: 15
+                                })
+                            });
+
+
+                            var pos = ol.proj.fromLonLat([-1.105356,43.669070]);
+
+                            // Vienna marker
+                            var marker = new ol.Overlay({
+                                position: pos,
+                                positioning: 'center-center',
+                                element: document.getElementById('marker'),
+                                stopEvent: false
+                            });
+                            map.addOverlay(marker);
+                            </script>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- /.row -->

@@ -10,7 +10,7 @@ var router = express.Router();
 
 
 var db = require("../models/db");//les acces a la base de données
-
+var stats  = require("./stats");//router pour affichage des statistiques
 
 
 /* GET page d'acceuil. */
@@ -157,6 +157,7 @@ router.get("/news",db.listAllNewsSwnapshot, function(req,res,next){
         products:req._news
     })
 });
+//creation d'une nouvelle news
 router.post("/news",db.saveNews,db.listAllNewsSwnapshot, function(req,res,next){
     res.render("news",{
         title:"Les news",
@@ -168,11 +169,14 @@ router.post("/news",db.saveNews,db.listAllNewsSwnapshot, function(req,res,next){
         msg:req._msg
     })
 });
+//edition/redaction d'une news
 router.get("/newsedit",function(req,res,next){
     res.render("forms/news",{
         title:"Création d'une News"
     });//le plus simple de l'appli!!!
-})
+});
+
+
 //affiche la liste des commentaires 
 router.get("/comments",db.listAllCommentsSwnapshot, function(req,res,next){
     res.render("comments",{
@@ -197,9 +201,6 @@ router.get('/users/:id',db.getUserDetails,function(req,res,next){
     });
 });
 
+router.use('/stats', stats);
 
-//affichage des infos sur une pizza en particulier
-router.get('/pizzas/:id', function(req,res,next){
-
-});
 module.exports = router;
