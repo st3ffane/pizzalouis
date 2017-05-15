@@ -77,7 +77,10 @@ router.get("/ventes",db.getSellDatas, function(req,res,next){
 router.get("/pizzas",db.getBestSellsM, function(req,res,next){
     res.render('details/pizzas',{
         title:"Evolution des ventes par pizzas!",
-        sell_datas:req._best_sell
+        sell_datas:req._best_sell,
+        graph_title:req._graph_title,
+        graph_value:req._graph_value,
+        graph_type : req._graph_type,
         
     })
 });

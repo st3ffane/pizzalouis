@@ -11,12 +11,13 @@
 
                 <div class="well">
                                 
-                                <form action="/admin/stats/ventes" method="GET">
+                                <form action="/admin/stats/pizzas" method="GET">
                                 <div class="form-group">
                                     <label>Choisissez la période:</label>
                                     <p class="help-block">Selectionnez une période d'affichage pour les ventes</p>
                                     <select class="form-control" name="period" value="{{graph_value}}">
-                                        
+                                            <option value="YEAR" {{#ifEq graph_value "YEAR"}}selected="true"{{/ifEq}}>Evolution sur les 12 derniers mois</option>
+                                            
                                             <option value="MONTH" {{#ifEq graph_value "MONTH"}}selected="true"{{/ifEq}}>Evolution sur les 30 derniers jours</option>
                                             <option value="WEEK" {{#ifEq graph_value "WEEK"}}selected="true"{{/ifEq}}>Evolution sur les 7 derniers jours</option>
                                             <option value="REPW" {{#ifEq graph_value "REPW"}}selected="true"{{/ifEq}}>Repartition sur la semaine</option>
@@ -34,29 +35,30 @@
                         //initialisation du graph Morris
                             $(function() {
 
-                                var chart = Morris.Bar({
+                                var chart = Morris.Area({
                                     element: 'morris-sells',
                                     data: [
                                     
-                                        
-                                            { y: 0,
+                                           
                                             {{#each sell_datas}}
-                                                "{{this.id}}":{{this.sum}} ,
+                                                {
+                                                    "date":"{{#formatDate this.period ../graph_type}}{{this}}{{/formatDate}}",
+                                                    {{#each datas}}
+                                                        "{{{this.nom}}}":{{this.sum}} ,
+                                                    {{/each}}
+                                                },
                                             {{/each}}
-                                            },
+                                            
                                     
                                     ],
-                                    xkey: 'y',                                    
-                                    labels: [{{#each sell_datas}}"{{{this.nom}}} {{#formatNumber this.sum}}{{this}}{{/formatNumber}}",{{/each}}],
-                                    ykeys: [{{#each sell_datas}}'{{this.id}}',{{/each}}],                                    
+                                    xkey: 'date',  
+                                    parseTime:false,                                  
+                                    labels: [{{#each sell_datas.0.datas}}"{{{this.nom}}}",{{/each}}],
+                                    ykeys: [{{#each sell_datas.0.datas}}"{{{this.nom}}}",{{/each}}],                                    
                                     hideHover: 'auto',
                                     resize: true
                                 });
-                                chart.options.labels.forEach(function(label, i){
-                                   var legendItem = $('<span></span>').text(label).css('color', chart.options.barColors[i])
-                                   
-                                    $('#legend').append(legendItem);
-                                });
+                                
                             });
                     </script>
             </div>

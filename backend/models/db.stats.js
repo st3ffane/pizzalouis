@@ -325,11 +325,24 @@ function getTotalCommandesM(req,res,next){
         next(err);  
     });
 }
+
+
+
+/**
+ * `select pizzas.id,serie, pizzas.nom, coalesce(sum(qtte),0) as sum
+            from pizzas
+            right outer join commandes_pizzas as cp
+            on cp.id_pizza = pizzas.id
+            right outer join commandes as c 
+            on cp.id_commande = c.id
+            right outer join ${serie}
+            on ${join}
+            group by (pizzas.id,pizzas.nom,serie)       
+            order by serie 
+        ${limit};`
+ */
 function getBestSellsM(req,res,next){
-    let limit = "order by sum(qtte) DESC limit 1 ";
-
-
-
+    
     let title = "Evolution au cours des 30 derniers jours";
     let value = "MONTH";
     let type = "DATE";//le type de coords Y  
@@ -354,9 +367,20 @@ function getBestSellsM(req,res,next){
                 value = "WEEK"
                 break;
             }
+            case 'YEAR':{
+                serie = `generate_series(
+                    now()-interval '12 months',
+                    now(),
+                    '1 month') as serie`;
+                join = "date_trunc('month',date_retrait)=date_trunc('month',serie)";
+                title="Evolution au cours des 12 derniers mois";
+                type = "MONTH";
+                value = "YEAR"
+                break;
+            }
             case 'REPW':
             {
-                join = "extract(dow from date_retrait)=serie";
+                join = "extract(dow from date_retrait) = serie";
                 serie = `generate_series(
                     0,
                     6) as serie`;
@@ -382,33 +406,43 @@ function getBestSellsM(req,res,next){
     }
 
 
-    if(req.query.show && req.query.show=="all") limit = "" ;
-    console.log(req.query.show, limit);
+    
+    SEQ.query(`select pizzas.id,serie,pizzas.nom,coalesce(sum(qtte),0) as sum
+            from ${serie}
+            inner join pizzas on (true)
+            left outer join commandes as c
+            on (${join})
+            left outer join commandes_pizzas as cp
+            on (cp.id_commande = c.id and pizzas.id = cp.id_pizza)
+            group by (pizzas.id, pizzas.nom, serie)
+            order by (serie,pizzas.nom);`
+        ).then(dt=>{
 
-    let pizzas_ids = [];
-    pizza.findAll({
-        attributes:["id"]
-    }).then( dt=>{
-        pizzas_ids = dt.map(el=>el.dataValues.id);//recupere les identifiants
-        return SEQ.query(`select pizzas.id,serie, pizzas.nom, coalesce(sum(qtte),0) as sum
-            from pizzas
-            right outer join commandes_pizzas as cp
-            on cp.id_pizza = pizzas.id
-            right outer join commandes as c 
-            on cp.id_commande = c.id
-            right outer join ${serie}
-            on ${join}
-            group by (pizzas.id,pizzas.nom,serie)       
-            order by serie 
-        ${limit};`
-        )
-    })
-    .then(dt=>{
+            //regroupe les données par date...
+            var date = "";
+            let current = null;
+            let datas = [];
 
-            //regroupe les données
-        req._best_sell = dt[0];//le resultat de la requete
+            for (let d of dt[0]){
+                if(""+d.serie != date){
+                    date = d.serie;
+                    if(current) datas.push(current);
+                    current = {
+                        "period":date,
+                        datas:[]
+                    };
+                }
+                //ajoute les infos a current 
+                current.datas.push(d);
+            }
+            //le dernier 
+            if(current) datas.push(current);
+
+
+            
+        req._best_sell = datas;//le resultat de la requete
         req._graph_value = value;
-            req._graph_type = type;
+        req._graph_type = type;
         next();
     }).catch(err=>{
         next(err);
