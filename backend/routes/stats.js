@@ -84,12 +84,22 @@ router.get("/pizzas",db.getBestSellsM, function(req,res,next){
         
     })
 });
-router.get("/ingredients",db.getIngredientsSells, db.getBaseSells, function(req,res,next){
+router.get("/ingredients",db.getIngredientsSellsGraph, function(req,res,next){
     res.render('details/ingredients',{
         title:"Consommation des ingrédients/bases",
-        datas:{
-            
-        }
+        sell_datas:req._best_sell,
+        graph_title:req._graph_title,
+        graph_value:req._graph_value,
+        graph_type : req._graph_type,
+    })
+});
+router.get("/bases",db.getBasesSellsGraph, function(req,res,next){
+    res.render('details/base',{
+        title:"Consommation des ingrédients/bases",
+        sell_datas:req._best_sell,
+        graph_title:req._graph_title,
+        graph_value:req._graph_value,
+        graph_type : req._graph_type,
     })
 });
 router.get("/notes",db.getBestStart, function(req,res,next){

@@ -219,6 +219,107 @@ function getIngredientsSells(req,res,next){
             next();
         }).catch(err=>next(err));
 }
+
+function getIngredientsSellsGraph(req,res,next){
+    let join = "date_trunc('day',c.date_retrait)=date_trunc('day',serie)";
+    let serie = `generate_series(
+        now()-interval '30 days',
+        now(),
+        '1 day') as serie`; //par defaut, le mois en cours 
+    let value = "MONTH";
+    let type = "DATE";//le type de coords Y  
+    if(req.query.period){
+        switch(req.query.period){
+            case 'WEEK':
+            {
+                //modifie uniquement serie 
+                serie = `generate_series(
+                    now()-interval '7 days',
+                    now(),
+                    '1 day') as serie`;
+                type = "DATE";
+                value = "WEEK"
+                break;
+            }
+            case 'YEAR':{
+                serie = `generate_series(
+                    now()-interval '12 months',
+                    now(),
+                    '1 month') as serie`;
+                join = "date_trunc('month',date_retrait)=date_trunc('month',serie)";
+                type = "MONTH";
+                value = "YEAR"
+                break;
+            }
+            case 'REPW':
+            {
+                join = "extract(dow from date_retrait) = serie";
+                serie = `generate_series(
+                    0,
+                    6) as serie`;
+                value = "REPW";
+                type = "DAY";
+
+                break;
+            }
+            case 'REPH':
+            {
+                join = "extract(hour from date_retrait)=serie";
+                serie = `generate_series(
+                    12,
+                    23) as serie`;
+                value = "REPH";
+                type = "HOUR";
+                break;
+            }
+            default:break;//rien 
+        }
+    }
+
+
+
+    SEQ.query(`select ingredients.id,serie,ingredients.nom,coalesce(sum(qtte),0) as sum
+            from ${serie}
+            inner join ingredients on (true)
+            left outer join commandes as c
+            on (${join})
+            left outer join pizza_ingredient as pi
+                on(pi.id_ingredient=ingredients.id)
+            left outer join pizzas on (pizzas.id=pi.id_pizza)
+            left outer join commandes_pizzas as cp on(cp.id_pizza=pizzas.id and cp.id_commande=c.id)
+            where ingredients.type='top'
+            group by (ingredients.id, ingredients.nom, serie)
+            order by (serie,ingredients.nom);`
+        ).then(dt=>{
+
+            //regroupe les données par date...
+            var date = "";
+            let current = null;
+            let datas = [];
+
+            for (let d of dt[0]){
+                if(""+d.serie != date){
+                    date = d.serie;
+                    if(current) datas.push(current);
+                    current = {
+                        "period":date,
+                        datas:[]
+                    };
+                }
+                //ajoute les infos a current 
+                current.datas.push(d);
+            }
+            //le dernier 
+            if(current) datas.push(current);
+
+
+            
+        req._best_sell = datas;//le resultat de la requete
+        req._graph_value = value;
+        req._graph_type = type;
+        next();
+        }).catch(err=>next(err));
+}
 function getBaseSells(req,res,next){
     SEQ.query(`select ingredients.nom,sum(qtte) from ingredients
         join pizzas on (pizzas.id_base=ingredients.id)
@@ -233,7 +334,104 @@ function getBaseSells(req,res,next){
             next();
         }).catch(err=>next(err));
 }
+function getBasesSellsGraph(req,res,next){
+    let join = "date_trunc('day',c.date_retrait)=date_trunc('day',serie)";
+    let serie = `generate_series(
+        now()-interval '30 days',
+        now(),
+        '1 day') as serie`; //par defaut, le mois en cours 
+    let value = "MONTH";
+    let type = "DATE";//le type de coords Y  
+    if(req.query.period){
+        switch(req.query.period){
+            case 'WEEK':
+            {
+                //modifie uniquement serie 
+                serie = `generate_series(
+                    now()-interval '7 days',
+                    now(),
+                    '1 day') as serie`;
+                type = "DATE";
+                value = "WEEK"
+                break;
+            }
+            case 'YEAR':{
+                serie = `generate_series(
+                    now()-interval '12 months',
+                    now(),
+                    '1 month') as serie`;
+                join = "date_trunc('month',date_retrait)=date_trunc('month',serie)";
+                type = "MONTH";
+                value = "YEAR"
+                break;
+            }
+            case 'REPW':
+            {
+                join = "extract(dow from date_retrait) = serie";
+                serie = `generate_series(
+                    0,
+                    6) as serie`;
+                value = "REPW";
+                type = "DAY";
 
+                break;
+            }
+            case 'REPH':
+            {
+                join = "extract(hour from date_retrait)=serie";
+                serie = `generate_series(
+                    12,
+                    23) as serie`;
+                value = "REPH";
+                type = "HOUR";
+                break;
+            }
+            default:break;//rien 
+        }
+    }
+
+
+
+    SEQ.query(`select ingredients.id,serie,ingredients.nom,coalesce(sum(qtte),0) as sum
+            from ${serie}
+            inner join ingredients on (true)
+            left outer join commandes as c
+            on (${join})
+            left outer join pizzas on (pizzas.id_base=ingredients.id)
+            left outer join commandes_pizzas as cp on(cp.id_pizza=pizzas.id and cp.id_commande=c.id)
+            where ingredients.type='base'
+            group by (ingredients.id, ingredients.nom, serie)
+            order by (serie,ingredients.nom);`
+        ).then(dt=>{
+
+            //regroupe les données par date...
+            var date = "";
+            let current = null;
+            let datas = [];
+
+            for (let d of dt[0]){
+                if(""+d.serie != date){
+                    date = d.serie;
+                    if(current) datas.push(current);
+                    current = {
+                        "period":date,
+                        datas:[]
+                    };
+                }
+                //ajoute les infos a current 
+                current.datas.push(d);
+            }
+            //le dernier 
+            if(current) datas.push(current);
+
+
+            
+        req._best_sell = datas;//le resultat de la requete
+        req._graph_value = value;
+        req._graph_type = type;
+        next();
+        }).catch(err=>next(err));
+}
 function getGeolocCommands(req,res,next){
     //parametres: date_retrait de la commande 
     //le parametre de temps: MONTH (par defaut), WEEK, REPW ou REPH
@@ -469,4 +667,7 @@ module.exports = {
     getBaseSells : getBaseSells,
     getGeolocCommands : getGeolocCommands,
     getAllPizzas : getAllPizzas,
+    getIngredientsSellsGraph:getIngredientsSellsGraph,
+    getBasesSellsGraph:getBasesSellsGraph,
+
 };
