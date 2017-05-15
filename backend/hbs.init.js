@@ -1,3 +1,5 @@
+"use strict";
+
 
 var hbs = require("hbs");
 var moment = require("moment");
@@ -23,18 +25,39 @@ hbs.registerHelper('linearizeArray', function(v, options) {
   return options.inverse(this);
 });
 
+
+const DAYS = ['Dimanche','Lundi','Mardi','Mercredi','Jeudi','Venderdi','Samedi'];
+const MONTH = ['Janvier','Février','Mars','Avril','Mai','Juin','Juillet','Aout','Septembre','Octobre','Novembre','Décembre'];
 hbs.registerHelper("formatDate", function(datetime, format) {
-  if (moment) {
-    console.log("hello");
+  
     // can use other formats like 'lll' too
-    
+    switch(format){
+      case 'DATE':{
+        format = "DD:MM:YYYY";break;
+      }
+      case 'DAY':{
+        return DAYS[datetime];//nom du jour
+
+      }
+      case 'MONTH':{
+        let m =  moment(datetime).month();//"dddd DD.MM.YYYY HH:mm");
+        return moment.monthsShort(m);
+      }
+      case 'HOUR':{
+        return (+datetime).toLocaleString("fr-FR",{minimumIntegerDigits:2})+"H";
+      }
+      default:break;
+    }
     return moment(datetime).format(format);//"dddd DD.MM.YYYY HH:mm");
-  }
-  else {
-    return datetime;
-  }
+ 
 });
 
+hbs.registerHelper("formatNumber",function(num,options){
+  return (+num).toLocaleString('fr-FR',{
+    minimumIntegerDigits: 1,
+    maximumFractionDigits: 2
+  })
+});
 
 
 hbs.registerHelper('ifEq', function(v1, v2, options) {

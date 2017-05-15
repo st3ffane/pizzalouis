@@ -1,0 +1,27 @@
+<div id="morris-sells" style="position: relative; -webkit-tap-highlight-color: rgba(0, 0, 0, 0);">
+</div>
+
+<script>
+    //initialisation du graph Morris
+        $(function() {
+
+            Morris.Bar({
+                element: 'morris-sells',
+                data: [
+                {{#each sell_datas.datas}}
+                    {
+                        y: '{{#formatDate this.serie ../graph_type}}{{this}}{{/formatDate}}',
+                        
+                        a: {{this.count}}
+                    },
+                {{/each}}
+                ],
+                xkey: 'y',
+                ykeys: 'a',
+                labels: ["Total des ventes"],
+                pointSize: 2,
+                hideHover: 'auto',
+                resize: true
+            });
+        });
+</script>

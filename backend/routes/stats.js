@@ -37,7 +37,7 @@ router.get('/', db.getTotalCommandesM,
                                                     )),
                             count:req._best_star[0].nom,
                             color:"panel-yellow",
-                            link:"/admin/stats/notes"
+                            link:"/admin/stats/notes?show=all"
                         },
                         ingredient_sell:{
                             icon:"fa-puzzle-piece",
@@ -66,17 +66,19 @@ router.get('/', db.getTotalCommandesM,
 router.get("/ventes",db.getSellDatas, function(req,res,next){
     res.render('details/ventes',{
         title:"Evolution des ventes",
-        datas:{
-
-        }
+        graph_title:req._graph_title,
+        graph_value:req._graph_value,
+        graph_type : req._graph_type,
+        sell_datas:{
+            datas:req._sell_datas
+        },
     })
 });
 router.get("/pizzas",db.getBestSellsM, function(req,res,next){
     res.render('details/pizzas',{
         title:"Evolution des ventes par pizzas!",
-        datas:{
-            
-        }
+        sell_datas:req._best_sell
+        
     })
 });
 router.get("/ingredients",db.getIngredientsSells, db.getBaseSells, function(req,res,next){
@@ -88,19 +90,30 @@ router.get("/ingredients",db.getIngredientsSells, db.getBaseSells, function(req,
     })
 });
 router.get("/notes",db.getBestStart, function(req,res,next){
+    //recupere les 3 meilleurs notes 
+    let tiercet = req._best_star.sort( (a,b)=>{
+        return a.avg < b.avg;
+    }).slice(0,3);
+    console.log(tiercet);
+
     res.render('details/notes',{
         title:"Les pizzas préférées de vos clients",
-        datas:{
-            
-        }
+        beststar:{
+            icon:"fa-star",
+            datas : req._best_star
+        },
+        tiercet: tiercet
     })
 });
-router.get("/geo",db.getGeolocCommands, function(req,res,next){
+router.get("/geo",db.getAllPizzas,db.getGeolocCommands, function(req,res,next){
+    console.log("selecion: ",req._pizza_value);
     res.render('details/geo',{
         title:"Répartition géographique des commandes",
-        datas:{
-            
-        }
+        geoloc:req._geo,
+        pizzas:req._pizzas,
+        graph_value:req._graph_value,
+        day:req._day,
+        pizza: req._pizza_value
     })
 })
 module.exports = router;

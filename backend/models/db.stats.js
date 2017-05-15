@@ -68,14 +68,18 @@ limit 1;
  */
 function getBestStart(req,res,next){
     
+    let limit = "order by coalesce(avg(note),0) DESC limit 1";//par defaut, la meilleure reponse
+
+    if(req.query.show && req.query.show=="all"){
+        limit = "";
+    }
     
-    SEQ.query(`select pizzas.id, pizzas.nom, avg(note)
+    SEQ.query(`select pizzas.id, pizzas.nom, coalesce(avg(note),0) as avg
         from pizzas
-        join comments_pizzas as cp on(cp.id_pizza=pizzas.id)
-        join comments on (cp.id_comment=comments.id)
-        group by (pizzas.id,pizzas.nom)
-        order by avg(note) DESC
-        limit 1;`).then( dt=>{
+        left outer join comments_pizzas as cp on(cp.id_pizza=pizzas.id)
+        left outer join comments on (cp.id_comment=comments.id)
+        group by (pizzas.id,pizzas.nom)        
+        ${limit};`).then( dt=>{
             req._best_star = dt[0];
             next();
         }).catch(err=>next(err));
@@ -94,17 +98,79 @@ group by serie;
 
  */
 function getSellDatas(req,res,next){ 
+    //le parametre de temps: MONTH (par defaut), WEEK, REPW ou REPH
+    let title = "Evolution au cours des 30 derniers jours";
+    let value = "MONTH";
+    let type = "DATE";//le type de coords Y  
+
+    let join = "date_trunc('day',date_retrait)=date_trunc('day',serie)";
+    let serie = `generate_series(
+        now()-interval '30 days',
+        now(),
+        '1 day') as serie`; //par defaut, le mois en cours 
+
+    if(req.query.period){
+        switch(req.query.period){
+            case "YEAR":{
+                serie = `generate_series(
+                    now()-interval '12 months',
+                    now(),
+                    '1 month') as serie`;
+                join = "date_trunc('month',date_retrait)=date_trunc('month',serie)";
+                title="Evolution au cours des 12 derniers mois";
+                type = "MONTH";
+                value = "YEAR"
+                break;
+            }
+            case 'WEEK':
+            {
+                //modifie uniquement serie 
+                serie = `generate_series(
+                    now()-interval '7 days',
+                    now(),
+                    '1 day') as serie`;
+                title="Evolution au cours des 7 derniers jours";
+                type = "DATE";
+                value = "WEEK"
+                break;
+            }
+            case 'REPW':
+            {
+                join = "extract(dow from date_retrait)=serie";
+                serie = `generate_series(
+                    0,
+                    6) as serie`;
+                title="Répartition des ventes par jour de la semaine";
+                value = "REPW";
+                type = "DAY";
+
+                break;
+            }
+            case 'REPH':
+            {
+                join = "extract(hour from date_retrait)=serie";
+                serie = `generate_series(
+                    12,
+                    23) as serie`;
+                title="Répartition des ventes par heure de la journée";
+                value = "REPH";
+                type = "HOUR";
+                break;
+            }
+            default:break;//rien 
+        }
+    }
+
 
     SEQ.query(`select serie, count(id)
         from commandes
-        right outer join generate_series(
-        now()-interval '30 days',
-        now(),
-        '1 day') as serie
-        on (date_trunc('day',date_retrait)=date_trunc('day',serie))
+        right outer join ${serie}
+        on (${join})
         group by serie
         order by serie;`).then (dt=>{
-
+            req._graph_title = title;
+            req._graph_value = value;
+            req._graph_type = type;
             req._sell_datas = dt[0];
             next();
 
@@ -169,9 +235,84 @@ function getBaseSells(req,res,next){
 }
 
 function getGeolocCommands(req,res,next){
-    SEQ.query("select location from commandes;").then(dt=>{
+    //parametres: date_retrait de la commande 
+    //le parametre de temps: MONTH (par defaut), WEEK, REPW ou REPH
+    let pizza_select = [];//par defaut, toutes les commandes
+    let join = "";//si demande une pizza
+
+    let day = 6;//par defaut, samedi
+    let value = "ALL";
+    let pizza_value = -1;//par defaut, toutes les commandes 
+
+
+    if(req.query.period){
+        switch(req.query.period){
+            case 'MONTH':{
+                pizza_select.push(" date_retrait >= (now() - interval '30 days') ");
+                value = 'ALL';
+                break;
+            }
+            case 'WEEK':
+            {
+                //modifie uniquement serie 
+                pizza_select.push(" date_retrait >= (now() - interval '7 days') ");                
+                value = "WEEK"
+                break;
+            }
+            case 'REPW':
+            {
+                //selectionne un jour de la semaine 
+                day = req.query.DAY || 6;//defaut samedi 
+                //verifie 
+                try{
+                    day = +day;//convertie
+                    if(day<0 && day>6) day = 6;
+                }catch(err) {day=6;}
+
+                pizza_select.push(" extract(dow from date_retrait)="+day+" ");
+                value = "REPW";
+
+                break;
+            }
+            case 'REPH':
+            {
+                join = "extract(hour from date_retrait)=serie";
+                serie = `generate_series(
+                    12,
+                    23) as serie`;
+                value = "REPH";
+                break;
+            }
+            default:break;//rien 
+        }
+    }
+
+    //OU pizza particuliere
+    if(req.query.pizza){
+        try{
+            pizza_value = +req.query.pizza;
+            
+        } catch (err){
+            //nope;
+        }
+        if(pizza_value != -1){
+            join = " join commandes_pizzas as cp on (cp.id_commande=commandes.id) ";
+            pizza_select.push(" cp.id_pizza="+pizza_value);
+        }
+
+        
+        
+    }
+    let query = `select location from commandes ${join} `;
+    if(pizza_select.length > 0){
+        query += "WHERE "+pizza_select.join(" AND ");
+    }
+    console.log(pizza_value);
+    SEQ.query(query).then(dt=>{
         req._geo = dt[0];
-         console.log(dt[0]);
+        req._graph_value = value;
+        req._day = day;
+        req._pizza_value = pizza_value
         next();
     }).catch(err=>next(err));
 }
@@ -185,14 +326,105 @@ function getTotalCommandesM(req,res,next){
     });
 }
 function getBestSellsM(req,res,next){
-    getBestSells().then(dt=>{
+    let limit = "order by sum(qtte) DESC limit 1 ";
+
+
+
+    let title = "Evolution au cours des 30 derniers jours";
+    let value = "MONTH";
+    let type = "DATE";//le type de coords Y  
+
+    let join = "date_trunc('day',c.date_retrait)=date_trunc('day',serie)";
+    let serie = `generate_series(
+        now()-interval '30 days',
+        now(),
+        '1 day') as serie`; //par defaut, le mois en cours 
+
+    if(req.query.period){
+        switch(req.query.period){
+            case 'WEEK':
+            {
+                //modifie uniquement serie 
+                serie = `generate_series(
+                    now()-interval '7 days',
+                    now(),
+                    '1 day') as serie`;
+                title="Evolution au cours des 7 derniers jours";
+                type = "DATE";
+                value = "WEEK"
+                break;
+            }
+            case 'REPW':
+            {
+                join = "extract(dow from date_retrait)=serie";
+                serie = `generate_series(
+                    0,
+                    6) as serie`;
+                title="Répartition des ventes par jour de la semaine";
+                value = "REPW";
+                type = "DAY";
+
+                break;
+            }
+            case 'REPH':
+            {
+                join = "extract(hour from date_retrait)=serie";
+                serie = `generate_series(
+                    12,
+                    23) as serie`;
+                title="Répartition des ventes par heure de la journée";
+                value = "REPH";
+                type = "HOUR";
+                break;
+            }
+            default:break;//rien 
+        }
+    }
+
+
+    if(req.query.show && req.query.show=="all") limit = "" ;
+    console.log(req.query.show, limit);
+
+    let pizzas_ids = [];
+    pizza.findAll({
+        attributes:["id"]
+    }).then( dt=>{
+        pizzas_ids = dt.map(el=>el.dataValues.id);//recupere les identifiants
+        return SEQ.query(`select pizzas.id,serie, pizzas.nom, coalesce(sum(qtte),0) as sum
+            from pizzas
+            right outer join commandes_pizzas as cp
+            on cp.id_pizza = pizzas.id
+            right outer join commandes as c 
+            on cp.id_commande = c.id
+            right outer join ${serie}
+            on ${join}
+            group by (pizzas.id,pizzas.nom,serie)       
+            order by serie 
+        ${limit};`
+        )
+    })
+    .then(dt=>{
+
+            //regroupe les données
         req._best_sell = dt[0];//le resultat de la requete
+        req._graph_value = value;
+            req._graph_type = type;
         next();
     }).catch(err=>{
         next(err);
     })
 }
 
+
+function getAllPizzas(req,res,next){
+    pizza.findAll({
+        attributes:["id","nom"]
+    }).then( dt=>{
+       
+        req._pizzas = dt.map(el=>el.dataValues);
+        next();
+    }).catch(err=>next(err));
+}
 
 module.exports = {
     getTotalCommandesM : getTotalCommandesM,
@@ -201,6 +433,6 @@ module.exports = {
     getSellDatas : getSellDatas,
     getIngredientsSells: getIngredientsSells,
     getBaseSells : getBaseSells,
-    getGeolocCommands : getGeolocCommands
-
+    getGeolocCommands : getGeolocCommands,
+    getAllPizzas : getAllPizzas,
 };

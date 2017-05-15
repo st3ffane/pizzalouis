@@ -1,0 +1,51 @@
+<div id="map" class="map"></div>
+    
+<div id="marker" title="Pizza Louis">
+    <img src="/images/marker.png">
+</div>
+    <script type="text/javascript">
+
+    //generer le tableau de features
+    var data = new ol.source.Vector();
+
+        {{#each geoloc}}
+            data.addFeature(
+                new ol.Feature({
+                    geometry:new ol.geom.Point(ol.proj.fromLonLat([{{location.y}},{{location.x}}])),
+                    weight:10
+                })
+            );
+
+        {{/each}}
+
+    var vector = new ol.layer.Heatmap({
+        source:data,
+        blur: 20,
+        radius:15
+    });
+    var map = new ol.Map({
+        target: 'map',
+        layers: [
+        new ol.layer.Tile({
+            source: new ol.source.OSM()
+        }),
+        vector
+        ],
+        view: new ol.View({
+        center: ol.proj.fromLonLat([-1.105356,43.669070]),
+        zoom: 15
+        })
+    });
+
+
+    var pos = ol.proj.fromLonLat([-1.105356,43.669070]);
+
+    // Vienna marker
+    var marker = new ol.Overlay({
+        position: pos,
+        positioning: 'center-center',
+        element: document.getElementById('marker'),
+        stopEvent: false
+    });
+    map.addOverlay(marker);
+    </script>

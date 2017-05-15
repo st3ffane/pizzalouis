@@ -1,0 +1,36 @@
+<div class="row">
+    <div class="col-lg-12"><h3>Evolution des ventes</h3>
+    <p>Texte description</p></div>
+</div>
+
+<div class="row">
+                <div class="col-lg-12">
+               <!-- graph de ventes -->
+               <div class="panel panel-default">
+                        <div class="well">
+                                
+                                <form action="/admin/stats/ventes" method="GET">
+                                <div class="form-group">
+                                    <label>Choisissez la période:</label>
+                                    <p class="help-block">Selectionnez une période d'affichage pour les ventes</p>
+                                    <select class="form-control" name="period" value="{{graph_value}}">
+                                            <option value="YEAR" {{#ifEq graph_value "YEAR"}}selected="true"{{/ifEq}}>Evolution sur les 12 derniers mois</option>
+                                            <option value="MONTH" {{#ifEq graph_value "MONTH"}}selected="true"{{/ifEq}}>Evolution sur les 30 derniers jours</option>
+                                            <option value="WEEK" {{#ifEq graph_value "WEEK"}}selected="true"{{/ifEq}}>Evolution sur les 7 derniers jours</option>
+                                            <option value="REPW" {{#ifEq graph_value "REPW"}}selected="true"{{/ifEq}}>Repartition sur la semaine</option>
+                                            <option value="REPH" {{#ifEq graph_value "REPH"}}selected="true"{{/ifEq}}>Repartition sur l'heure</option>
+                                    </select>
+                                    
+                                </div>
+                                <button type="submit" class="btn btn-primary btn-lg">Voir les résultats</button>
+                                </form>
+                            </div>
+                        <!-- /.panel-heading -->
+                        <div class="panel-body">
+                            <p>{{graph_title}}</p>
+                            {{> ventes.graph this}}
+                        </div>
+                        <!-- /.panel-body -->
+                    </div>
+                </div>
+            </div>

@@ -1,0 +1,123 @@
+&nbsp;
+<div class="row">
+    <div class="col-lg-12">
+        
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                Géolocatisation des commandes
+            </div>
+            <div class="panel-body">
+                
+
+                <div class="well">
+                                
+                                <form action="/admin/stats/geo" method="GET">
+                                <div class="form-group">
+                                    <label>Séléctionnez une pizza:</label>
+                                    <p class="help-block">Visualizer les commandes pour une pizza en particulier, ou toutes les pizzas</p>
+                                    <select class="form-control" name="pizza" value="{{pizza}}">    
+
+                                            <option value="-1" {{#ifEq pizza -1}}selected="true"{{/ifEq}}>Toutes les pizzas</option>
+                                            {{#each pizzas}}
+                                                <option value="{{id}}" {{#ifEq ../pizza id}}selected="true"{{/ifEq}}>{{{nom}}}</option>                                            
+                                            {{/each}}
+                                            
+                                    </select>
+                                    
+                                </div>
+
+
+                                <div class="form-group">
+                                    <label>Choisissez la période:</label>
+                                    <p class="help-block">Selectionnez une période d'affichage pour les ventes</p>
+                                    <select class="form-control" name="period" value="{{graph_value}}" id="period">
+                                            <option value="ALL" {{#ifEq graph_value "ALL"}}selected="true"{{/ifEq}}>Voir toutes les commandes</option>
+                                            
+                                            <option value="MONTH" {{#ifEq graph_value "MONTH"}}selected="true"{{/ifEq}}>Commandes sur les 30 derniers jours</option>
+                                            <option value="WEEK" {{#ifEq graph_value "WEEK"}}selected="true"{{/ifEq}}>Commandes sur les 7 derniers jours</option>
+                                            <option value="REPW" {{#ifEq graph_value "REPW"}}selected="true"{{/ifEq}}>Choisir un jour de la semaine</option>
+                                            <!--option value="REPH" {{#ifEq graph_value "REPH"}}selected="true"{{/ifEq}}>Choisir une heure</option-->
+                                    </select>
+                                    
+                                    
+                                </div>
+                                <div class="form-group" id="extras">
+                                    <div id="REPW">
+                                        <label>Choisissez un jour de la semaine:</label>
+                                       
+                                            <label>Radio Buttons</label>
+                                            <div class="radio">
+                                                <label>
+                                                    <input type="radio" name="DAY" id="optionsRadios1" value="0" {{#ifEq day 0}}checked="true"{{/ifEq}}>Dimanche
+                                                </label>
+                                            </div>
+                                            <div class="radio">
+                                                <label>
+                                                    <input type="radio" name="DAY" id="optionsRadios2" value="1" {{#ifEq day 1}}checked="true"{{/ifEq}}>Lundi
+                                                </label>
+                                            </div>
+                                            <div class="radio">
+                                                <label>
+                                                    <input type="radio" name="DAY" id="optionsRadios3" value="2" {{#ifEq day 2}}checked="true"{{/ifEq}}>Mardi
+                                                </label>
+                                            </div>
+                                            <div class="radio">
+                                                <label>
+                                                    <input type="radio" name="DAY" id="optionsRadios3" value="3" {{#ifEq day 3}}checked="true"{{/ifEq}}>Mercredi
+                                                </label>
+                                            </div>
+                                            <div class="radio">
+                                                <label>
+                                                    <input type="radio" name="DAY" id="optionsRadios3" value="4" {{#ifEq day 4}}checked="true"{{/ifEq}}>Jeudi
+                                                </label>
+                                            </div>
+                                            <div class="radio">
+                                                <label>
+                                                    <input type="radio" name="DAY" id="optionsRadios3" value="5" {{#ifEq day 5}}checked="true"{{/ifEq}}>Vendredi
+                                                </label>
+                                            </div>
+                                            <div class="radio">
+                                                <label>
+                                                    <input type="radio" name="DAY" id="optionsRadios3" value="6" {{#ifEq day 6}}checked="true"{{/ifEq}}>Samedi
+                                                </label>
+                                            </div>
+                                        
+                                    </div>
+                                    <div id="REPH">
+                                        <label>Autres possibilités à voir....</label>
+
+                                    </div>
+                                </div>
+                                <button type="submit" class="btn btn-primary btn-lg">Voir les résultats</button>
+                                </form>
+                            </div>
+
+
+
+
+                {{>geoloc this}}
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+
+$(function(){
+    $("#REPW").hide();
+    $("#REPH").hide();
+
+    {{#ifEq graph_value 'REPW'}}$("#REPW").toggle();{{/ifEq}}
+    $("#period").on('change',function(evt){
+        $("#REPH").hide();
+        $("#REPW").hide();
+
+
+        if(evt.target.value == "REPH")$("#REPH").toggle();
+        else if(evt.target.value == "REPW")$("#REPW").toggle();
+       
+            
+        
+    });
+})
+
+</script>

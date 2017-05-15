@@ -68,3 +68,54 @@ a {
   margin-left: 10px;
 
 }
+#legend {
+        height: 50px;
+        
+    }
+    #legend span {
+        display: inline-block;
+        padding: 15px 30px;
+        position: relative;
+    }
+    
+.podium{
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+}
+.podium > div{
+  max-width: 235px;
+  height: 400px;
+  margin: 20px 10px;
+  border-top-left-radius: 10px;
+  border-top-right-radius: 10px;
+}
+.podium div div{
+  font-size: 3em;
+    color: white;
+    text-align: center;
+}
+.podium  .second{
+  background-color: #fde795;
+  width: 100%;
+  height: 300px;
+  align-self:flex-end;
+}
+.podium  .first{
+  background-color: #aff3af;
+  width: 100%;
+  
+  align-self:flex-end;
+}
+.podium  .third{
+  background-color: #d7b1f9;
+  width: 100%;
+  height: 200px;
+  align-self:flex-end;
+}
+.podium h3{
+  font-size: 3.4em;
+    color: #fffffe;
+    text-align: center;
+}
