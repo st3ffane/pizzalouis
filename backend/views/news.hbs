@@ -51,6 +51,7 @@
 
         $(document).ready(function() {
             $('#products').DataTable( {
+                "serverSide": true,
                 "ajax": '/admin/news/api',
                 "columns" : [
                     { "data": "date_pub" },

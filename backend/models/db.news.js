@@ -41,35 +41,45 @@ function listAllNewsSwnapshot(req,res,next){
 
 //pour supporter les datatables
 function listAllNewsAjax(req,res,next){
-    let iDisplayStart = req.query.iDisplayStart || 0;
-    let iDisplayLength = req.query.iDisplayLength || 10;
-    let iColumns = req.query.iColumns || 10;
-    let sSearch = req.query.sSearch ;
+    let iDisplayStart = req.query.start || 0;
+    let iDisplayLength = req.query.length || 10;
+    let sSearch = req.query.search.value ;
     let iSortingCols = req.query.iSortingCols || 0;
     let sEcho = req.query.sEcho;
+    let order = req.query.order;
+    let columns = req.query.columns;
 
     let totalnews = 0;
     //etc....
 
     news.count().then(dt=>{
-        totalnews = dt.count;
-
+        totalnews = dt;
         //parametres de la requete 
         let orderby="date_pub DESC";//par defaut, les dernieres en premier
+        if(order){
+            let who = order[0].column;
+            let how = order[0].dir;
 
-        return SEQ.query(`select id,title,date_pub,texte,counts.count
+            orderby = columns[who].data+" "+how;
+        }
+        let strsearch = sSearch ? "WHERE title ILIKE '"+sSearch+"%' " : "";
+
+        return SEQ.query(`select id,title,date_pub,texte, coalesce(counts.count,0) as count
             from news
             left outer join (
             select id_news, count(id_news) from comments_news group by(id_news)) as counts
             on id=counts.id_news
+            ${strsearch}
             ORDER BY ${orderby}
+            LIMIT ${iDisplayLength}
+            OFFSET ${iDisplayStart}
             ;`);
 
     }).then(dt=>{
     
         req._news ={
-            iTotalRecords: totalnews, //a voir
-            iTotalDisplayRecords : dt[0].length,
+            recordsTotal: totalnews,//totalnews, //a voir
+            recordsFiltered : totalnews,
             sEcho:sEcho,
 
             aaData:dt[0]
