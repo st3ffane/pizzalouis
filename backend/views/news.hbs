@@ -26,7 +26,7 @@
                                         <th>nbr Commentaires</th>
                                     </tr>
                                 </thead>
-                                <tbody>
+                                {{!--<tbody>
                                     {{#each products}}
                                     <tr class="odd gradeX">
                                         <td>{{#formatDate date_pub "HH:mm:ss DD-MM-YYYY"}}{{this}}{{/formatDate}}</td>
@@ -36,7 +36,7 @@
                                     </tr>
                                     {{/each}}
                                     
-                                </tbody>
+                                </tbody>--}}
                             </table>
                             
                         </div>
@@ -46,5 +46,39 @@
                 </div>
                 <!-- /.col-lg-12 -->
             </div>
-           
+    <script>
+       
+
+        $(document).ready(function() {
+            $('#products').DataTable( {
+                "ajax": '/admin/news/api',
+                "columns" : [
+                    { "data": "date_pub" },
+                    { "data": "title" },
+                    { "data": "texte" },
+                    { "data": "count" }
+                ],
+            columnDefs: [ 
+            {
+                targets: 0,
+                render: function(from){
+                    var d = new Date(from);
+                    return d.toLocaleDateString();
+                }
+            },
+            {
+                targets: 3,
+                render: function(data, type, row, meta){
+                    var ret = "0";
+                    if(data){
+                        ret="<a href='/admin/comments?from_news="+row.id+"' title='Voir tous les commentaires pour cette news'>"+data+"</a>";
+                    }
+                    return ret;
+                }
+            },
+            
+            
+             ]
+            } );
+        } );   
     </script>

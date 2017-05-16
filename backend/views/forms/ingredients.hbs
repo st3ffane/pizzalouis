@@ -1,5 +1,5 @@
 <div class="row">
-    {{#if error_msg}}<p>{{error_msg}}</p>{{/if}}
+   <p> {{#if error_msg}}{{error_msg}}{{/if}}</p>
 <div class="col-lg-12">
         <div class="panel panel-default">
             <div class="panel-heading">
@@ -42,6 +42,7 @@
                                 </select>
                             </div>
                             <div class="form-group">
+                                
                                 <div class="checkbox">
                                     <label>
                                         <input name="dispo" type="checkbox" data-toggle="toggle" value="true" {{#ifEq product.dispo true}}checked="true"{{/ifEq}}>Disponnibilité
@@ -49,14 +50,10 @@
                                 </div>
                             </div>
 
-                             <div class="form-group">
-                                <label>File input</label>
-                                <input type="file">
-                            </div>
-
+                            
                             <div class="form-group">
                                 <button type="submit" class="btn btn-primary btn-lg">Enregistrer</button>
-                                <button type="reset" class="btn btn-default btn-lg">Abandonner</button>
+                                <a href="/admin/ingredients" class="btn btn-default btn-lg">Retour</a>
                                 {{#if product.id}}<a href="/admin/ingredients/delete/{{product.id}}" class="btn btn-danger btn-lg">Supprimer</a>{{/if}}
                             </div>
                         </form>

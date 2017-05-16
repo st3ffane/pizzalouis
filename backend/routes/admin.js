@@ -14,6 +14,8 @@ var upload = multer({ dest: 'public/images/pizzas' });
 var db = require("../models/db");//les acces a la base de données
 
 var dbpizza = require("../models/db.pizzas");//middlewares pour les pizzas 
+var dbing = require("../models/db.ingredients");
+var dbnews = require("../models/db.news");
 
 var stats  = require("./stats");//router pour affichage des statistiques
 
@@ -64,7 +66,7 @@ router.get('/', function(req, res, next) {
 
 
 
-//affiche la liste des recettes + permet d'en creer de nouvelles
+//affiche la liste des recettes + permet d'en creer de nouvelles /////////////////////////////////////////////////////////
 router.get('/pizzas',dbpizza.listAllPizzasSnapshot, function(req,res,next){
     res.render('pizzas',{
         title:'Pizza Louis - les recettes',
@@ -113,7 +115,7 @@ router.post('/pizzas',upload.single('picture'),dbpizza.saveOrUpdatePizzas, dbpiz
     
 });
 //formulaire de recette -nouvelle recette
-router.get("/pizzaedit",dbpizza.getCategoryPizzaSNapshot, db.getIngredientsByType,function(req,res,next){
+router.get("/pizzaedit",dbpizza.getCategoryPizzaSNapshot, dbing.getIngredientsByType,function(req,res,next){
     res.render("forms/pizzas",{
         error_msg: req._error_msg,
         title:"Création d'une nouvelle Pizza!",
@@ -124,7 +126,7 @@ router.get("/pizzaedit",dbpizza.getCategoryPizzaSNapshot, db.getIngredientsByTyp
     });
 });
 //modification d'une recette 
-router.get("/pizzaedit/:id",dbpizza.getCategoryPizzaSNapshot,dbpizza.getPizzaDetails,db.getIngredientsByType,function(req,res,next){
+router.get("/pizzaedit/:id",dbpizza.getCategoryPizzaSNapshot,dbpizza.getPizzaDetails,dbing.getIngredientsByType,function(req,res,next){
     res.render("forms/pizzas",{
         error_msg: req._error_msg,
         title:"Création d'une nouvelle Pizza!",
@@ -144,7 +146,7 @@ router.get("/pizzaedit/:id",dbpizza.getCategoryPizzaSNapshot,dbpizza.getPizzaDet
 
 
 
-//affichage de la liste des ingredients 
+//affichage de la liste des ingredients /////////////////////////////////////////////////////////////////////////////
 function renderIngredients(req,res,next){
     res.render("ingredients",{
         title:"Liste des ingredients",
@@ -158,13 +160,14 @@ function renderIngredients(req,res,next){
     });
 }
 //liste les ingredients 
-router.get("/ingredients",db.listAllIngredientsSnapshot,renderIngredients );
+router.get("/ingredients",dbing.listAllIngredientsSnapshot,renderIngredients );
 //sauvegarde ou met a jour un ingredient
-router.post('/ingredients',db.saveOrUpdateIngredient,db.listAllIngredientsSnapshot,renderIngredients);
-
-router.get("/ingredients/delete/:id",db.deleteIngredientById,db.listAllIngredientsSnapshot,renderIngredients);
-
-
+router.post('/ingredients',dbing.saveOrUpdateIngredient,dbing.listAllIngredientsSnapshot,renderIngredients);
+router.put("/ingredients",dbing.setIngredientActive,function(req,res,next){
+    res.status(200);
+    res.end("");
+})
+router.get("/ingredients/delete/:id",dbing.deleteIngredientById,dbing.listAllIngredientsSnapshot,renderIngredients);
 
 router.get("/ingredientedit", function(req,res,next){
     res.render("forms/ingredients",{
@@ -173,7 +176,7 @@ router.get("/ingredientedit", function(req,res,next){
         product:{}
     });
 });
-router.get("/ingredientedit/:id",db.getIngredientDetails, function(req,res,next){
+router.get("/ingredientedit/:id",dbing.getIngredientDetails, function(req,res,next){
     res.render("forms/ingredients",{
         error_msg: req._error_msg,
         title:"Modification d'un ingrédient",
@@ -186,8 +189,8 @@ router.get("/ingredientedit/:id",db.getIngredientDetails, function(req,res,next)
 
 
 
-//affiche la liste des news
-router.get("/news",db.listAllNewsSwnapshot, function(req,res,next){
+//affiche la liste des news //////////////////////////////////////////////////////////////////////////////////////////
+router.get("/news",dbnews.listAllNewsSwnapshot, function(req,res,next){
     res.render("news",{
         title:"Les news",
         slogan:"Les dernieres news publiées",
@@ -198,7 +201,7 @@ router.get("/news",db.listAllNewsSwnapshot, function(req,res,next){
     })
 });
 //creation d'une nouvelle news
-router.post("/news",db.saveNews,db.listAllNewsSwnapshot, function(req,res,next){
+router.post("/news",dbnews.saveNews,dbnews.listAllNewsSwnapshot, function(req,res,next){
     res.render("news",{
         title:"Les news",
         slogan:"Les dernieres news publiées",
@@ -215,9 +218,18 @@ router.get("/newsedit",function(req,res,next){
         title:"Création d'une News"
     });//le plus simple de l'appli!!!
 });
+router.get("/news/api",dbnews.listAllNewsAjax,function(req,res,next){
+    //renvoie les resultats au format JSON 
+    //appel via AJAX par la datable
+    res.json(req._news);
+});
 
 
-//affiche la liste des commentaires 
+
+
+
+
+//affiche la liste des commentaires  ////////////////////////////////////////////////////////////////////////////////
 router.get("/comments",db.listAllCommentsSwnapshot, function(req,res,next){
     res.render("comments",{
         title:"Les derniers commentaires",
@@ -225,7 +237,12 @@ router.get("/comments",db.listAllCommentsSwnapshot, function(req,res,next){
         products:req._comments
     })
 });
-//affiche la liste des clients
+
+
+
+
+
+//affiche la liste des clients /////////////////////////////////////////////////////////////////////////////////////
 router.get("/users",db.listAllUsersSnapshot, function(req,res,next){
     res.render("users",{
         title:"Liste des utilisateurs de l'application",

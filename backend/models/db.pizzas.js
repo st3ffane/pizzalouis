@@ -100,7 +100,7 @@ function saveOrUpdatePizzas(req,res,next){
     req.checkBody("ingredients").isArrayOfId();
 
 
-    let FILE_NAME = null;
+    
 
 
     req.getValidationResult().then( result=>{
@@ -115,7 +115,6 @@ function saveOrUpdatePizzas(req,res,next){
         }
         //le file upload 
         let file = req.file? req.file.filename : null;
-        console.log("un fichier image???")
         
         
         let infos = {

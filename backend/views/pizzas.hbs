@@ -86,7 +86,8 @@
                 return;
             }
             //lance une requete put 
-            var active = !$("#check-"+id).checked;
+            console.log($("#check-"+id).prop('checked'))
+            var active = $("#check-"+id).prop('checked') ;
             $.ajax({
                 url: '/admin/pizzas',
                 type: 'PUT',
@@ -112,4 +113,18 @@
                 
             });
         }
+    </script>
+     <script>
+    $(document).ready(function() {
+        $('table').each( (i,elem)=>{
+                $(elem).DataTable({
+                "filter": true,
+                "pagingType": "simple_numbers",
+                "orderClasses": false,
+                "order": [[0, "asc"]],
+                "info": false,
+                responsive: true
+            });
+        });
+    });
     </script>
