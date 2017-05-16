@@ -61,6 +61,40 @@
                                 
                             });
                     </script>
+
+
+                    
+                    <div class="well">
+                        <p>Total des ventes pour la période</p>
+                    </div>
+
+                    <div id="morris-total" style="position: relative; -webkit-tap-highlight-color: rgba(0, 0, 0, 0);">
+                    </div>
+
+                    <script>
+                        //initialisation du graph Morris
+                            $(function() {
+
+                                Morris.Bar({
+                                    element: 'morris-total',
+                                    data: [
+                                    {{#each totaux}}
+                                        {
+                                            y: '{{{this.name}}}',                                            
+                                            a: {{this.sum}}
+                                        },
+                                    {{/each}}
+                                    ],
+                                    xkey: 'y',
+                                    ykeys: 'a',
+                                    labels: ["Total des ventes"],
+                                    xLabelAngle: 35,
+                                    pointSize: 2,
+                                    hideHover: 'auto',
+                                    resize: true
+                                });
+                            });
+                    </script>
             </div>
         </div>
     </div>

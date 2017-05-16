@@ -119,3 +119,21 @@ a {
     color: #fffffe;
     text-align: center;
 }
+
+.morris-hover{
+  position: absolute!important;
+  background: white!important;
+    /*display: block!important;*/
+    /*left: 0!important;*/
+    transform: translate(-60%, -20%);
+    transition: transform 0.2s ease;
+}
+.morris-hover.morris-default-style .morris-hover-row-label{
+  font-weight: bold;
+    font-size: 1em;
+    margin: 0.25em 0;
+}
+.morris-hover.morris-default-style .morris-hover-point{
+  font-size: 1.2em;
+  font-weight: bold;
+}

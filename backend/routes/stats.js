@@ -78,6 +78,7 @@ router.get("/pizzas",db.getBestSellsM, function(req,res,next){
     res.render('details/pizzas',{
         title:"Evolution des ventes par pizzas!",
         sell_datas:req._best_sell,
+        totaux: req._totaux,
         graph_title:req._graph_title,
         graph_value:req._graph_value,
         graph_type : req._graph_type,
@@ -86,8 +87,9 @@ router.get("/pizzas",db.getBestSellsM, function(req,res,next){
 });
 router.get("/ingredients",db.getIngredientsSellsGraph, function(req,res,next){
     res.render('details/ingredients',{
-        title:"Consommation des ingrédients/bases",
+        title:"Consommation des ingrédients",
         sell_datas:req._best_sell,
+        totaux: req._totaux,
         graph_title:req._graph_title,
         graph_value:req._graph_value,
         graph_type : req._graph_type,
@@ -97,6 +99,7 @@ router.get("/bases",db.getBasesSellsGraph, function(req,res,next){
     res.render('details/base',{
         title:"Consommation des ingrédients/bases",
         sell_datas:req._best_sell,
+        totaux: req._totaux,
         graph_title:req._graph_title,
         graph_value:req._graph_value,
         graph_type : req._graph_type,
@@ -126,7 +129,8 @@ router.get("/geo",db.getAllPizzas,db.getGeolocCommands, function(req,res,next){
         pizzas:req._pizzas,
         graph_value:req._graph_value,
         day:req._day,
-        pizza: req._pizza_value
+        pizza: req._pizza_value,
+        weight: req._weight
     })
 })
 module.exports = router;

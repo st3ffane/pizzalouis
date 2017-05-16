@@ -296,6 +296,7 @@ function getIngredientsSellsGraph(req,res,next){
             var date = "";
             let current = null;
             let datas = [];
+            let totaux = {};//pour stocker les valeurs totales
 
             for (let d of dt[0]){
                 if(""+d.serie != date){
@@ -308,13 +309,26 @@ function getIngredientsSellsGraph(req,res,next){
                 }
                 //ajoute les infos a current 
                 current.datas.push(d);
+                //ajoute au total 
+                if(!totaux[d.nom])totaux[d.nom] = +d.sum;
+                else totaux[d.nom] += +d.sum;
             }
             //le dernier 
             if(current) datas.push(current);
 
+            //converti l'objet totaux en tabeau pour le display
+            let t = [];
+            for (let n in totaux){
+                console.log(totaux[n])
+                t.push({
+                    name:n,
+                    sum: totaux[n]
+                });
+            }
 
             
         req._best_sell = datas;//le resultat de la requete
+        req._totaux = t;//le nbr de ventes totales/ingredients...
         req._graph_value = value;
         req._graph_type = type;
         next();
@@ -408,6 +422,7 @@ function getBasesSellsGraph(req,res,next){
             var date = "";
             let current = null;
             let datas = [];
+            let totaux = {};//pour stocker les valeurs totales
 
             for (let d of dt[0]){
                 if(""+d.serie != date){
@@ -420,15 +435,28 @@ function getBasesSellsGraph(req,res,next){
                 }
                 //ajoute les infos a current 
                 current.datas.push(d);
+
+                //ajoute au total 
+                if(!totaux[d.nom])totaux[d.nom] = +d.sum;
+                else totaux[d.nom] += +d.sum;
             }
             //le dernier 
             if(current) datas.push(current);
-
+            //converti l'objet totaux en tabeau pour le display
+            let t = [];
+            for (let n in totaux){
+                console.log(totaux[n])
+                t.push({
+                    name:n,
+                    sum: totaux[n]
+                });
+            }
 
             
         req._best_sell = datas;//le resultat de la requete
         req._graph_value = value;
         req._graph_type = type;
+        req._totaux = t;//le nbr de ventes totales/ingredients...
         next();
         }).catch(err=>next(err));
 }
@@ -441,7 +469,9 @@ function getGeolocCommands(req,res,next){
     let day = 6;//par defaut, samedi
     let value = "ALL";
     let pizza_value = -1;//par defaut, toutes les commandes 
+    let total = 0;
 
+    
 
     if(req.query.period){
         switch(req.query.period){
@@ -505,10 +535,18 @@ function getGeolocCommands(req,res,next){
     if(pizza_select.length > 0){
         query += "WHERE "+pizza_select.join(" AND ");
     }
-    console.log(pizza_value);
+   
+      
+
+
     SEQ.query(query).then(dt=>{
+
+        //pour chaque commande, calcule le poids
+        
+
         req._geo = dt[0];
         req._graph_value = value;
+        //req._weight = 1/total;
         req._day = day;
         req._pizza_value = pizza_value
         next();
@@ -620,7 +658,7 @@ function getBestSellsM(req,res,next){
             var date = "";
             let current = null;
             let datas = [];
-
+            let totaux = {};
             for (let d of dt[0]){
                 if(""+d.serie != date){
                     date = d.serie;
@@ -632,15 +670,28 @@ function getBestSellsM(req,res,next){
                 }
                 //ajoute les infos a current 
                 current.datas.push(d);
+
+                //ajoute au total 
+                if(!totaux[d.nom])totaux[d.nom] = +d.sum;
+                else totaux[d.nom] += +d.sum;
             }
             //le dernier 
             if(current) datas.push(current);
 
-
+            //converti l'objet totaux en tabeau pour le display
+            let t = [];
+            for (let n in totaux){
+               
+                t.push({
+                    name:n,
+                    sum: totaux[n]
+                });
+            }
             
         req._best_sell = datas;//le resultat de la requete
         req._graph_value = value;
         req._graph_type = type;
+        req._totaux = t;//le nbr de ventes totales/ingredients...
         next();
     }).catch(err=>{
         next(err);
