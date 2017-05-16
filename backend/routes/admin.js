@@ -7,9 +7,14 @@
  */
 var express = require('express');
 var router = express.Router();
-
+//pour le multipart datas
+var multer  = require('multer')
+var upload = multer({ dest: 'public/images/pizzas' });
 
 var db = require("../models/db");//les acces a la base de données
+
+var dbpizza = require("../models/db.pizzas");//middlewares pour les pizzas 
+
 var stats  = require("./stats");//router pour affichage des statistiques
 
 
@@ -53,8 +58,14 @@ router.get('/', function(req, res, next) {
   });
 });
 
+
+
+
+
+
+
 //affiche la liste des recettes + permet d'en creer de nouvelles
-router.get('/pizzas',db.listAllPizzasSnapshot, function(req,res,next){
+router.get('/pizzas',dbpizza.listAllPizzasSnapshot, function(req,res,next){
     res.render('pizzas',{
         title:'Pizza Louis - les recettes',
         slogan:'La liste de toutes les pizzas',
@@ -68,7 +79,25 @@ router.get('/pizzas',db.listAllPizzasSnapshot, function(req,res,next){
 
     
 });
-router.post('/pizzas',db.saveOrUpdatePizzas, db.listAllPizzasSnapshot, function(req,res,next){
+router.put("/pizzas",dbpizza.setPizzaActive, function(req,res,next){
+
+    res.json({msg:req._msg});
+    // res.render('pizzas',{
+    //     title:'Pizza Louis - les recettes',
+    //     slogan:'La liste de toutes les pizzas',
+    //     addnew_label:"Créer une nouvelle recette!",
+    //     view_link:"/admin/pizzas/",
+    //     edit_link:"/admin/pizzaedit",
+    //     count: req._pizzas.count,
+    //     products: req._pizzas.pizzas,
+    //     msg:req._msg
+    // });
+
+
+    
+});
+//creation d'une nouvelle recette
+router.post('/pizzas',upload.single('picture'),dbpizza.saveOrUpdatePizzas, dbpizza.listAllPizzasSnapshot, function(req,res,next){
     res.render('pizzas',{
         title:'Pizza Louis - les recettes',
         slogan:'La liste de toutes les pizzas',
@@ -83,7 +112,8 @@ router.post('/pizzas',db.saveOrUpdatePizzas, db.listAllPizzasSnapshot, function(
 
     
 });
-router.get("/pizzaedit",db.getCategoryPizzaSNapshot, db.getIngredientsByType,function(req,res,next){
+//formulaire de recette -nouvelle recette
+router.get("/pizzaedit",dbpizza.getCategoryPizzaSNapshot, db.getIngredientsByType,function(req,res,next){
     res.render("forms/pizzas",{
         error_msg: req._error_msg,
         title:"Création d'une nouvelle Pizza!",
@@ -93,7 +123,8 @@ router.get("/pizzaedit",db.getCategoryPizzaSNapshot, db.getIngredientsByType,fun
         bases: req._bases
     });
 });
-router.get("/pizzaedit/:id",db.getCategoryPizzaSNapshot,db.getPizzaDetails,db.getIngredientsByType,function(req,res,next){
+//modification d'une recette 
+router.get("/pizzaedit/:id",dbpizza.getCategoryPizzaSNapshot,dbpizza.getPizzaDetails,db.getIngredientsByType,function(req,res,next){
     res.render("forms/pizzas",{
         error_msg: req._error_msg,
         title:"Création d'une nouvelle Pizza!",
@@ -103,6 +134,15 @@ router.get("/pizzaedit/:id",db.getCategoryPizzaSNapshot,db.getPizzaDetails,db.ge
         bases: req._bases
     });
 });
+
+
+
+
+
+
+
+
+
 
 //affichage de la liste des ingredients 
 function renderIngredients(req,res,next){

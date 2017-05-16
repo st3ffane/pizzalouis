@@ -37,11 +37,12 @@
                                         <td>{{base}}</td>
                                         <td>{{#linearizeArray ingredients}}{{this}}{{/linearizeArray}}</td>
                                         <td>{{id_category}}</td>
-                                        <td class="center">{{this.prix_small}}</td>
-                                        <td class="center">{{prix_big}}</td>
-                                        <td class="center">{{note}}</td>
-                                        <td class="center"><label>
-                                                    <input type="checkbox" data-toggle="toggle" {{#ifEq active true}}checked="true"{{/ifEq}}>
+                                        <td class="text-center">{{this.prix_small}}</td>
+                                        <td class="text-center">{{prix_big}}</td>
+                                        <td class="text-center">{{#formatNumber note }}{{this}}{{/formatNumber}}</td>
+                                        <td class="center"><label >
+                                                    <input  id="check-{{id}}" type="checkbox" onchange="activatepizza({{id}});" data-toggle="toggle" {{#ifEq active true}}checked="true"{{/ifEq}}>
+                                                    <span id="text-{{id}}">{{#ifEq active true}}Active{{else}}Inactive{{/ifEq}}</span>
                                                 </label></td>
                                     </tr>
                                     {{/each}}
@@ -56,5 +57,59 @@
                 </div>
                 <!-- /.col-lg-12 -->
             </div>
-           
+
+            <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="display: none;">
+                                <div class="modal-dialog">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                                            <h4 class="modal-title" id="myModalLabel">Oups...</h4>
+                                        </div>
+                                        <div class="modal-body">
+                                            Une erreur est arrivée lors de la mise à jour de la base.<br/>
+                                            Les modifications n'ont pas été prises en compte.
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                                        </div>
+                                    </div>
+                                    <!-- /.modal-content -->
+                                </div>
+                                <!-- /.modal-dialog -->
+                            </div>
+    <script>
+        var forget = false;//wow
+
+        function activatepizza(id){
+            if(forget){
+                forget = false;
+                return;
+            }
+            //lance une requete put 
+            var active = !$("#check-"+id).checked;
+            $.ajax({
+                url: '/admin/pizzas',
+                type: 'PUT',
+                data: "pizza="+id+"&active="+active,
+                success: function(data, status) {
+                    console.log("hello", status)
+                    if(status=="success"){
+                        //modifie le label 
+                        $("#text-"+id).text(active?"Active":"Inactive");
+                    } else {
+                        forget = true;
+                        $("#check-"+id).bootstrapToggle('toggle');
+                        $('#myModal').modal('toggle');
+                    }
+                    
+                }, 
+                error:function(){
+                    //parceque la, jquery appelle le onchange!!!!
+                    forget = true;
+                    $("#check-"+id).bootstrapToggle('toggle');
+                    $('#myModal').modal('toggle');
+                }
+                
+            });
+        }
     </script>

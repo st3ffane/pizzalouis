@@ -8,8 +8,10 @@ var expressValidator = require('express-validator')
 
 
 
+//crée les relations entre les tables de la base 
+require("./models/relations");
 
-
+//importe les différentes routes de l'appli
 var admin = require("./routes/admin");
 var api = require('./routes/api');
 var login = require('./routes/login');
@@ -31,16 +33,21 @@ require("./hbs.init");
 //app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
 app.use(logger('dev'));
 app.use(bodyParser.json());
-// app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.urlencoded({ extended: true }));
+//ajoute le validator pour les parametres, query & body 
+//pour s'assurer que les données envoyées soient cohérentes
+//rajoutte des validateurs pour certains cas
 app.use(expressValidator({
   customValidators: {
+    //verifie si est un tableau
      isArray: function(value) {
         return Array.isArray(value);
      },
+     //un tableau non vide
      notEmpty: function(array) {
         return array.length > 0;
      },
+     //verifie qu'est un tableau d'ID
      isArrayOfId: function(value) {
        
         if(!Array.isArray(value)) return false;
@@ -50,11 +57,12 @@ app.use(expressValidator({
         }
         return true;
      },
+     //verifie que la valeur est une de celles acceptables
      isCommentWaiting: function(value){
         return value == "all";//unquement ceux en attente par defaut
      }
   }
-})); // this line must be immediately after any of the bodyParser middlewares!
+})); 
 
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));

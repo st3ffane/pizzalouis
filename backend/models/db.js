@@ -4,12 +4,13 @@
  * generation des middlewares pour la recuperation des données
  * 
  */
+
 var sequelize = require("sequelize");
 var util = require('util');
 var SEQ = require("./db_connect");
 
 
-
+//les models de tables
 var users = require("./users");
 var comments = require("./comments");
 var pizza = require("./pizzas");
@@ -18,55 +19,6 @@ var category = require("./category");
 var commandes = require("./commands");
 var news = require("./news");
 var cp = require("./commandes_pizzas");
-
-
-//defini qqs tables en plus
-var pizza_ingredient = SEQ.define('pizza_ingredient',{
-    id_pizza:{type:sequelize.INTEGER},//identifiant unique de la recette
-    id_ingredient:{type:sequelize.INTEGER},//identifiant unique de la recette
-    
-    }, 
-    {
-        tableName: 'pizza_ingredient',
-        timestamps: false
-    }
-);
-
-
-//une pizza a un ingredient de base
-pizza.belongsTo(ingredients,{foreignKey:"id_base", as:"base"});
-//et des tops
-pizza.belongsToMany(ingredients,{through:"pizza_ingredient", foreignKey:"id_pizza"});
-ingredients.belongsToMany(pizza,{through:"pizza_ingredient", foreignKey:"id_ingredient"});
-
-// //une pizza a des commentaires
-pizza.belongsToMany(comments,{through:"comments_pizzas", foreignKey:"id_pizza"});
-comments.belongsToMany(pizza,{through:"comments_pizzas", foreignKey:"id_comment"});
-
-// //une pizza a une category
-category.hasMany(pizza,{foreignKey:"id_category"});
-pizza.belongsTo(category,{foreignKey:"id_category"});
-
-// //une commande est passée par un client
-users.hasMany(commandes,{foreignKey:"id_client"});
-
-// //une commande a des pizzas
-// commandes.belongsToMany(pizza,{through:"commandes_pizzas", foreignKey:"id_pizza"});
-// pizza.belongsToMany(commandes,{through:"commandes_pizzas", foreignKey:"id_commande"});
-cp.belongsTo(commandes,{foreignKey:"id_commande"});
-cp.belongsTo(pizza,{foreignKey:"id_pizza"});
-pizza.hasMany(cp,{foreignKey:"id_pizza"});
-commandes.hasMany(cp,{foreignKey:"id_commande"});
-
-
-// //les news ont des commentaires aussi 
-news.belongsToMany(comments,{through:"comments_news", foreignKey:"id_news"});
-comments.belongsToMany(news,{through:"comments_news", foreignKey:"id_comment"});
-
-
-// //un utilisateur peut poster des commentaires
-users.hasMany(comments,{foreignKey:"id_user"});
-comments.belongsTo(users,{foreignKey:"id_user"});
 
 
 /**
@@ -179,215 +131,6 @@ function listAllPizzas(req,res,next){
  * 
  */
 //les pizzas CRU: pas de possibilité de suppression, uniquement desactivation
-function listAllPizzasSnapshot(req,res,next){
-    pizza.findAll({
-        attributes:["id","nom","pizzas.slogan","prix_small","prix_big",'id_category','active',
-            [sequelize.fn("AVG", sequelize.col("comments.note")), "note"]],
-         include:[
-             {
-                model:ingredients,
-                attributes:['nom'],
-                as: "base"
-            },
-            {
-                model:ingredients,
-                attributes:['nom']
-            },
-            {
-                model:comments,
-                attributes:[]
-            }
-        ],
-        group:["pizzas.id","pizzas.nom","pizzas.slogan","prix_small","prix_big",'id_category','active',
-        "base.id","base.nom","ingredients.id","ingredients.nom","ingredients.pizza_ingredient.id_pizza",
-        "ingredients.pizza_ingredient.id_ingredient","comments.comments_pizzas.id_pizza","comments.comments_pizzas.id_comment"]
-    }).then( dt=>{
-        let p = {};
-        if(dt){
-            p = {
-                
-                pizzas: dt.map(el=>{
-                    let p = el.dataValues;
-                    
-                    p.ingredients = p.ingredients.map(ing=>{
-                        return ing.dataValues.nom;
-                    });
-                    p.base = el.base.dataValues.nom;
-                    return p;
-                })
-            }
-            p.count = p.pizzas.length;
-            
-        } 
-        
-        req._pizzas = p;
-        next();
-    })
-}
-function getIngredientsByType(req,res,next){
-    //recupere tous les ingredients et enregistre dans ingredients ou bases
-    ingredients.findAll().then( dt=>{
-        let base = [];
-        let ingredients = [];
-        
-        
-        for (let ing of dt){
-            let i = ing.dataValues;
-            if(i.type == "top") ingredients.push(i);
-            else base.push(i);
-        }
-        req._ingredients = ingredients;
-        req._bases = base;
-        next();
-    }).catch(err=>{
-        next(err);//gros bug!!!
-    })
-}
-function getCategoryPizzaSNapshot(req,res,next){
-    category.findAll({
-        attributes:["nom"]
-    }).then(dt=>{
-        req._category = dt.map(el=>{
-            console.log(el.dataValues)
-            return el.dataValues.nom;
-        });
-        next();
-    });
-
-}
-function saveOrUpdatePizzas(req,res,next){
-    //validation des donées
-    req.checkBody('id').optional().isInt();//id peut etre present, doit etre un entier (bigint)
-    req.checkBody("nom").notEmpty();//titre obligatoire
-    // req.checkBody("slogan").notEmpty();//titre obligatoire
-    // req.checkBody("long_desc").notEmpty();//titre obligatoire
-    req.checkBody("prix_small").isDecimal();
-    req.checkBody("prix_big").isDecimal();
-    //picture?
-    //active ?
-    req.checkBody("id_base").isInt();//identifiant base 
-    req.checkBody("ingredients").isArrayOfId();
-
-    req.getValidationResult().then( result=>{
-        if(!result.isEmpty()){
-            //erreur validation des données
-            console.log("Erreur de validations");
-            console.log(util.inspect(result.array()))
-            req._msg = "Erreur de validations";
-            //revient sur la meme page... 
-            res.redirect("/admin/pizzaedit");
-            return;
-        }
-
-        console.log("Trry saving datas");
-        let infos = {
-           
-            nom: req.body.nom,
-            slogan: req.body.slogan,
-            long_desc: req.body.long_desc,
-            prix_small: req.body.prix_small,
-            prix_big: req.body.prix_big,
-            active: req.body.active || false,
-            picture: "test.jpg",
-            id_category: req.body.id_category,
-            id_base: req.body.id_base,
-            
-
-        }
-
-        if(req.body.id){
-            //mise a jour
-           
-            pizza.update(infos,{validate:true,where:{id:req.body.id}}).then( dt=>{
-                let ings = req.body.ingredients.map(el=>{
-                    return "("+req.body.id+","+el+")";
-                });
-                return SEQ.query("DELETE from pizza_ingredient where id_pizza="+req.body.id+"; INSERT INTO pizza_ingredient(id_pizza, id_ingredient) VALUES "+ings.join(','));
-
-            }).then( dt=>{
-                    //fin de requete????
-                    req._msg = "Modification effectuées avec succès!"
-                    next();
-                }).catch(err=>{
-                    next(err);//gros bug!
-                });
-
-        } else {
-            //creation
-            
-            let mp = pizza.create(infos).then( dt=>{
-                //les relations avec les ingredients 
-                let ings = req.body.ingredients.map(el=>{
-                    return "("+dt.id+","+el+")";
-                });
-                
-                return SEQ.query("INSERT INTO pizza_ingredient(id_pizza, id_ingredient) VALUES "+ings.join(','));
-
-            }).then( dt=>{
-                    //fin de requete????
-                    next();
-                }).catch(err=>{
-                    next(err);
-                });
-        }
-        // pizza.upsert(infos,{
-        //     validate:true,
-        //     include:[{
-        //         model: ingredients
-        //     }]
-        // }).then( dt=>{
-
-            
-        //     req._msg = "Sauvegarde des modifications OK";
-        //     console.log(dt);
-        //     let id = dt.dataValues.id;
-        //     console.log("Identifiant de la pizza: "+id);
-
-        //     //sauvegarde la liste des ingredients 
-
-        //     console.log("OK");
-        //     next();
-        // }).catch( err =>{
-        //     req._msg = "Echec lors de la modification "+err;
-        //     console.log("Error: "+err);
-        //     next();
-        // })
-        //les relations
-    });
-    
-}
-
-function getPizzaDetails(req,res,next){
-    let id = req.params.id;
-    if(!id) {
-        res.redirect("/admin/pizzas");
-        return;
-    }
-    pizza.findById(id,{
-        include:[
-            {
-                model: ingredients,
-                as:"base",
-                attributes:["id","nom"]
-            },
-            {
-            model: ingredients,
-            attributes:["id","nom"]
-        }]
-    }).then(dt=>{
-        //enregistre les données 
-        let p = dt.dataValues;
-        //les ingredients 
-        p.base = p.base.dataValues;
-        p.ingredients = p.ingredients.map(el=>{
-            return el.dataValues;
-        });
-        req._pizza = p;
-        next();
-    }).catch(err=>{
-        next(err);//gros bug
-    })
-}
 
 //les ingredients CRUD 
 function listAllIngredientsSnapshot(req,res,next){
@@ -497,7 +240,25 @@ function getIngredientDetails(req,res,next){
             next();
     });
 }
-
+function getIngredientsByType(req,res,next){
+    //recupere tous les ingredients et enregistre dans ingredients ou bases
+    ingredients.findAll().then( dt=>{
+        let base = [];
+        let ingredients = [];
+        
+        
+        for (let ing of dt){
+            let i = ing.dataValues;
+            if(i.type == "top") ingredients.push(i);
+            else base.push(i);
+        }
+        req._ingredients = ingredients;
+        req._bases = base;
+        next();
+    }).catch(err=>{
+        next(err);//gros bug!!!
+    })
+}
 
 /**
  * SELECT "users"."id", "users"."nom", "users"."prenom", "users"."login", "users"."passwrd", "users"."tel", "users"."mail",
@@ -804,12 +565,12 @@ module.exports = {
     getIngredientDetails: getIngredientDetails,
     deleteIngredientById: deleteIngredientById,
     getIngredientsByType:getIngredientsByType,
-    getCategoryPizzaSNapshot : getCategoryPizzaSNapshot,
+    // getCategoryPizzaSNapshot : getCategoryPizzaSNapshot,
 
 
-    listAllPizzasSnapshot: listAllPizzasSnapshot,
-    saveOrUpdatePizzas: saveOrUpdatePizzas,
-    getPizzaDetails : getPizzaDetails,
+    // listAllPizzasSnapshot: listAllPizzasSnapshot,
+    // saveOrUpdatePizzas: saveOrUpdatePizzas,
+    // getPizzaDetails : getPizzaDetails,
 
     listAllNewsSwnapshot: listAllNewsSwnapshot,
     saveNews: saveNews,

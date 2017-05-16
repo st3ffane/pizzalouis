@@ -1,5 +1,5 @@
 <div class="row">
-    {{#if msg}}<p>{{msg}}</p>{{/if}}
+    <p>{{#if msg}}{{msg}}{{/if}}</p>
 <div class="col-lg-12">
         <div class="panel panel-default">
             <div class="panel-heading">
@@ -21,7 +21,7 @@
                         
 
                         
-                        <form role="form" method="POST" action="/admin/pizzas">
+                        <form role="form" method="POST" action="/admin/pizzas" enctype="multipart/form-data">
                             {{#if product.id}}<input type="hidden" name="id" value="{{product.id}}">{{/if}}
 
                             <div class="form-group">
@@ -62,24 +62,27 @@
                             <!-- la base de la pizza -->
                             <div class="form-group">
                                 <label>Base de la pizza</label>
-                                {{#each bases}}
+                               {{#each bases}}
                                 <div class="radio">
                                     <label>
                                         <input type="radio" name="id_base"  value="{{id}}" {{#ifEq id ../product.id_base }}checked="true"{{/ifEq}}>{{nom}}
                                     </label>
                                 </div>
                                 {{/each}}
+                                
                             </div>
                             <!-- liste des ingredients -->
-                            <div class="form-group">
+                           <div class="form-group">
                                 <label>Les ingredients de la recette</label>
+                                
                                 {{#each ingredients}}
-                                <div class="checkbox">
+                                <div class="checkbox" >
                                     <label>
                                         <input type="checkbox" name="ingredients" {{#ifIn id ../product.ingredients }}checked="true"{{/ifIn}} value="{{id}}">{{nom}}
                                     </label>
                                 </div>
                                 {{/each}}
+                                
                             </div>
 
 
@@ -93,14 +96,33 @@
                             </div>
 
                              <div class="form-group">
-                                <label>File input</label>
-                                <input type="file">
+                                <label>Photo de la pizza!</label>
+                                <input id="fileUp" type="file" name="picture"
+                               >
                             </div>
+                            <script>
+                                $(function(){
+                                    $("#fileUp").fileinput(
+                                        {'showUpload':true,
+                                         'allowedFileExtensions':['jpg', 'gif', 'png'],
+                                         maxFileCount:1,
+                                         showRemove: false,
+                                         showUpload: false,
+                                         {{#if product.picture}}
+                                         initialPreview: ["/images/pizzas/{{product.picture}}"],
+                                         initialPreviewAsData: true
+                                         {{/if}}
+                                         
+                                         }
+                                    );
+                                })
+
+                            </script>
 
                             <div class="form-group">
                                 <button type="submit" class="btn btn-primary btn-lg">Enregistrer</button>
-                                <button type="reset" class="btn btn-default btn-lg">Abandonner</button>
-                                {{#if product.id}}<a href="/admin/ingredients/delete/{{product.id}}" class="btn btn-danger btn-lg">Supprimer</a>{{/if}}
+                                <a href="/admin/pizzas" class="btn btn-default btn-lg">Retour</a>
+                                
                             </div>
                         </form>
                     </div>
