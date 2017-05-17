@@ -15,8 +15,7 @@
                             <div class="well">
                                 <h3>{{title}}</h3>
                                 <p>{{slogan}}</p>
-                                <p>Actuellement, il y a <strong>{{count}}</strong> utilisateurs inscripts sur l'application.</p>
-                                
+                               
                             </div>
                                 <thead>
                                     <tr>
@@ -27,18 +26,7 @@
                                         <th>nbr Messages</th>
                                     </tr>
                                 </thead>
-                                <tbody>
-                                    {{#each products}}
-                                    <tr class="odd gradeX">
-                                        <td><a href="/admin/users/{{id}}" title="Cliquez pour voir les details de cet utilisateur">{{prenom}} {{nom}}</a></td>
-                                        <td>{{tel}}</td>
-                                        <td>{{mail}}</td>
-                                        <td>{{commandesCount}}</td>
-                                        <td><a href="/admin/comments?from_user={{id}}">{{commentsCount}}</a></td>
-                                    </tr>
-                                    {{/each}}
-                                    
-                                </tbody>
+                               
                             </table>
                             
                         </div>
@@ -49,4 +37,54 @@
                 <!-- /.col-lg-12 -->
             </div>
            
+  <script>
+       
+
+        $(document).ready(function() {
+            $('#products').DataTable( {
+                "serverSide": true,
+                "ajax": '/admin/users/api',
+                "columns" : [
+                    { "data": "nom" },
+                    { "data": "tel" },
+                    { "data": "mail" },
+                    { "data": "commandescount" },
+                    { "data": "commentscount" },
+                
+                ],
+            "order": [[ 0, "desc" ]],
+            columnDefs: [ 
+            {
+                targets: 0,
+                render: function(data, type, row, meta){
+                    var name = "<a href='/admin/users/"+row.id+"' title='Cliquez pour voir les détails de cet utilisateur'>"+row.prenom+" "+row.nom+"</a>";
+                    return name;
+                }
+            },
+            
+            {
+                targets: 3,
+                render: function(data, type, row, meta){
+                    var ret = "0";
+                    if(data){
+                        ret="<a href='/admin/commands?from_user="+row.id+"' title='Voir toutes les commandes de cet utilisateur'>"+data+"</a>";
+                    }
+                    return ret;
+                }
+            },
+            {
+                targets: 4,
+                render: function(data, type, row, meta){
+                    var ret = "0";
+                    if(data){
+                        ret="<a href='/admin/comments?from_user="+row.id+"' title='Voir tous les commentaires de cet utilisateur'>"+data+"</a>";
+                    }
+                    return ret;
+                }
+            },
+            
+            
+             ]
+            } );
+        } );   
     </script>

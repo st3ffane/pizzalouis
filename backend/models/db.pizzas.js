@@ -125,7 +125,7 @@ function saveOrUpdatePizzas(req,res,next){
             prix_small: req.body.prix_small,
             prix_big: req.body.prix_big,
             active: req.body.active || false,
-            picture: file,
+            
             id_category: req.body.id_category,
             id_base: req.body.id_base,
             

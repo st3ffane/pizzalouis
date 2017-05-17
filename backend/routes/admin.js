@@ -16,6 +16,7 @@ var db = require("../models/db");//les acces a la base de données
 var dbpizza = require("../models/db.pizzas");//middlewares pour les pizzas 
 var dbing = require("../models/db.ingredients");
 var dbnews = require("../models/db.news");
+var dbUsers = require("../models/db.users");
 
 var stats  = require("./stats");//router pour affichage des statistiques
 
@@ -197,7 +198,7 @@ router.get("/news", function(req,res,next){
         addnew_label:"Créer une nouvelle news",
         view_link:"/admin/news/",
         edit_link:"/admin/newsedit",
-        products:req._news
+        //products:req._news
     })
 });
 //creation d'une nouvelle news -avec image
@@ -253,20 +254,24 @@ router.get("/comments",db.listAllCommentsSwnapshot, function(req,res,next){
 
 
 //affiche la liste des clients /////////////////////////////////////////////////////////////////////////////////////
-router.get("/users",db.listAllUsersSnapshot, function(req,res,next){
+router.get("/users", function(req,res,next){
     res.render("users",{
         title:"Liste des utilisateurs de l'application",
         slogan:"La liste des inscripts",
-        count: req._users.count,
-        products:req._users.users
+        // count: req._users.count,
+        //products:req._users.users
     })
 });
-router.get('/users/:id',db.getUserDetails,function(req,res,next){
+router.get("/users/api",dbUsers.listAllUsersSnapshot, function(req,res,next){
+    res.json(req._users);
+});
+router.get('/users/:id',dbUsers.getUserDetails,function(req,res,next){
     res.render("details/user",{
         title:"Informations client",
        user:req._user 
     });
 });
+
 
 router.use('/stats', stats);
 

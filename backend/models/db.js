@@ -560,11 +560,11 @@ module.exports = {
     
     listAllCommentsSwnapshot: listAllCommentsSwnapshot,
 
-    listAllIngredientsSnapshot: listAllIngredientsSnapshot,
-    saveOrUpdateIngredient:saveOrUpdateIngredient,
-    getIngredientDetails: getIngredientDetails,
-    deleteIngredientById: deleteIngredientById,
-    getIngredientsByType:getIngredientsByType,
+    // listAllIngredientsSnapshot: listAllIngredientsSnapshot,
+    // saveOrUpdateIngredient:saveOrUpdateIngredient,
+    // getIngredientDetails: getIngredientDetails,
+    // deleteIngredientById: deleteIngredientById,
+    // getIngredientsByType:getIngredientsByType,
     // getCategoryPizzaSNapshot : getCategoryPizzaSNapshot,
 
 
@@ -572,11 +572,11 @@ module.exports = {
     // saveOrUpdatePizzas: saveOrUpdatePizzas,
     // getPizzaDetails : getPizzaDetails,
 
-    listAllNewsSwnapshot: listAllNewsSwnapshot,
-    saveNews: saveNews,
+    // listAllNewsSwnapshot: listAllNewsSwnapshot,
+    // saveNews: saveNews,
 
-    listAllUsersSnapshot:listAllUsersSnapshot,
-    getUserDetails:getUserDetails,
+    // listAllUsersSnapshot:listAllUsersSnapshot,
+    // getUserDetails:getUserDetails,
 
 
 
