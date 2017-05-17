@@ -57,14 +57,26 @@
                     { "data": "date_pub" },
                     { "data": "title" },
                     { "data": "texte" },
-                    { "data": "count" }
+                    { "data": "count" },
+                
                 ],
+            "order": [[ 0, "desc" ]],
             columnDefs: [ 
             {
                 targets: 0,
                 render: function(from){
                     var d = new Date(from);
                     return d.toLocaleDateString();
+                }
+            },
+            {
+                targets: 1,
+                render: function(data, type, row, meta){
+                    var ret = data;
+                    if(data){
+                        ret="<a href='/admin/newsedit/"+row.id+"' title='Editer cette news'>"+data+"</a>";
+                    }
+                    return ret;
                 }
             },
             {

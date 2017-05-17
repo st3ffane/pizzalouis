@@ -190,7 +190,7 @@ router.get("/ingredientedit/:id",dbing.getIngredientDetails, function(req,res,ne
 
 
 //affiche la liste des news //////////////////////////////////////////////////////////////////////////////////////////
-router.get("/news",dbnews.listAllNewsSwnapshot, function(req,res,next){
+router.get("/news", function(req,res,next){
     res.render("news",{
         title:"Les news",
         slogan:"Les dernieres news publiées",
@@ -200,8 +200,8 @@ router.get("/news",dbnews.listAllNewsSwnapshot, function(req,res,next){
         products:req._news
     })
 });
-//creation d'une nouvelle news
-router.post("/news",dbnews.saveNews,dbnews.listAllNewsSwnapshot, function(req,res,next){
+//creation d'une nouvelle news -avec image
+router.post("/news",upload.single('picture'),dbnews.saveNews,dbnews.listAllNewsSwnapshot, function(req,res,next){
     res.render("news",{
         title:"Les news",
         slogan:"Les dernieres news publiées",
@@ -212,12 +212,22 @@ router.post("/news",dbnews.saveNews,dbnews.listAllNewsSwnapshot, function(req,re
         msg:req._msg
     })
 });
+
+//edition/redaction d'une news
+router.get("/newsedit/:id",dbnews.getNewsDetails,function(req,res,next){
+    res.render("forms/news",{
+        title:"Edition d'une News",
+        product: req._news
+    });//le plus simple de l'appli!!!
+});
 //edition/redaction d'une news
 router.get("/newsedit",function(req,res,next){
     res.render("forms/news",{
         title:"Création d'une News"
     });//le plus simple de l'appli!!!
 });
+
+
 router.get("/news/api",dbnews.listAllNewsAjax,function(req,res,next){
     //renvoie les resultats au format JSON 
     //appel via AJAX par la datable

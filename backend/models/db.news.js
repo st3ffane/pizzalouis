@@ -56,7 +56,7 @@ function listAllNewsAjax(req,res,next){
         totalnews = dt;
         //parametres de la requete 
         let orderby="date_pub DESC";//par defaut, les dernieres en premier
-        if(order){
+        if(order && order.length>0){
             let who = order[0].column;
             let how = order[0].dir;
 
@@ -90,6 +90,7 @@ function listAllNewsAjax(req,res,next){
 
 
 function saveNews(req,res,next){
+    req.checkBody("id").optional().isInt();
     req.checkBody("title").notEmpty();//titre obligatoire
     req.checkBody('texte').notEmpty();
 
@@ -99,23 +100,62 @@ function saveNews(req,res,next){
             //error
             
             next("Invalid datas");
+            return;
         }
+
+        //le file upload 
+
+        console.log(req.file)
+        let file = req.file? req.file.filename : null;
         let infos = {
             title: req.body.title,
             texte: req.body.texte,
-            picture: "test.jpg"
+            
         }
-        
-        news.create(infos).then(dt=>{
+        if(file){
+            console.log("SAUVEGARDE IMAGE "+file)
+            infos.picture = file;
+        }
+        console.log("HAS ID: ",req.body.id)
+        if(req.body.id){
+           return  news.update(infos, {
+                where:{
+                    id: req.body.id
+                }
+            });
+        }
+        return news.create(infos)
+    }).then(dt=>{
             req._msg="Creation de la news OK";
             next();
-        }).catch(err=>next(err));
-    });
+        }).catch(err=>next(err));;
     
+
+
 }
 
+function getNewsDetails(req,res,next){
+    req.checkParams("id").isInt();
+    req.getValidationResult().then(result=>{
+        if(!result.isEmpty()){
+            res.redirect("/admin/news");//repart a la liste 
+            return;
+        }
+        //recup la news 
+        return news.find({
+            where:{
+                id:req.params.id
+            }
+        });
+    }).then( dt =>{
+        req._news = dt.dataValues;
+        console.log(req._news);
+        next();
+    })
+}
 module.exports={
      listAllNewsSwnapshot: listAllNewsSwnapshot,
      listAllNewsAjax: listAllNewsAjax,
      saveNews: saveNews,
+     getNewsDetails: getNewsDetails
 }

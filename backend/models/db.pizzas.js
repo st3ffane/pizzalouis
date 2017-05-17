@@ -87,7 +87,7 @@ function getCategoryPizzaSNapshot(req,res,next){
 //sauvegarde les infos relatives a une pizza
 function saveOrUpdatePizzas(req,res,next){
     //validation des donées
-    console.log(req.body)
+    
     req.checkBody('id').optional().isInt();//id peut etre present, doit etre un entier (bigint)
     req.checkBody("nom").notEmpty();//titre obligatoire
     // req.checkBody("slogan").notEmpty();//titre obligatoire
@@ -125,7 +125,7 @@ function saveOrUpdatePizzas(req,res,next){
             prix_small: req.body.prix_small,
             prix_big: req.body.prix_big,
             active: req.body.active || false,
-            picture: "test.jpg",
+            picture: file,
             id_category: req.body.id_category,
             id_base: req.body.id_base,
             

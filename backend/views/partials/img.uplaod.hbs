@@ -1,0 +1,22 @@
+<div class="form-group">
+    <label>Photo de présentation:</label>
+    <input id="fileUp" type="file" name="picture">
+</div>
+<script>
+    $(function(){
+        $("#fileUp").fileinput(
+            {'showUpload':true,
+                'allowedFileExtensions':['jpg', 'gif', 'png'],
+                maxFileCount:1,
+                showRemove: false,
+                showUpload: false,
+                {{#if product.picture}}
+                initialPreview: ["/images/pizzas/{{product.picture}}"],
+                initialPreviewAsData: true
+                {{/if}}
+                
+                }
+        );
+    })
+
+</script>
