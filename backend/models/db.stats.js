@@ -68,13 +68,13 @@ limit 1;
  */
 function getBestStart(req,res,next){
     
-    let limit = "order by coalesce(avg(note),0) DESC limit 1";//par defaut, la meilleure reponse
+    let limit = "order by avg(coalesce(note,0)) DESC limit 1";//par defaut, la meilleure reponse
 
     if(req.query.show && req.query.show=="all"){
-        limit = "";
+        limit = "order by coalesce(avg(note),0) DESC";
     }
     
-    SEQ.query(`select pizzas.id, pizzas.nom, coalesce(avg(note),0) as avg
+    SEQ.query(`select pizzas.id, pizzas.nom, avg(coalesce(note,0)) as avg
         from pizzas
         left outer join comments_pizzas as cp on(cp.id_pizza=pizzas.id)
         left outer join comments on (cp.id_comment=comments.id)

@@ -38,18 +38,20 @@
                                         
                                             
                                             {{#each beststar.datas}}
-                                            { y: "{{{this.nom}}}",
-                                                "{{this.id}}":{{this.avg}} },
+                                            { 
+                                                y: "{{{this.nom}}}",
+                                                a:{{this.avg}} 
+                                            },
                                             {{/each}}
                                     
                                     
                                     ],
                                     xkey: 'y',
-                                    ymax:5,
-                                    labels: [{{#each beststar.datas}}"{{{this.nom}}} {{#formatNumber this.avg}}{{this}}{{/formatNumber}}",{{/each}}],
-                                    ykeys: [{{#each beststar.datas}}'{{this.id}}',{{/each}}],
+                                    ymax:6,
+                                    labels: ['note'],
+                                    ykeys: ['a'],
                                     
-                                    hideHover: 'always',
+                                    hideHover: 'auto',
                                     resize: true
                                 });
                                 chart.options.labels.forEach(function(label, i){
