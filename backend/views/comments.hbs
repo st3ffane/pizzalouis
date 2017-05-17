@@ -12,32 +12,20 @@
                             
                             <table width="100%" class="table table-striped table-bordered table-hover" id="products">
                                 <!-- /.table-responsive -->
-                            <div class="well">
-                                <h3>{{title}}</h3>
-                                <p>{{slogan}}</p>
-                                
-                            </div>
+                                <div class="well">
+                                    <h3>{{title}}</h3>
+                                    <p>{{slogan}}</p>
+                                    
+                                </div>
                                 <thead>
                                     <tr>
                                         <th>Date</th>
                                         <th>Message</th>
                                         <th>auteur</th>
-                                        <th>Activer</th>
+                                        <th>Etat</th>
                                     </tr>
                                 </thead>
-                                <tbody>
-                                    {{#each products}}
-                                    <tr class="odd gradeX">
-                                        <td>{{#formatDate date "HH:mm:ss DD-MM-YYYY"}}{{this}}{{/formatDate}}</td>
-                                        <td>{{texte}}</td>
-                                        <td><a href="/admin/users/{{user.id}}" title="Voir les informations de cet utilisateur">{{user.prenom}} {{user.nom}}</a></td>
-                                        <td class="center"><label>
-                                                    <input type="checkbox" data-toggle="toggle" {{#ifEq etat 'published'}}checked="true"{{/ifEq}}>
-                                                </label></td>
-                                    </tr>
-                                    {{/each}}
-                                    
-                                </tbody>
+                                
                             </table>
                             
                         </div>
@@ -48,4 +36,64 @@
                 <!-- /.col-lg-12 -->
             </div>
            
+    <script>
+       
+
+        $(document).ready(function() {
+            var table = $('#products').DataTable( {
+                "serverSide": true,
+                "ajax": '/admin/comments/api',
+                "filter": false,
+                "sort":false,
+                "columns" : [
+                    { "data": "date" },
+                    { "data": "texte" },
+                    { "data": "client" },
+                    { "data": "etat" },
+                ],
+                "order": [[ 0, "desc" ]],
+            columnDefs: [ 
+                {
+                    targets: 0,
+                    render: function(from){
+                        var d = new Date(from);
+                        return d.toLocaleDateString();
+                    }
+                },{
+                    targets:1,
+                    bSortable:false
+                },
+                {
+                    targets: 2,
+                    render: function(data, type, row, meta){
+                        
+                        ret="<a href='/admin/users/"+data.id+"' title='Voir les informations de ce client'>"+data.prenom+" "+data.nom+"</a>";
+                        
+                        return ret;
+                    },
+                    
+                },
+                {
+                    targets:3,
+                    render:function(data,type,row,meta){
+                        var checked = row.etat == 'published' ? "checked" : "";
+                        return "<input id="+row.id+" "+checked+" type='checkbox'>";
+                    }
+                    
+                }
+                
+                
+             ]
+            } 
+            );
+
+            table.on('draw', function(evt){
+                $("input[type='checkbox']").each((index,elem)=>$(elem).bootstrapToggle({
+                    on: 'Publié',
+                    off: 'en attente'
+                }));
+            })
+        } );   
     </script>
+    
+        

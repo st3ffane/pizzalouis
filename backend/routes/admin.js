@@ -11,7 +11,7 @@ var router = express.Router();
 var multer  = require('multer')
 var upload = multer({ dest: 'public/images/pizzas' });
 
-var db = require("../models/db");//les acces a la base de données
+//var db = require("../models/db");//les acces a la base de données
 
 var dbpizza = require("../models/db.pizzas");//middlewares pour les pizzas 
 var dbing = require("../models/db.ingredients");
@@ -279,11 +279,14 @@ router.get("/news/api",dbnews.listAllNewsAjax,function(req,res,next){
 
 
 //affiche la liste des commentaires  ////////////////////////////////////////////////////////////////////////////////
-router.get("/comments",db.listAllCommentsSwnapshot, function(req,res,next){
+router.get("/comments/api",dbComments.listAllCommentsSwnapshot,function(req,res,next){
+    res.json(req._comments);
+})
+router.get("/comments", function(req,res,next){
     res.render("comments",{
         title:"Les derniers commentaires",
         slogan:"Tenez vous informé de ce que disent vos clients!",
-        products:req._comments
+        
     })
 });
 

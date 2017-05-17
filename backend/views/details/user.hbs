@@ -90,7 +90,6 @@
                                     <tr>
                                         <th>date</th>
                                         <th>texte</th>
-                                        <th>etat</th>
                                         
                                     </tr>
                                 </thead>
@@ -99,9 +98,7 @@
                                     <tr class="odd gradeX">
                                         <td>{{#formatDate date "HH:mm:ss DD-MM-YYYY"}}{{this}}{{/formatDate}}</td>
                                         <td>{{texte}}</td>
-                                        <td class="center"><label>
-                                            <input type="checkbox" data-toggle="toggle" {{#ifEq etat true}}checked="true"{{/ifEq}}>
-                                        </label></td>
+                                        
                                     </tr>
                                     {{/each}}
                                     

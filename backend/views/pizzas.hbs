@@ -41,7 +41,7 @@
                                         <td class="text-center">{{prix_big}}</td>
                                         <td class="text-center">{{#formatNumber note }}{{this}}{{/formatNumber}}</td>
                                         <td class="center"><label >
-                                                    <input  id="check-{{id}}" type="checkbox" onchange="activatepizza({{id}});" data-toggle="toggle" {{#ifEq active true}}checked="true"{{/ifEq}}>
+                                                    <input  id="check-{{id}}" type="checkbox" onchange="activatepizza({{id}});"  {{#ifEq active true}}checked="true"{{/ifEq}}>
                                                     <span id="text-{{id}}">{{#ifEq active true}}Active{{else}}Inactive{{/ifEq}}</span>
                                                 </label></td>
                                     </tr>
@@ -117,7 +117,7 @@
      <script>
     $(document).ready(function() {
         $('table').each( (i,elem)=>{
-                $(elem).DataTable({
+                var t = $(elem).DataTable({
                 "filter": true,
                 "pagingType": "simple_numbers",
                 "orderClasses": false,
@@ -125,6 +125,17 @@
                 "info": false,
                 responsive: true
             });
+
+            t.on('draw', function(evt){
+                    
+                console.log("redraw?")
+                $("input[type='checkbox']").each((index,elem)=>$(elem).bootstrapToggle());
+                
+
+            });
         });
+
+        //les toggles deja présentes
+        $("input[type='checkbox']").each((index,elem)=>$(elem).bootstrapToggle());
     });
     </script>
