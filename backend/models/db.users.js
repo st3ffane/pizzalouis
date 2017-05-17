@@ -45,10 +45,10 @@ function listAllUsersSnapshot(req,res,next){
 
     let totalnews = 0;
 
-    console.log("APPEL USERS API");
+    
     users.count().then( (dt)=>{
         totalnews = dt;
-        console.log("TOTAL USERS: ",totalnews);
+        
         let orderby=" users.id DESC ";//par defaut, rien
         if(order && order.length>0){
             let who = order[0].column;
@@ -137,7 +137,7 @@ function getUserDetails(req,res,next){
     }).then( dt=>{
 
         let client = dt.dataValues;
-        console.log(client)
+        
         client.commandes = client.commandes.map(el=>{
             let e = el.dataValues;
             console.log(e);
@@ -164,9 +164,16 @@ function getUserDetails(req,res,next){
     
 }
 
+function getUsersCount(req,res,next){
+    users.count().then(dt=>{
+        req._users_count = dt;
+        next();
+    }).catch(err=>next(err))
+}
 
 module.exports = {
     listAllUsersSnapshot:listAllUsersSnapshot,
     getUserDetails:getUserDetails,
+    getUsersCount: getUsersCount,
 
 }

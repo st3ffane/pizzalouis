@@ -709,6 +709,21 @@ function getAllPizzas(req,res,next){
     }).catch(err=>next(err));
 }
 
+function getBestPizzaSells(req,res,next){
+    
+     SEQ.query(`select pizzas.id, pizzas.nom,sum(qtte) 
+        from commandes_pizzas
+        join pizzas on (commandes_pizzas.id_pizza = pizzas.id)
+        group by (pizzas.id, pizzas.nom)
+        order by sum(qtte) DESC
+        limit 1;`).then(dt=>{
+            
+            req._best_sell = dt[0];
+            next();
+        }).catch(err=>next(err));
+}
+
+
 module.exports = {
     getTotalCommandesM : getTotalCommandesM,
     getBestSellsM : getBestSellsM,
@@ -720,5 +735,6 @@ module.exports = {
     getAllPizzas : getAllPizzas,
     getIngredientsSellsGraph:getIngredientsSellsGraph,
     getBasesSellsGraph:getBasesSellsGraph,
+    getBestPizzaSells: getBestPizzaSells
 
 };

@@ -60,8 +60,7 @@
                                 <tbody>
                                     {{#each user.commandes}}
                                     <tr class="odd gradeX">
-                                        <td><a href="/admin/commanddetails/{{id}}" title="Cliquez pour voir les details de cette commande">
-                                        {{#formatDate date_cmd "HH:mm:ss DD-MM-YYYY"}}{{this}}{{/formatDate}}</a></td>
+                                        <td>{{#formatDate date_cmd "HH:mm:ss DD-MM-YYYY"}}{{this}}{{/formatDate}}</td>
                                         <td>{{#formatDate date_retrait "HH:mm:ss DD-MM-YYYY"}}{{this}}{{/formatDate}}</td>
                                         <td><a href="/admin/payements/{{payement_id}}" title="Voir les details du payement">{{payement_id}}</a></td>
                                         <td>

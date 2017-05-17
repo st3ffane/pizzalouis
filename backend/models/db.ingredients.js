@@ -171,6 +171,12 @@ function setIngredientActive(req,res,next){
     })
 }
 
+function getIngredientsCount(req,res,next){
+    ingredients.count().then(dt=>{
+        req._ingredients_count = dt;
+        next();
+    }).catch(err=>next(err));
+}
 
 module.exports = {
     listAllIngredientsSnapshot: listAllIngredientsSnapshot,
@@ -178,5 +184,7 @@ module.exports = {
     getIngredientDetails: getIngredientDetails,
     deleteIngredientById: deleteIngredientById,
     getIngredientsByType:getIngredientsByType,
-    setIngredientActive: setIngredientActive
+    setIngredientActive: setIngredientActive,
+
+    getIngredientsCount: getIngredientsCount
 }

@@ -17,12 +17,23 @@ var dbpizza = require("../models/db.pizzas");//middlewares pour les pizzas
 var dbing = require("../models/db.ingredients");
 var dbnews = require("../models/db.news");
 var dbUsers = require("../models/db.users");
+var dbComments = require("../models/db.comments");
+var dbCommandes = require("../models/db.commandes");
+var dbStats = require("../models/db.stats");
+
 
 var stats  = require("./stats");//router pour affichage des statistiques
 
 
 /* GET page d'acceuil. */
-router.get('/', function(req, res, next) {
+router.get('/', dbComments.getNewCommentsCount,
+    dbCommandes.getNewCommandesCount,
+    dbUsers.getUsersCount,
+    dbpizza.getPizzasCount,
+    dbing.getIngredientsCount,
+    dbStats.getBestStart,
+    dbStats.getBestPizzaSells,
+function(req, res, next) {
   res.render('dash',{
       title:"Pizza Louis - Administration",
       page_slogan:"Bienvenu dans votre administration de site",
@@ -30,34 +41,61 @@ router.get('/', function(req, res, next) {
           {
               icon:"fa-comments",
               label:"Nouveaux commentaires!",
-              count:34,
-              color:"panel-primary"
+              count:req._comments_count,
+              color:"panel-primary",
+              link:"/admin/comments"
           },
           {
               icon:"fa-shopping-cart",
               label:"Commandes en attentes!",
-              count:34,
-              color:"panel-green"
+              count:req._commandes_count,
+              color:"panel-green",
+              link:"/admin/commandes"
           },
           {
               icon:"fa-user",
               label:"Inscripts!",
-              count:12,
-              color:"panel-yellow"
+              count:req._users_count,
+              color:"panel-yellow",
+              link:"/admin/users"
           },
           {
               icon:"fa-book",
               label:"Recettes!",
-              count:34,
-              color:"panel-red"
+              count:req._pizzas_count,
+              color:"panel-red",
+              link:"/admin/pizzas"
           },
           {
               icon:"fa-puzzle-piece",
               label:"Ingrédients!",
-              count:34,
-              color:"panel-primary"
+              count:req._ingredients_count,
+              color:"panel-yellow",
+               link:"/admin/ingredients"
+              
           },
-      ]
+          {
+            icon:"fa-star",
+            label:"Meilleur Note "+(+req._best_star[0].avg.toLocaleString(
+                                        'fr-FR', 
+                                        { minimumFractionDigits: 2 }
+                                    )),
+            count:req._best_star[0].nom,
+            color:"panel-yellow",
+            link:"/admin/stats/notes?show=all"
+        },
+        {
+            icon:"fa-trophy",
+            label:"Meilleur vente "+req._best_sell[0].sum,
+            count:req._best_sell[0].nom,
+            color:"panel-green",
+            link:"/admin/stats/pizzas"
+        }
+      ],
+      sell_datas:req._sell_datas,//les ventes de jour par heure
+      geoloc:req._geo, //les clients du jour
+      comments: req._comments,//les 10 derniers commentaires
+
   });
 });
 
@@ -272,6 +310,15 @@ router.get('/users/:id',dbUsers.getUserDetails,function(req,res,next){
     });
 });
 
+
+//historique de commandes //////////////////////////////////////////////////////////////////////////////////////////
+
+router.get("/commandes/api",dbCommandes.getCommandsSnapshot,function(req,res,next){
+    res.json(req._commandes);
+});
+router.get("/commandes",function(req,res,next){
+    res.render("commandes",{});
+});
 
 router.use('/stats', stats);
 

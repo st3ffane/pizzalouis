@@ -50,7 +50,7 @@ pizza.belongsTo(category,{foreignKey:"id_category"});
 
 // //une commande est passée par un client
 users.hasMany(commandes,{foreignKey:"id_client"});
-
+commandes.belongsTo(users,{foreignKey:"id_client"});
 // //une commande a des pizzas
 // commandes.belongsToMany(pizza,{through:"commandes_pizzas", foreignKey:"id_pizza"});
 // pizza.belongsToMany(commandes,{through:"commandes_pizzas", foreignKey:"id_commande"});

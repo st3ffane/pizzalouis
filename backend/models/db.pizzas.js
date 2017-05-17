@@ -240,12 +240,23 @@ function setPizzaActive(req,res,next){
     });
 }
 
+function getPizzasCount(req,res,next){
+    pizza.count().then(dt=>{
+        req._pizzas_count = dt;
+        next();
+    }).catch(err=>next(err));
+}
 
+function getBestNote(req,res,next){
+    
+}
 module.exports = {
 
     listAllPizzasSnapshot: listAllPizzasSnapshot,
     saveOrUpdatePizzas: saveOrUpdatePizzas,
     getPizzaDetails : getPizzaDetails,
     getCategoryPizzaSNapshot : getCategoryPizzaSNapshot,
-    setPizzaActive:setPizzaActive
+    setPizzaActive:setPizzaActive,
+
+    getPizzasCount: getPizzasCount
 }
