@@ -68,10 +68,10 @@ limit 1;
  */
 function getBestStart(req,res,next){
     
-    let limit = "order by avg(coalesce(note,0)) DESC limit 1";//par defaut, la meilleure reponse
+    let limit ="order by avg(coalesce(note,0)) DESC limit 1";//par defaut, la meilleure reponse
 
     if(req.query.show && req.query.show=="all"){
-        limit = "order by coalesce(avg(note),0) DESC";
+        limit = "";// "order by coalesce(avg(note),0) DESC";
     }
     
     SEQ.query(`select pizzas.id, pizzas.nom, avg(coalesce(note,0)) as avg

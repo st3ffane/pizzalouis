@@ -29,6 +29,7 @@
                                         <th>auteur</th>
                                         <th>A propos</th>
                                         <th>Etat</th>
+                                        <!--th> </th-->
                                     </tr>
                                 </thead>
                                 
@@ -44,7 +45,45 @@
            
     <script>
        
+       function doDeleteComment(id){
+           //suppression d'un commentaire
+       }
+       var forget = false;//wow
 
+        function activatecomment(id){
+            if(forget){
+                forget = false;
+                return;
+            }
+            //lance une requete put 
+            
+            var active = $("#check-"+id).prop('checked') ;
+            $.ajax({
+                url: '/admin/comments',
+                type: 'PUT',
+                data: "comment="+id+"&active="+active,
+                success: function(data, status) {
+                    console.log("hello", status)
+                    if(status=="success"){
+                        //modifie le label 
+                        //$("#text-"+id).text(active?"Active":"Inactive");
+                    } else {
+                        forget = true;
+                        $("#check-"+id).bootstrapToggle('toggle');
+                        alert("Oups...");
+                    }
+                    
+                }, 
+                error:function(){
+                    //parceque la, jquery appelle le onchange!!!!
+                    forget = true;
+                    $("#check-"+id).bootstrapToggle('toggle');
+                    alert("Oups...");
+                    //$('#myModal').modal('toggle');
+                }
+                
+            });
+        }
         $(document).ready(function() {
             var table = $('#products').DataTable( {
                 "serverSide": true,
@@ -63,6 +102,7 @@
                     { "data": "client" },
                     { "data": 'a_propos' },
                     { "data": "etat" },
+                    {{!--{ "data": "id" },--}}
                     
                 ],
                 "order": [[ 0, "desc" ]],
@@ -100,10 +140,20 @@
                         targets:4,
                         render:function(data,type,row,meta){
                             var checked = row.etat == 'published' ? "checked" : "";
-                            return "<input id="+row.id+" "+checked+" type='checkbox'>";
+                            return "<input id='check-"+row.id+"' "+checked+" type='checkbox' onchange='activatecomment("+row.id+")'>";
                         }
                         
-                    }
+                    },
+                    {{!--{
+                        targets:5,
+                        render:function(data,type,row,meta){
+                            
+                            return "<button class='btn btn btn-danger btn-circle btn-lg' onclick='doDeleteComment("
+                                +data
+                                +");' title='Supprimer definitivement ce commentaire (Attention, ne peut etre annulé)'><i class='fa fa-trash'></i></button>";
+                        }
+                        
+                    }--}}
                     
                     
                 ]

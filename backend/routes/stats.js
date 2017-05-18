@@ -107,15 +107,14 @@ router.get("/bases",db.getBasesSellsGraph, function(req,res,next){
 });
 router.get("/notes",db.getBestStart, function(req,res,next){
     //recupere les 3 meilleurs notes 
-    let tiercet = req._best_star.slice(0,3);
-    console.log(tiercet);
+    
     res.render('details/notes',{
         title:"Les pizzas préférées de vos clients",
         beststar:{
             icon:"fa-star",
             datas : req._best_star
         },
-        tiercet: tiercet
+        //tiercet: tiercet
     })
 });
 router.get("/geo",db.getAllPizzas,db.getGeolocCommands, function(req,res,next){

@@ -2,7 +2,7 @@
     <div class="col-lg-12"><h3>{{title}}</h3>
     <p>Texte description</p></div>
 </div>
-<div class="row">
+<!--div class="row">
     <div class="col-lg-12">
         <div class="podium">
             <div class="second">
@@ -20,13 +20,31 @@
 
         </div>
     </div>
-</div>
+</div-->
 
 <div class="row">
                 <div class="col-lg-12">
+                    <div class="panel panel-default">
+                        
+                        <!-- /.panel-heading -->
+                        <div class="panel-body pizzas">
+                    <div class="well" class="col-lg-12">
+                                <div class="logo">
+                                    <i class="fa fa-star"></i>
+                                </div>
+                                <div class="content">
+                                    <h3>{{title}}</h3>
+                                    <p>Les notes receillies par les différentes recettes:</p>
+                                    <p>Couleur verte: note supérieur à 4 (très appréciée)</p>
+                                    <p>Couleur rouge: note inférieure à 2 (peu appréciée)</p>
+                                    
+                                </div>
+                            </div>
                     <div id="morris-sells" style="position: relative; -webkit-tap-highlight-color: rgba(0, 0, 0, 0);">
                     </div>
-                     <div id="legend"></div>
+                        </div>
+                    </div>
+                     
                     <script>
                         //initialisation du graph Morris
                             $(function() {
@@ -48,11 +66,16 @@
                                     ],
                                     xkey: 'y',
                                     ymax:6,
-                                    labels: ['note'],
+                                    labels: ['Stars'],
                                     ykeys: ['a'],
                                     xLabelAngle: 35,
                                     hideHover: 'auto',
-                                    resize: true
+                                    resize: true,
+                                    barColors : function(row, series, type) {
+                                        if(row.y >4) return 'rgb(92, 226, 133)';
+                                        else if(row.y <3) return 'rgb(241, 71, 71)';
+                                        else return 'rgb(71, 154, 241)';
+                                    },
                                 });
                                 chart.options.labels.forEach(function(label, i){
                                    var legendItem = $('<span></span>').text(label).css('color', chart.options.barColors[i])

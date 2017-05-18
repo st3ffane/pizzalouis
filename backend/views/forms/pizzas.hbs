@@ -60,26 +60,30 @@
                             </div>
 
                             <!-- la base de la pizza -->
-                            <div class="form-group">
-                                <label>Base de la pizza</label>
+                            <div class="col-lg-12">
+                                <label class="col-lg-12">Base de la pizza</label>
                                {{#each bases}}
+                               <div class="form-group col-lg-2">
                                 <div class="radio">
                                     <label>
                                         <input type="radio" name="id_base"  value="{{id}}" {{#ifEq id ../product.id_base }}checked="true"{{/ifEq}}>{{nom}}
                                     </label>
                                 </div>
+                                </div>
                                 {{/each}}
                                 
                             </div>
                             <!-- liste des ingredients -->
-                           <div class="form-group">
-                                <label>Les ingredients de la recette</label>
+                           <div class="col-lg-12">
+                                <label class="col-lg-12">Les ingredients de la recette</label>
                                 
                                 {{#each ingredients}}
+                                <div class="form-group col-lg-2">
                                 <div class="checkbox" >
                                     <label>
                                         <input type="checkbox" name="ingredients" {{#ifIn id ../product.ingredients }}checked="true"{{/ifIn}} value="{{id}}">{{nom}}
                                     </label>
+                                </div>
                                 </div>
                                 {{/each}}
                                 
@@ -87,7 +91,7 @@
 
 
 
-                            <div class="form-group">
+                            <div class="form-group col-lg-12">
                                 <div class="checkbox">
                                     <label>
                                         <input name="active" type="checkbox" data-toggle="toggle" value="true" {{#ifEq product.active true}}checked="true"{{/ifEq}}>Cette recette est actuellement à la carte.

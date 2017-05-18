@@ -155,7 +155,38 @@ function listAllCommentsSwnapshot(req,res,next){
   
 }
 
+function publishComment(req,res,next){
+    req.checkBody("comment").isInt();
+    req.checkBody("active").isBoolean();
+
+
+    req.getValidationResult().then(result=>{
+        if(!result.isEmpty()){
+            //rien...
+            console.log("Erreur params, silently fail...");
+            console.log(result.array())
+            next("Invalid params");
+            return;
+        }
+        else {
+            console.log("update: ",req.body.active, req.body.comment);
+            return comments.update({
+                etat: req.body.active == 'true'? 'published' : 'waiting'
+            },{
+                where:{
+                    id: req.body.comment
+                }
+            });
+        }
+    }).then( dt=>{
+        next();
+    }).catch(err=>next(err));
+}
+function deleteComment(req,res,next){
+
+}
 module.exports = {
     getNewCommentsCount : getNewCommentsCount,
-    listAllCommentsSwnapshot: listAllCommentsSwnapshot
+    listAllCommentsSwnapshot: listAllCommentsSwnapshot,
+    publishComment: publishComment
 }

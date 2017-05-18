@@ -168,7 +168,7 @@ router.get("/pizzaedit",dbpizza.getCategoryPizzaSNapshot, dbing.getIngredientsBy
 router.get("/pizzaedit/:id",dbpizza.getCategoryPizzaSNapshot,dbpizza.getPizzaDetails,dbing.getIngredientsByType,function(req,res,next){
     res.render("forms/pizzas",{
         error_msg: req._error_msg,
-        title:"Création d'une nouvelle Pizza!",
+        title:"Modification des données d'une Pizza!",
         product:req._pizza,
         category: req._category,
         ingredients:req._ingredients,
@@ -279,9 +279,18 @@ router.get("/news/api",dbnews.listAllNewsAjax,function(req,res,next){
 
 
 //affiche la liste des commentaires  ////////////////////////////////////////////////////////////////////////////////
+router.get('/comments/delete/:id',function(req,res,next){
+    res.json({msg:req._msg});
+});
+
+
 router.get("/comments/api",dbComments.listAllCommentsSwnapshot,function(req,res,next){
     res.json(req._comments);
-})
+});
+//modifie le published
+router.put('/comments',dbComments.publishComment,function(req,res,next){
+    res.json({msg:"OK"});
+});
 router.get("/comments", function(req,res,next){
     res.render("comments",{
         title:"Les derniers commentaires",
