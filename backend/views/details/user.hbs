@@ -90,7 +90,7 @@
                                     <tr>
                                         <th>date</th>
                                         <th>texte</th>
-                                        
+                                        <th>A propos</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -98,7 +98,7 @@
                                     <tr class="odd gradeX">
                                         <td>{{#formatDate date "HH:mm:ss DD-MM-YYYY"}}{{this}}{{/formatDate}}</td>
                                         <td>{{texte}}</td>
-                                        
+                                        <td>{{#if a_propos}}{{a_propos.type}}: {{a_propos.nom}}{{else}}aucune infos{{/if}}</td>
                                     </tr>
                                     {{/each}}
                                     

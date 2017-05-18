@@ -114,6 +114,16 @@ function getUserDetails(req,res,next){
                 
                 {
                     model:comments,
+                    include:[
+                        {
+                            model:news,
+                            attributes:["title"]
+                        },
+                        {
+                            model:pizza,
+                            attributes:['nom']
+                        }
+                    ]
                     
                 },
                 {
@@ -140,7 +150,7 @@ function getUserDetails(req,res,next){
         
         client.commandes = client.commandes.map(el=>{
             let e = el.dataValues;
-            console.log(e);
+            
             
             e.pizzas = el.commandes_pizzas.map(p=>{
                 let dv = p.dataValues;
@@ -155,7 +165,14 @@ function getUserDetails(req,res,next){
             });
             return e;
         });
-        client.comments = client.comments.map(el=>el.dataValues);
+        client.comments = client.comments.map(el=>{
+            let comm = el.dataValues;
+            comm.a_propos = 
+                comm.news && comm.news.length> 0? {type:"news", nom:comm.news[0].dataValues.title} : 
+                comm.pizzas && comm.pizzas.length>0? {type:"pizza", nom: comm.pizzas[0].dataValues.nom} : undefined;
+            return comm;
+        
+        });
         req._user= client;
         
         next();

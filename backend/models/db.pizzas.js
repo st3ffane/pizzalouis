@@ -27,7 +27,10 @@ var cp = require("./commandes_pizzas");
 function listAllPizzasSnapshot(req,res,next){
     pizza.findAll({
         attributes:["id","nom","pizzas.slogan","prix_small","prix_big",'id_category','active',
-            [sequelize.fn("AVG", sequelize.col("comments.note")), "note"]],
+            [sequelize.fn("AVG", sequelize.col("comments.note")), "note"],
+             [sequelize.fn("COUNT", sequelize.col("comments.id")), "commentsCount"]
+            
+        ],
          include:[
              {
                 model:ingredients,
@@ -64,7 +67,7 @@ function listAllPizzasSnapshot(req,res,next){
             p.count = p.pizzas.length;
             
         } 
-        
+        console.log(p)
         req._pizzas = p;
         next();
     })

@@ -44,12 +44,41 @@ function listAllCommentsSwnapshot(req,res,next){
     let columns = req.query.columns;
 
     let totalnews = 0;
-    //compte toutes les commandes possibles avec les parametres donnés
-    comments.count({
-        where:{
 
-        }
-    }).then(dt=>{
+
+    let from_pizzas = req.query.from_pizzas;
+    let from_news = req.query.from_news;
+
+    console.log(from_pizzas,from_news)
+    
+    let opt = {};//par defaut, pas de condition 
+    let attr = [];
+    if(from_pizzas){
+        opt = {
+            include:[{
+                model: pizza,
+                where:{
+                    id:from_pizzas
+                }
+            }]
+        };
+        attr=["nom"];
+
+
+    } else if(from_news){
+        opt = {
+            include:[{
+                model: news,
+                
+                where:{
+                    id:from_news
+                }
+            }]
+        };
+        attr=["title"];
+    }
+    //compte toutes les commandes possibles avec les parametres donnés
+    comments.count(opt).then(dt=>{
         totalnews = dt;
         //parametres de la requete 
         // let orderby="date_pub DESC";//par defaut, les dernieres en premier
@@ -61,12 +90,7 @@ function listAllCommentsSwnapshot(req,res,next){
         // }
         // let strsearch = sSearch ? "WHERE title ILIKE '"+sSearch+"%' " : "";
 
-        return comments.findAll({
-            attributes:['id',"date","texte",'etat'],
-            where:{
-
-            },
-            include:[
+        let inc = [
                 {
                     model:users,
                     attributes:["id","nom","prenom"],
@@ -74,17 +98,47 @@ function listAllCommentsSwnapshot(req,res,next){
 
                     }
                 }
-            ],
+            ];
+        if(opt.include){ 
+            let more = opt.include[0];
+            more.attributes=attr;
+            inc.push(more);
+        
+        } else {
+            //recherche les 2 possibles 
+            inc.push({
+                model:news,
+                attributes:["title"]
+            });
+            inc.push({
+                model:pizza,
+                attribute:["nom"]
+            })
+        }
+
+
+        
+        return comments.findAll({
+            attributes:['id',"date","texte",'etat'],
+            
+            include: inc,
             order:[['date','desc']],
             limit:iDisplayLength,
             offset:iDisplayStart
         })
 
     }).then(dt=>{
-        console.log(dt);
+        
         let c = dt.map(el=>{
             let e = el.dataValues;
             e.client = e.user.dataValues;//la personne qui a posté le comment
+
+            
+            e.a_propos = 
+                e.news && e.news.length> 0? {type:"news", nom:e.news[0].dataValues.title} : 
+                e.pizzas && e.pizzas.length>0? {type:"pizza", nom: e.pizzas[0].dataValues.nom} : undefined;
+            
+            
             return e;
         })
         req._comments ={

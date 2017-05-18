@@ -286,6 +286,8 @@ router.get("/comments", function(req,res,next){
     res.render("comments",{
         title:"Les derniers commentaires",
         slogan:"Tenez vous informé de ce que disent vos clients!",
+        from_news: req.query.from_news,
+        from_pizzas: req.query.from_pizza
         
     })
 });
