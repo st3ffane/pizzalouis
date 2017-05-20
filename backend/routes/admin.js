@@ -7,14 +7,13 @@
  */
 var express = require('express');
 var router = express.Router();
-//pour le multipart datas
+//pour le multipart datas -file transfert
 var multer  = require('multer')
 var upload = multer({ dest: 'public/images/pizzas' });
 
-//var db = require("../models/db");//les acces a la base de données
 
 var dbpizza = require("../models/db.pizzas");//middlewares pour les pizzas 
-var dbing = require("../models/db.ingredients");
+var dbing = require("../models/db.ingredients");//...
 var dbnews = require("../models/db.news");
 var dbUsers = require("../models/db.users");
 var dbComments = require("../models/db.comments");
