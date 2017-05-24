@@ -1,0 +1,96 @@
+ p{
+margin-bottom: 0!important;
+}
+
+.action{
+padding: 10px 10px;
+margin: 2px;
+    margin-top: 20px;
+    width: 48%;
+	
+}
+#fh5co-press h1{
+        font-size: 45px;
+        line-height: 1.8em;
+        font-weight: 300;
+    }
+.fh5co-press-text h3{
+	text-align: center;
+}
+.news-img{
+	width:100%;
+	height: auto;
+	
+}
+.full-size{
+	width: 100%;
+}
+.note{
+	font-size: 24px;
+	text-align: center;
+}
+.note i{
+	margin: 5px ;
+}
+#fh5co-press .fh5co-press-item .fh5co-press-text .fh5co-press-title .fh5co-border {
+    position: absolute;
+    left: 40%;
+    bottom: 0;
+    height: 2px;
+    width: 20%;
+    background: #65d269;
+}
+.fh5co-press-title{
+	font-size: 36px!important;
+	text-align: center;
+}
+@media screen and (orientation:landscape){
+    #fh5co-our-services{
+        padding: 0!important;
+    }
+    .section-heading h1, .section-heading h3{
+	line-height: 1em!important;
+    }
+    .form-group{
+	margin: 0 auto;
+    }
+}
+.tarif, .tarif div div{
+	display: flex;
+	    flex-direction: row;
+	    align-items: baseline;
+	    justify-content: space-between;
+	margin:0 12px;
+}
+.tarif>div:first-child{
+	border-right: 1px dashed green;
+}
+.tarif div{
+	flex-grow: 1;
+}
+.tarif h1{
+	text-align: center;
+	    margin: 0;
+	line-height:1em;
+}
+
+.btn-floating {
+   display: inline-block;
+    color: #fff;
+    position: fixed;
+    top: 88%;
+    left: 80%;
+    overflow: hidden;
+    z-index: 1;
+    width: 60px;
+    height: 60px;
+    line-height: 60px;
+    padding: 0;
+    background-color: #26a69a;
+    border-radius: 50%;
+    transition: .3s;
+    cursor: pointer;
+    vertical-align: middle;
+	box-shadow: 0 2px 2px 0 rgba(0,0,0,0.14), 0 1px 5px 0 rgba(0,0,0,0.12), 0 3px 1px -2px rgba(0,0,0,0.2);
+   background-color: #F44336 !important;
+}

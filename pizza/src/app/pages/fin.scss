@@ -2,7 +2,9 @@ input{
 		    width: 80%!important;
             margin: 10px auto;
 	}
-
+.form-group{
+    padding: 5px;
+}
 .form-control:focus {
     border-color: #393e46!important;
     outline: 0;
@@ -12,16 +14,16 @@ input{
 p  {
     color: white;
 }
-.section-heading h1{
+#fh5co-testimonials{
+height: 100vh;
+}
+#fh5co-testimonials h1{
         font-size: 45px;
         line-height: 1.8em;
         font-weight: 300;
     }
-.padd{
-	padding: 10px 40px;
-}
 @media screen and (orientation:landscape){
-    #fh5co-pricing{
+    #fh5co-testimonials{
         padding: 0!important;
     }
     .section-heading h1, .section-heading h2{

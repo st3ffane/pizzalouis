@@ -5,3 +5,9 @@
 @import "./css/simple-line-icons.css";
 @import "./css/bootstrap.css";
 @import "./css/green.css";
+
+.js .to-animate,
+.js .to-animate-2,
+.js .single-animate {
+  opacity: 0;
+}
