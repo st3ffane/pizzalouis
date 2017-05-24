@@ -1,0 +1,119 @@
+	input{
+		    width: 80%!important;
+            margin: 10px auto;
+	}
+.form-group{
+    padding: 5px;
+}
+.form-control:focus {
+    border-color: #393e46!important;
+    outline: 0;
+    -webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075), 0 0 8px rgba(57,62,70, 0.6);
+    box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075), 0 0 8px rgba(57,62,70, 0.6);
+}
+.author, .subtext{
+	color: #7f7f7f!important;
+}
+#fh5co-testimonials h1{
+        font-size: 45px;
+        line-height: 1.8em;
+        font-weight: 300;
+    }
+
+.news-img{
+	width:100%;
+	height: auto;
+	
+}
+#fh5co-testimonials{
+        padding: 0!important;
+	background: white;
+	color: #7f7f7f!important;
+    }
+.full-size{
+	width: 100%;
+}
+.section-heading{
+	margin-bottom: 0;
+}
+.section-heading h1,.section-heading h2, .section-heading h3{
+	color: #7f7f7f!important;
+    }
+.section-heading h1:after,.section-heading h2:after{
+	background: #65d269!important;
+    }
+#fh5co-testimonials .box-testimony blockquote .quote{
+	color: #65d269!important;
+	background-color: white;
+}
+
+#fh5co-testimonials .box-testimony blockquote{
+	background: #65d269!important;
+	color: white!important;
+	
+}
+#fh5co-testimonials .box-testimony blockquote p{
+	margin-bottom: 0;
+}
+#fh5co-testimonials .box-testimony blockquote:after {
+	border-top-color: #65d269!important;
+}
+.note{
+	text-align: right;
+}
+.note i{
+	margin-right: 5px;
+}
+@media screen and (orientation:landscape){
+    #fh5co-testimonials{
+        padding: 0!important;
+    }
+    .section-heading h1, .section-heading h3{
+	line-height: 1em!important;
+    }
+    .form-group{
+	margin: 0 auto;
+    }
+}
+.tarif{
+margin:10px;
+}
+.tarif, .tarif div div{
+	display: flex;
+	    flex-direction: row;
+	    align-items: baseline;
+	    justify-content: space-around;
+	margin:0 12px;
+}
+.tarif>div:first-child{
+	border-right: 1px dashed green;
+}
+.tarif div{
+	flex-grow: 1;
+}
+.tarif h1{
+	text-align: center;
+	    margin: 0;
+	line-height:1em;
+}
+
+.btn-floating {
+   display: inline-block;
+    color: #fff;
+    position: fixed;
+    top: 88%;
+    left: 80%;
+    overflow: hidden;
+    z-index: 1;
+    width: 60px;
+    height: 60px;
+    line-height: 60px;
+    padding: 0;
+    background-color: #26a69a;
+    border-radius: 50%;
+    transition: .3s;
+    cursor: pointer;
+    vertical-align: middle;
+	box-shadow: 0 2px 2px 0 rgba(0,0,0,0.14), 0 1px 5px 0 rgba(0,0,0,0.12), 0 3px 1px -2px rgba(0,0,0,0.2);
+   background-color: #F44336 !important;
+}

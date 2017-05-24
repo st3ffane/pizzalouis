@@ -10,6 +10,9 @@ import CompteComponent from "./pages/compte";
 import CompleteComponent from "./pages/fin";
 import NewsComponent from "./pages/news";
 import PizzasListComponent from './pages/pizzas.list';
+import PizzaDetailsComponent from "./pages/pizza.details";
+import PanierComponent from './pages/panier';
+
 
 const routes = [
     /**/
@@ -34,8 +37,16 @@ const routes = [
         component:CompleteComponent
     },
     {
+        path:"pizzas/:id",
+        component:PizzaDetailsComponent
+    },
+    {
         path:"pizzas",
         component:PizzasListComponent
+    },
+    {
+        path:"panier",
+        component:PanierComponent
     },
     {
         path:"main",

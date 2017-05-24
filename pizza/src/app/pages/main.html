@@ -1,0 +1,197 @@
+    <header #banner role="banner" id="fh5co-header" class="navbar-fixed-top slideInDown animated">
+			<div class="container">
+				<!-- <div class="row"> -->
+			    <nav class="navbar navbar-default">
+		        <div class="navbar-header">
+		        	<!-- Mobile Toggle Menu Button -->
+					<a href="#" class="js-fh5co-nav-toggle fh5co-nav-toggle"
+                     data-toggle="collapse"
+                      data-target="#navbar" aria-expanded="false" aria-controls="navbar"
+                      (click)="toggleMenu($event)"
+                      [class.active]="show_menu"><i></i></a>
+		          	<span class="navbar-brand">Pizza-Louis</span>
+		        </div>
+		        <div id="navbar" class="navbar-collapse collapse animated"  [class.active]="show_menu" >
+		          <ul class="nav navbar-nav navbar-right">
+		            <li class="active"><a href="#" data-nav-section="home"><span>Accueil</span></a></li>
+		            <li><a href="/pizzas.html"><span>Notre carte</span></a></li>
+		            <li><a href="#fh5co-our-services" data-nav-section="services"><span>Nos Engagements</span></a></li>
+			        <li><a href="#fh5co-features" data-nav-section="features"><span>Ou nous trouver?</span></a></li>
+		            <li><a href="#fh5co-press" data-nav-section="testimonials"><span>En direct du four à pizza</span></a></li>
+								<li><a href="compte.html"><span>Mon Compte</span></a></li>
+
+
+		          </ul>
+		        </div>
+			    </nav>
+			  <!-- </div> -->
+		  </div>
+	</header>
+
+
+
+
+
+
+
+		<div id="fh5co-testimonials" data-section="home">
+			<div class="container">
+				<div class="row">
+					<div class="col-md-12 section-heading text-center" style="padding-bottom: 0;">
+						<h2 class="to-animate">Bienvenu chez Pizza-Louis</h2>
+
+					</div>
+				</div>
+				<div class="row">
+					<div class="col-md-4">
+						<div class="box-testimony to-animate">
+							<blockquote>
+								<span class="quote"><span><i class="icon-quote-left"></i></span></span>
+								<p>&ldquo;Nous prenons le plus grand soin pour choisir nos produits, notre pate et nos garnitures pour vous offrir des pizzas savoureuses et gourmandes.&rdquo;</p>
+							</blockquote>
+							<p class="author">Louis <span class="subtext">Pizzaiolo</span></p>
+						</div>
+
+					</div>
+
+				</div>
+				<div class="row">
+					<div class="col-md-12">
+						<a href="pizza.details.html" class="btn btn-primary btn-lg full-width to-animate" style="border: 1px solid white!important;">Voir notre carte</a>
+					</div>
+				</div>
+			</div>
+		
+
+		</div>
+	
+
+
+
+
+	<div id="fh5co-our-services" data-section="services">
+		<div class="container">
+			<div class="row row-bottom-padded-sm">
+				<div class="col-md-12 section-heading text-center">
+					<h2 class="to-animate">Nos engagements</h2>
+					<div class="row">
+						<div class="col-md-8 col-md-offset-2 to-animate">
+							<h3>LA PASSION DE LA VERITABLE PIZZA ARTISANALE</h3>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-md-4">
+					<div class="box to-animate">
+						<div class="icon colored-cheese "><span></span></div>
+						<h3>La garniture</h3>
+						<p>La garniture est travaillée avec des produits frais et de qualité. Ils sont CUISINES MAISON. Les fromages et les charcuteries sont AOP (Appellation d'Origine Protégée) ou IGP (Indication Géographique Protégée) Le boeuf et le poulet sont certifiés d'origine française. Tout ceci donne à nos pizza une qualité et un goût unique.</p>
+					</div>
+					<div class="box to-animate">
+						<div class="icon colored-tomato"></div>
+						<h3>La sauce tomate</h3>
+						<p>La sauce tomate est élaborée à partir de tomates italiennes cultivées par des agriculteurs membres d'une coopérative et soumis à UNE PRODUCTION INTEGREE CERTIFIEE. Le principe de l'agricuture intégrée caractérise des pratiques agricoles menant à des aliments de qualité en utilisant des moyens naturels et des mécanismes régulateurs proches de ceux qui existent dans la nature,pour remplacer les apports polluants. Elles sont cueillies à maturité et conditionnées le jour même de la récolte.</p>
+					</div>
+				</div>
+				<div class="col-md-4">
+					<div class="box to-animate">
+						<div class="icon colored-flour"></div>
+						<h3>Nos farines</h3>
+						<p>Nous utilisons des farines d'origine italienne Avec la qualité exceptionnelle de ces farines et notre savoir faire,nous obtenons une pâte croustillante en surface et moelleuse à coeur, dans la pure tradition italienne.Ce résultat est obtenu après une longue maturation de la pâte,qui libère ainsi tous ses arômes et apporte légèreté et grande digestibilité.</p>
+					</div>
+
+				</div>
+
+			</div>
+		</div>
+	</div>
+
+
+
+    <div id="fh5co-features" data-section="features" class="no-pad">
+		<div class="container">
+			<div class="row">
+				<div class="col-md-12 section-heading text-center no-pad">
+					<h2 class="single-animate animate-features-1">Ou nous trouver?</h2>
+					<div class="row">
+						<div class="col-md-8 col-md-offset-2 single-animate animate-features-2">
+							<h3 style="    margin-bottom: 2em;">Nous sommes ouvert tous les jours sauf le lundi de 17h30 à 21h30.</h3>
+						</div>
+					</div>
+					<div class="row">
+						<i class="icon-phone big">05.58.55.54.77</i>
+						<p><i class="icon-location-pin">184 rue du lavoir
+                        40180 Tercis les bains</i></p>
+					<div id="map" class="map"></div>
+					<div id="marker" title="Pizza Louis">
+					    <img src="assets/images/marker.png" with="36px" height="36px" style="border:1px solid black; border-radius:50%">
+					</div>
+    
+    
+    
+					</div>
+				</div>
+			</div>
+
+		</div>
+	</div>
+
+
+
+
+	<div id="fh5co-press" data-section="testimonials">
+		<div class="container">
+			<div class="row">
+				<div class="col-md-12 section-heading text-center">
+					<h2 class="to-animate">En direct du four à pizzas...</h2>
+					<div class="row">
+						<div class="col-md-8 col-md-offset-2 subtext to-animate">
+							<h3 style="color: white">Rester toujours au courant des dernières recette de notre chef!</h3>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-md-6">
+					<!-- Press Item -->
+					<div class="fh5co-press-item to-animate">
+						<div class="fh5co-press-img" style="background-image: url(assets/images/img_7.jpg)">
+						</div>
+						<div class="fh5co-press-text">
+							<h3 class="h2 fh5co-press-title">Titre de la news </h3>
+							<small>12/04/2017</small>
+							<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Veritatis eius quos similique suscipit dolorem cumque vitae qui molestias illo accusantium...</p>
+							<p><a href="#" class="btn btn-primary btn-sm">Lire la suite...</a></p>
+						</div>
+					</div>
+					<!-- Press Item -->
+				</div>
+
+			</div>
+		</div>
+	</div>
+
+
+
+
+
+	<footer id="footer" role="contentinfo">
+		<div class="container">
+
+			<div class="row">
+				<div class="col-md-12 text-center">
+					<ul class="social social-circle">
+						<li><a href="#"><i class="icon-twitter"></i></a></li>
+						<li><a href="#"><i class="icon-facebook"></i></a></li>
+						<li><a href="#"><i class="icon-youtube"></i></a></li>
+						<li><a href="#"><i class="icon-pinterest"></i></a></li>
+						<li><a href="#"><i class="icon-linkedin"></i></a></li>
+						<li><a href="#"><i class="icon-instagram"></i></a></li>
+						<li><a href="#"><i class="icon-dribbble"></i></a></li>
+					</ul>
+				</div>
+			</div>
+		</div>
+	</footer>
+

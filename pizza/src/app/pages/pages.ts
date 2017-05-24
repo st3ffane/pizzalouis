@@ -6,7 +6,9 @@ import CompteComponent from './compte';
 import NewsComponent from "./news";
 import CompleteComponent from "./fin";
 import PizzasListComponent from "./pizzas.list";
+import PizzaDetailsComponent from "./pizza.details";
+import PanierComponent from './panier';
 
 export const PAGES=[AccueilComponent, LoginComponent, RegisterComponent,
     MainComponent, CompteComponent, NewsComponent, CompleteComponent,
-    PizzasListComponent ];//etc...
+    PizzasListComponent, PizzaDetailsComponent, PanierComponent ];//etc...
