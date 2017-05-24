@@ -2,9 +2,10 @@ import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { HttpModule } from '@angular/http';
-
+import {Ng2PageScrollModule} from 'ng2-page-scroll';
+ 
 import { AppComponent } from './app.component';
-import Routes from "./router";
+import {Routing} from "./router";
 import {PAGES} from './pages/pages';
 
 import {WSProvider} from "./ws.provider";
@@ -19,7 +20,8 @@ import {WSProvider} from "./ws.provider";
     BrowserModule,
     FormsModule,
     HttpModule,
-    Routes
+    Ng2PageScrollModule.forRoot(),
+    Routing
   ],
   providers: [WSProvider],
   bootstrap: [AppComponent]

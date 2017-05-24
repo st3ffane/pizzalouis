@@ -57,4 +57,4 @@ const routes = [
         redirectTo:"/login"
     },
 ]
-export default RouterModule.forRoot(routes);
+export const Routing = RouterModule.forRoot(routes);
