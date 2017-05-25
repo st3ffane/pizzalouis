@@ -188,9 +188,27 @@ function getUsersCount(req,res,next){
     }).catch(err=>next(err))
 }
 
+
+function authUser(name, passwrd){
+    return users.find({
+        login: name,
+        passwrd: passwrd
+    });
+}
+function createUser(name, email){
+    return users.create({
+        nom:name,
+        login:name,
+        email:email,
+        passwrd: email
+    });
+}
+
 module.exports = {
     listAllUsersSnapshot:listAllUsersSnapshot,
     getUserDetails:getUserDetails,
     getUsersCount: getUsersCount,
 
+    authUser: authUser,
+    createUser: createUser
 }

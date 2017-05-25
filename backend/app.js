@@ -20,6 +20,9 @@ var login = require('./routes/login');
 var test = require("./routes/test");
 //debug only /////////////////////////
 
+//la protection des urls
+var authController = require("./strategy");
+
 
 
 var app = express();
@@ -67,7 +70,11 @@ app.use(expressValidator({
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
-app.use('/', login);//par defaut, arrive sur une page d'authentification
+
+
+
+
+
 app.use('/api', api);//les api rest pour l'application mobile
 app.use("/admin", admin);//administration du site
 

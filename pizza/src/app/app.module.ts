@@ -7,7 +7,7 @@ import {Ng2PageScrollModule} from 'ng2-page-scroll';
 import { AppComponent } from './app.component';
 import {Routing} from "./router";
 import {PAGES} from './pages/pages';
-
+import "./rxjs-operators";
 import {WSProvider} from "./ws.provider";
 
 @NgModule({
