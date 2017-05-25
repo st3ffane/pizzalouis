@@ -57,7 +57,9 @@ export class WSProvider implements CanActivate{
     public loadNews(id){
         return this.sendGetToServer("/api/client/news/"+id);
     }
-
+    public postNewsComment(id, msg){
+        return this.sendToServer("/api/client/news/"+id,'post',{msg:msg});
+    }
 
     private sendGetToServer(url,datas?:string){
         let headers =  new Headers({'Content-Type': 'application/json'});

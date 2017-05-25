@@ -185,8 +185,23 @@ function publishComment(req,res,next){
 function deleteComment(req,res,next){
 
 }
+
+
+function addNewsComment(from, about, msg){
+    return comments.create({
+        texte:msg,
+        id_user:from
+    }).then(dt=>{
+        //associe le comment a la news
+        return SEQ.query("INSERT INTO comments_news(id_comment,id_news) VALUES ("+dt.id+","+about+");");
+    });
+}
 module.exports = {
     getNewCommentsCount : getNewCommentsCount,
     listAllCommentsSwnapshot: listAllCommentsSwnapshot,
-    publishComment: publishComment
+    publishComment: publishComment,
+
+
+
+    addNewsComment: addNewsComment
 }

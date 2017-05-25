@@ -34,5 +34,16 @@ export default class NewsComponent{
 
     processForm(){
         //post le message
+        if(this.news){
+            this.is_processing = true;
+            this._ws.postNewsComment(this.news.id, this.msg_text).then(dt=>{
+                if(dt.error == 0) this.success = true;
+                else this.error = "Erreur lors de l'enregistrement de votre comment";
+                this.is_processing = false;
+            }).catch(err=>{
+                this.error = "Erreur lors de l'enregistrement de votre comment";
+                this.is_processing = false;
+            })
+        }
     }
 }

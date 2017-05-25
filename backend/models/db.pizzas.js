@@ -253,6 +253,42 @@ function getPizzasCount(req,res,next){
 function getBestNote(req,res,next){
     
 }
+
+
+
+function getPizzaList(){
+    return pizza.findAll({
+        attributes:["id","nom","pizzas.slogan","prix_small","prix_big",'id_category',
+        [sequelize.fn("AVG", sequelize.col("comments.note")), "note"]],
+        where:{
+            acive:true
+        },
+        include:[
+            {
+                model:ingredients,
+                attributes:['nom'],
+                as: "base",
+                where:{
+                    active:true
+                }
+            },
+            {
+                model:ingredients,
+                attributes:['nom'],
+                where:{
+                    active:true //probleme, si 1 non actif, annule la pizza...
+                }
+            },
+            {
+                model:comments,
+                attributes:[]
+            }
+        ],
+        group:["pizzas.id","pizzas.nom","pizzas.slogan","prix_small","prix_big",'id_category','active',
+        "base.id","base.nom","ingredients.id","ingredients.nom","ingredients.pizza_ingredient.id_pizza",
+        "ingredients.pizza_ingredient.id_ingredient","comments.comments_pizzas.id_pizza","comments.comments_pizzas.id_comment"]
+    });
+}
 module.exports = {
 
     listAllPizzasSnapshot: listAllPizzasSnapshot,

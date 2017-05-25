@@ -10,7 +10,7 @@ var authController = require("../strategy");
 var gen = require('../token');
 var db_users = require('../models/db.users');
 var db_news = require("../models/db.news");
-
+var db_comments = require("../models/db.comments");
 
 
 function genTokenForUser(req, res, next){
@@ -127,7 +127,20 @@ api_router.get('/news/:id',function(req,res,next){
       res.json(dt);//la news
     })
 })
+api_router.post("/news/:id",function(req,res,next){
+    //ajoutte un nouveau commentaire 
+    let uid = req.user.id;
+    let newsid = req.params.id;
+    let msg = req.body.msg;
+    if(!msg) return res.json({error:1,msg:"empty"});
 
+    //enregistre le comment 
+    db_comments.addNewsComment(uid,newsid,msg).then(dt=>{
+      res.json({error:0,msg:"OK"});
+    }).catch(err=>{
+      res.json(500,{error:1,msg:"une couille dans le potage"});
+    })
+});
 
 router.use("/client",authController.isAuth, api_router);//routes protégées
 
