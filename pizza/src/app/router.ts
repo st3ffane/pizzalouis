@@ -14,6 +14,8 @@ import PizzaDetailsComponent from "./pages/pizza.details";
 import PanierComponent from './pages/panier';
 
 
+import {WSProvider } from "./ws.provider";
+
 const routes = [
     /**/
     {
@@ -26,31 +28,38 @@ const routes = [
     },
     {
         path:"compte",
-        component:CompteComponent
+        component:CompteComponent,
+        canActivate: [WSProvider]
     },
     {
         path:"news/:id",
-        component:NewsComponent
+        component:NewsComponent,
+        canActivate: [WSProvider]
     },
     {
         path:"complete",
-        component:CompleteComponent
+        component:CompleteComponent,
+        canActivate: [WSProvider]
     },
     {
         path:"pizzas/:id",
-        component:PizzaDetailsComponent
+        component:PizzaDetailsComponent,
+        canActivate: [WSProvider]
     },
     {
         path:"pizzas",
-        component:PizzasListComponent
+        component:PizzasListComponent,
+        canActivate: [WSProvider]
     },
     {
         path:"panier",
-        component:PanierComponent
+        component:PanierComponent,
+        canActivate: [WSProvider]
     },
     {
         path:"main",
-        component:MainComponent
+        component:MainComponent,
+        canActivate: [WSProvider]
     },
     {
         path:"**",

@@ -10,9 +10,13 @@ import {PAGES} from './pages/pages';
 import "./rxjs-operators";
 import {WSProvider} from "./ws.provider";
 
+import {ReadableDatePipe} from "./pipes/date";
+import {BypassCSSPipe} from "./pipes/bypass.css";
 @NgModule({
   declarations: [
     AppComponent,
+    BypassCSSPipe,
+    ReadableDatePipe,
     //les pages de l'application 
     ...PAGES
   ],

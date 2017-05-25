@@ -29,5 +29,6 @@ function expiresIn(numDays){
 }
 
 module.exports = {
-    genToken: genToken
+    genToken: genToken,
+    secret:secret
 }

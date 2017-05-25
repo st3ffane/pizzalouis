@@ -15,7 +15,9 @@
     -webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075), 0 0 8px rgba(57,62,70, 0.6);
     box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075), 0 0 8px rgba(57,62,70, 0.6);
 }
-
+.fh5co-press-item{
+    width: 100%;
+}
 .section-heading h1{
         font-size: 45px;
         line-height: 1.8em;
@@ -51,7 +53,7 @@ margin-bottom: 0!important;
 .full-width{width:100%;}
 
 #fh5co-testimonials{padding: 5.8em 0!important;}
-#fh5co-testimonials::after{
+/*#fh5co-testimonials::after{
 	content: "";
     position: absolute;
     top: 16.5%;
@@ -60,7 +62,7 @@ margin-bottom: 0!important;
     border-top-color: #65d269;
     border-left: 15px solid transparent;
     border-right: 15px solid transparent;
-}
+}*/
 @media screen and (orientation:landscape){
     #fh5co-pricing{
         padding: 0!important;
@@ -81,4 +83,9 @@ margin-bottom: 0!important;
       }
 .active{
     display: block;
+}
+.commands{
+    display:flex;
+    flex-direction:row;
+    justify-content: space-between;
 }

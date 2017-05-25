@@ -14,11 +14,11 @@
 		        <div id="navbar" class="navbar-collapse collapse animated"  [class.active]="show_menu" >
 		          <ul class="nav navbar-nav navbar-right">
 		            <li class="active"><a href="#" data-nav-section="home"><span>Accueil</span></a></li>
-		            <li><a href="/pizzas.html"><span>Notre carte</span></a></li>
+		            <li><a routerLink="/pizzas"><span>Notre carte</span></a></li>
 		            <li><a pageScroll href="#fh5co-our-services" data-nav-section="services" (click)="toggleMenu($event)"><span>Nos Engagements</span></a></li>
 			        <li><a pageScroll href="#fh5co-features" data-nav-section="features" (click)="toggleMenu($event)"><span>Ou nous trouver?</span></a></li>
 		            <li><a pageScroll href="#fh5co-press" data-nav-section="testimonials" (click)="toggleMenu($event)"><span>En direct du four à pizza</span></a></li>
-								<li><a href="compte.html"><span>Mon Compte</span></a></li>
+					<li><a routerLink="/compte"><span>Mon Compte</span></a></li>
 
 
 		          </ul>
@@ -155,14 +155,20 @@
 			<div class="row">
 				<div class="col-md-6">
 					<!-- Press Item -->
-					<div class="fh5co-press-item to-animate">
-						<div class="fh5co-press-img" style="background-image: url(assets/images/img_7.jpg)">
+					<div *ngIf="last_news" class="fh5co-press-item to-animate">
+						<div class="fh5co-press-img" [style]="last_news.picture | safeCSS ">
 						</div>
 						<div class="fh5co-press-text">
-							<h3 class="h2 fh5co-press-title">Titre de la news </h3>
-							<small>12/04/2017</small>
-							<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Veritatis eius quos similique suscipit dolorem cumque vitae qui molestias illo accusantium...</p>
-							<p><a href="#" class="btn btn-primary btn-sm">Lire la suite...</a></p>
+							<h3 class="h2 fh5co-press-title">{{last_news.title}}</h3>
+							<small>{{last_news.date_pub | readableDate}}</small>
+							<p>{{last_news.texte}}...</p>
+							<p><a [routerLink]="['/news',last_news.id]" class="btn btn-secondary full-width btn-sm">Lire la suite...</a></p>
+
+							<div class="commands">
+								<a *ngIf="offset>0" (click)="prevnews(last_news.id)" class='btn btn-primary'>Prec.</a>
+								<a *ngIf="hasmore" (click)="nextnews(last_news.id)" class='btn btn-primary'>Suiv.</a>
+							</div>
+
 						</div>
 					</div>
 					<!-- Press Item -->

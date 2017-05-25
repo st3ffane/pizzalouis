@@ -191,8 +191,11 @@ function getUsersCount(req,res,next){
 
 function authUser(name, passwrd){
     return users.find({
-        login: name,
-        passwrd: passwrd
+        where:{
+            login: name,
+            passwrd: passwrd
+        }
+        
     });
 }
 function createUser(name, email){
@@ -203,6 +206,16 @@ function createUser(name, email){
         passwrd: email
     });
 }
+function getUserInfos(id){
+    return users.find({where:{id:id}});
+}
+function updateUser(id, user){
+   return  users.update(user,{
+        where:{
+            id:id
+        }
+    });
+}
 
 module.exports = {
     listAllUsersSnapshot:listAllUsersSnapshot,
@@ -210,5 +223,7 @@ module.exports = {
     getUsersCount: getUsersCount,
 
     authUser: authUser,
-    createUser: createUser
+    createUser: createUser,
+    getUserInfos: getUserInfos,
+    updateUser: updateUser
 }

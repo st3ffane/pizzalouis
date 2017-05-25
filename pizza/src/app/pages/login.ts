@@ -16,7 +16,9 @@ export default class LoginComponent{
 
 
     constructor(private _ws:WSProvider, private _route:Router){}
-
+    ngOnInit(){
+        this._ws.setAuthInfos(null);
+    }
     processAuth(){
         this.error = null;
         this.is_processing = true;

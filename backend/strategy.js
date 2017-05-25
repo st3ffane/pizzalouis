@@ -10,9 +10,8 @@ var gen = require("./token");
 function process_auth(token, cb){
 
      if(token){
-        
-        try{
-            var decoded = jwt.decode(token, require("../config/secret")());
+         try{
+            var decoded = jwt.decode(token, gen.secret);
             
             if(decoded.exp <= Date.now()){
                 //token expires, redirect to loggin                

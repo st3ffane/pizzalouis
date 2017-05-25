@@ -153,9 +153,56 @@ function getNewsDetails(req,res,next){
         next();
     })
 }
+
+//renvoie une mini de news + 
+//id prev et next
+function getNewsExcerpt(offset){
+    if(!offset){
+        offset = 0;
+        count = 2;//juste 2 news
+    } else {
+        count = 3;//3 news max
+    }
+    return news.findAll({
+        
+        order:[['date_pub','DESC']],
+        offset: offset,
+        limit: count
+
+    }).then(dt=>{
+        if(!dt) return {};
+        if(offset == 0)dt.unshift({dataValues:{id:null}});
+        //normalement, au moin un tableau de 2 news...
+        let infos = {
+            last_news: dt[1].dataValues
+        }
+        infos.last_news.texte = infos.last_news.texte.substr(0,30);//50 premier chars only...
+        return infos;
+    }) ;
+}
+function getNewsById(id){
+    return news.find({
+        where:{id:id},
+        include:[
+            {
+                model:comments,
+                where:{etat:'published'},
+                required: false,
+                include:[
+                    {model:users}
+                ]
+            }
+        ]
+    });
+}
 module.exports={
      listAllNewsSwnapshot: listAllNewsSwnapshot,
      listAllNewsAjax: listAllNewsAjax,
      saveNews: saveNews,
-     getNewsDetails: getNewsDetails
+     getNewsDetails: getNewsDetails,
+
+
+
+     getNews: getNewsExcerpt,
+     getNewsById: getNewsById
 }
