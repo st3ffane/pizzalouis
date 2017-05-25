@@ -10,33 +10,35 @@
 					</div>
 				</div>
 			</div>
-			<div class="row">
-				<div class="col-md-6 col-xs-12">
+			<div class="row" *ngFor='let pizza of pizzas'>
+			
+				<div *ngIf="pizza" class="col-md-6 col-xs-12">
 					<!-- Press Item -->
 					<div class="fh5co-press-item to-animate full-size">
-						<div class="fh5co-press-img" style="background-image: url(assets/images/img_7.jpg)">
+						<div class="fh5co-press-img" [style]="pizza.picture | safeCSS">
 						</div>
 						<div class="fh5co-press-text">
-							<h1 class="fh5co-press-title">La Coparrella <span class="fh5co-border"></span></h1>
+							<h1 class="fh5co-press-title title">{{pizza.nom}}<span class="fh5co-border"></span></h1>
 							<p class="note">
-								<i class="icon-star" aria-hidden="true">
-									</i><i class="icon-star" aria-hidden="true">
-									</i><i class="icon-star" aria-hidden="true"></i>
-
-									<i class="icon-star" aria-hidden="true"></i>
+								<i class="icon-star" aria-hidden="true" *ngIf='pizza.note>0'></i>
+								<i class="icon-star" aria-hidden="true" *ngIf='pizza.note>1'></i>
+								<i class="icon-star" aria-hidden="true" *ngIf='pizza.note>2'></i>
+								<i class="icon-star" aria-hidden="true" *ngIf='pizza.note>3'></i>
+								<i class="icon-star" aria-hidden="true" *ngIf='pizza.note>4'></i>
 							</p>
-							<p>Slogan de la pizza</p>
-							<p>ingredient, ingredient, ingredient, ingredient, ingredient, </p>
+							<p class="slogan">{{pizza.slogan}}</p>
+							<p >Base: <strong>{{pizza.base.nom}}</strong></p>
+							<p>Ingrédients: <strong>{{pizza.ingredients}}</strong></p>
 							<p>
-								<a href="pizzas.html" class="btn btn-secondary btn-sm action full-size">Plus de details</a>
+								<a [routerLink]="['/pizzas',pizza.id]" class="btn btn-secondary btn-sm action full-size">Plus de details</a>
 							</p>
 							<div class="tarif to-animate">
 								<div>
-									<div><span>24cm:</span><h2 style="display:inline-block">12€</h2></div>
+									<div><span>24cm:</span><h2 style="display:inline-block">{{pizza.prix_small}}€</h2></div>
 									<h1 class="number">0</h1>
 								</div>
 								<div>
-									<div><span>33cm:</span><h2 style="display:inline">16€</h2></div>
+									<div><span>33cm:</span><h2 style="display:inline">{{pizza.prix_big}}€</h2></div>
 									<h1 class="number">0</h1>
 								</div>
 							</div>

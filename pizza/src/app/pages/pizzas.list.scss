@@ -44,6 +44,11 @@ margin: 2px;
 	font-size: 36px!important;
 	text-align: center;
 }
+.fh5co-press-img{
+    border: 2px solid white;
+    border-top-left-radius: 5px;
+    border-top-right-radius: 5px;
+}
 @media screen and (orientation:landscape){
     #fh5co-our-services{
         padding: 0!important;
@@ -73,7 +78,22 @@ margin: 2px;
 	    margin: 0;
 	line-height:1em;
 }
-
+.slogan{
+    text-align: center;
+    font-size: 1.3em;
+    margin-bottom: 1.2em!important;
+    font-style: italic;
+    letter-spacing: 1px;
+}
+.slogan::before{
+    content:open-quote;
+}
+.slogan::after{
+    content:close-quote;
+}
+.title{
+    letter-spacing: 3px;
+}
 .btn-floating {
    display: inline-block;
     color: #fff;

@@ -57,7 +57,7 @@
 				</div>
 				<div class="row">
 					<div class="col-md-12">
-						<a href="pizza.details.html" class="btn btn-primary btn-lg full-width to-animate" style="border: 1px solid white!important;">Voir notre carte</a>
+						<a routerLink="/pizzas" class="btn btn-primary btn-lg full-width to-animate" style="border: 1px solid white!important;">Voir notre carte</a>
 					</div>
 				</div>
 			</div>
@@ -156,7 +156,7 @@
 				<div class="col-md-6">
 					<!-- Press Item -->
 					<div *ngIf="last_news" class="fh5co-press-item to-animate">
-						<div class="fh5co-press-img" [style]="last_news.picture | safeCSS ">
+						<div class="fh5co-press-img bordered" [style]="last_news.picture | safeCSS ">
 						</div>
 						<div class="fh5co-press-text">
 							<h3 class="h2 fh5co-press-title">{{last_news.title}}</h3>

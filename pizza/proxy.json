@@ -8,6 +8,16 @@
     "changeOrigin": true,
     "secure": false,
     "logLevel": "debug"
+  },
+  "/images/**": {
+    "target": {
+        "host": "localhost",
+        "protocol": "http:",
+        "port": 3000
+      },
+    "changeOrigin": true,
+    "secure": false,
+    "logLevel": "debug"
   }
  
 }

@@ -89,3 +89,8 @@ margin-bottom: 0!important;
     flex-direction:row;
     justify-content: space-between;
 }
+.bordered{
+    border: 2px solid white;
+    border-top-left-radius: 5px;
+    border-top-right-radius: 5px;
+}

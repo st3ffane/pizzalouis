@@ -61,6 +61,12 @@ export class WSProvider implements CanActivate{
         return this.sendToServer("/api/client/news/"+id,'post',{msg:msg});
     }
 
+
+
+    public getPizzasList(){
+        return this.sendGetToServer("/api/client/pizzas");
+    }
+
     private sendGetToServer(url,datas?:string){
         let headers =  new Headers({'Content-Type': 'application/json'});
         console.log("Authoticate: "+this.auth_token)

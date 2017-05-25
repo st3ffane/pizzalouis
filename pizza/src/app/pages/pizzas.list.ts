@@ -1,5 +1,5 @@
 import {Component} from "@angular/core";
-
+import {WSProvider} from "../ws.provider";
 
 
 @Component({
@@ -8,5 +8,19 @@ import {Component} from "@angular/core";
     styleUrls:['./pizzas.list.scss']
 })
 export default class PizzasListComponent{
+    pizzas:Array<any> = [];
+    error:string = null;
 
+
+
+    constructor(private _ws:WSProvider){}
+    ngOnInit(){
+        this._ws.getPizzasList().then(dt=>{
+            this.pizzas = dt;
+            console.log(dt)
+
+        }).catch(err=>{
+            console.log(err);
+        })
+    }
 }

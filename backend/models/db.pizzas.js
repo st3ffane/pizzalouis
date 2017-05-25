@@ -258,35 +258,51 @@ function getBestNote(req,res,next){
 
 function getPizzaList(){
     return pizza.findAll({
-        attributes:["id","nom","pizzas.slogan","prix_small","prix_big",'id_category',
+        attributes:["id","nom","picture","slogan","prix_small","prix_big",'id_category',
         [sequelize.fn("AVG", sequelize.col("comments.note")), "note"]],
         where:{
-            acive:true
+            active:true
         },
         include:[
             {
                 model:ingredients,
-                attributes:['nom'],
+                attributes:['nom','dispo'],
                 as: "base",
                 where:{
-                    active:true
+                    dispo:true
                 }
             },
             {
                 model:ingredients,
-                attributes:['nom'],
-                where:{
-                    active:true //probleme, si 1 non actif, annule la pizza...
-                }
+                attributes:['nom','dispo'],
+               
             },
             {
                 model:comments,
                 attributes:[]
             }
         ],
-        group:["pizzas.id","pizzas.nom","pizzas.slogan","prix_small","prix_big",'id_category','active',
-        "base.id","base.nom","ingredients.id","ingredients.nom","ingredients.pizza_ingredient.id_pizza",
+        group:["pizzas.id","pizzas.picture","pizzas.nom","pizzas.slogan","prix_small","prix_big",'id_category','active',
+        "base.id","base.nom","base.dispo","ingredients.id","ingredients.nom","ingredients.dispo","ingredients.pizza_ingredient.id_pizza",
         "ingredients.pizza_ingredient.id_ingredient","comments.comments_pizzas.id_pizza","comments.comments_pizzas.id_comment"]
+    }).then(dt=>{
+        let p =dt.map(el=>{
+            
+            let e = el.dataValues;
+            e.note = e.note || 0;
+            let ing = [];
+            //verifie si un ingrédient est desactivé
+            for(let i of e.ingredients){
+                
+                if(!i.dataValues.dispo) return;//nope
+                ing.push(i.nom);
+            }
+            e.ingredients = ing.join(', ');
+            return e;
+        });
+        console.log(p);
+        return p;
+
     });
 }
 module.exports = {
@@ -297,5 +313,6 @@ module.exports = {
     getCategoryPizzaSNapshot : getCategoryPizzaSNapshot,
     setPizzaActive:setPizzaActive,
 
-    getPizzasCount: getPizzasCount
+    getPizzasCount: getPizzasCount,
+    getPizzaList: getPizzaList
 }

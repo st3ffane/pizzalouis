@@ -11,7 +11,7 @@ var gen = require('../token');
 var db_users = require('../models/db.users');
 var db_news = require("../models/db.news");
 var db_comments = require("../models/db.comments");
-
+var db_pizzas = require("../models/db.pizzas");
 
 function genTokenForUser(req, res, next){
     
@@ -142,6 +142,17 @@ api_router.post("/news/:id",function(req,res,next){
     })
 });
 
+
+api_router.get("/pizzas", function(req,res,next){
+  //renvoie la liste des pizzas
+  db_pizzas.getPizzaList().then(dt=>{
+    res.json(dt);
+  }).catch(err=>{
+    console.log(err);
+    res.status(404);
+    res.end("nope");
+  })
+})
 router.use("/client",authController.isAuth, api_router);//routes protégées
 
 module.exports = router;
