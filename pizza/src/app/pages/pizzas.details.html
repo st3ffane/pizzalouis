@@ -4,6 +4,13 @@
 				<img class="news-img" [src]="'/images/pizzas/'+pizza.picture">
 			</div>
 			<div class="row">
+				
+				
+
+
+
+
+
 				<div class="col-md-12 section-heading text-center">
 					<h2 class="fadeInUp animated title">{{pizza.nom}}</h2>
 					<p class="note">
@@ -18,24 +25,32 @@
 						<div class="col-md-8 col-md-offset-2 subtext fadeInUp animated">
 							<h3>{{pizza.long_desc}}</h3>
 						</div>
-						<div class="col-md-8 col-md-offset-2 subtext fadeInUp animated">
-							<div><strong>{{pizza.base.nom}}</strong><br/>
-							<span>{{pizza.base.description}}</span></div>
-							<ul class="ing-list">
-								<li *ngFor="let ing of pizza.ingredients">
-									<strong>{{ing.nom}}</strong><br/>
-									<span>{{ing.description}}</span>
+
+
+						<div class="col-md-3 col-sm-6">
+							<div class="price-box  fadeInUp animated">
+								<h2 class="pricing-plan">{{pizza.base.nom}}</h2>
+								
+								<p>{{pizza.base.description}}</p>
+								<hr>
+								<div *ngFor="let ing of pizza.ingredients">
+									<h2 class="pricing-plan">{{ing.nom}}</h2>
 									
-								</li>
-							</ul>
+									<p>{{ing.description}}</p>
+									<hr>
+								</div>
+								<p class="more">Tous nos ingrédients sont séléctionnés avec soins blablabla;....</p>
+							</div>
 						</div>
+
+						
 						<div class="tarif fadeInUp animated">
 								<div>
-									<div><span>24cm:</span><span class="h2" style="display:inline-block"><p>{{pizza.prix_small}}</p></span></div>
+									<div><span>24cm:</span><span class="h2" style="display:inline-block"><div class="price">{{pizza.prix_small}}<sup class="currency">€</sup></div></span></div>
 									<h1 class="number">0</h1>
 								</div>
 								<div>
-									<div><span>33cm:</span><span class="h2" style="display:inline"><p>{{pizza.prix_big}}</p></span></div>
+									<div><span>33cm:</span><span class="h2" style="display:inline"><div class="price">{{pizza.prix_big}}<sup class="currency">€</sup></div></span></div>
 									<h1 class="number">0</h1>
 								</div>
 							</div>
