@@ -9,6 +9,9 @@ import {Routing} from "./router";
 import {PAGES} from './pages/pages';
 import "./rxjs-operators";
 import {WSProvider} from "./ws.provider";
+import {StateProvider} from "./state.provider";
+
+
 
 import {ReadableDatePipe} from "./pipes/date";
 import {BypassCSSPipe} from "./pipes/bypass.css";
@@ -27,7 +30,7 @@ import {BypassCSSPipe} from "./pipes/bypass.css";
     Ng2PageScrollModule.forRoot(),
     Routing
   ],
-  providers: [WSProvider],
+  providers: [WSProvider,StateProvider],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

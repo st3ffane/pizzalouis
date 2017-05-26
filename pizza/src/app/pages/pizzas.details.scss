@@ -117,3 +117,121 @@ margin:10px;
 	box-shadow: 0 2px 2px 0 rgba(0,0,0,0.14), 0 1px 5px 0 rgba(0,0,0,0.12), 0 3px 1px -2px rgba(0,0,0,0.2);
    background-color: #F44336 !important;
 }
+.ing-list{
+    padding: 0;
+    list-style: none;
+    margin-bottom: 30px;
+}
+.ing-list li{
+    margin-bottom: 10px;
+}
+.slogan{
+    text-align: center;
+    font-size: 1.3em;
+    margin-bottom: 1.2em!important;
+    font-style: italic;
+    letter-spacing: 1px;
+}
+.slogan::before{
+    content:open-quote;
+}
+.slogan::after{
+    content:close-quote;
+}
+.title{
+    letter-spacing: 3px;
+}
+
+
+
+.tarif, .tarif div div{
+	display: flex;
+	    flex-direction: row;
+	    align-items: baseline;
+	    justify-content: space-between;
+	margin:0 12px;
+}
+.tarif>div:first-child{
+	border-right: 1px dashed green;
+}
+.tarif div{
+	flex-grow: 1;
+}
+.tarif h1{
+	text-align: center;
+	    margin: 0;
+	line-height:1em;
+}
+
+
+
+$unchecked-star: '\2606';
+$unchecked-color: white;
+$checked-star: '\2605';
+$checked-color: #e7f547;
+
+.star-cb-group {
+  /* remove inline-block whitespace */
+  font-size: 0;
+  * {
+    font-size: 5rem;
+  }
+  /* flip the order so we can use the + and ~ combinators */
+  unicode-bidi: bidi-override;
+  direction: rtl;
+  & > input {
+    display: none;
+    & + label {
+      /* only enough room for the star */
+      display: inline-block;
+      overflow: hidden;
+      text-indent: 9999px;
+      width: 1em;
+      white-space: nowrap;
+      cursor: pointer;
+      &:before {
+        display: inline-block;
+        text-indent: -9999px;
+        content: $unchecked-star;
+        color: $unchecked-color;
+      }
+    }
+    &:checked ~ label:before,
+      & + label:hover ~ label:before,
+      & + label:hover:before {
+      content: $checked-star;
+      color: #e7f547;
+      text-shadow: 0 0 1px white;
+    }
+  }
+  
+  /* the hidden clearer */
+  & > .star-cb-clear + label {
+    text-indent: -9999px;
+    width: .5em;
+    margin-left: -.5em;
+  }
+  & > .star-cb-clear + label:before {
+    width: .5em;
+  }
+
+  &:hover > input + label:before {
+    content: $unchecked-star;
+    color: $unchecked-color;
+    text-shadow: none;
+  }
+  &:hover > input + label:hover ~ label:before,
+  &:hover > input + label:hover:before {
+    content: $checked-star;
+    color: $checked-color;
+    text-shadow: 0 0 1px white;
+  }
+}
+
+.note{
+	font-size: 24px;
+	text-align: center;
+}
+.note i{
+	margin: 5px ;
+}

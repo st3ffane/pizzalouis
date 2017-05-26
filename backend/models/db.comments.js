@@ -196,6 +196,16 @@ function addNewsComment(from, about, msg){
         return SEQ.query("INSERT INTO comments_news(id_comment,id_news) VALUES ("+dt.id+","+about+");");
     });
 }
+function addPizzaComment(from,about,msg,note){
+    return comments.create({
+        texte:msg,
+        id_user:from,
+        note: note
+    }).then(dt=>{
+        //associe le comment a la news
+        return SEQ.query("INSERT INTO comments_pizzas(id_comment,id_pizza) VALUES ("+dt.id+","+about+");");
+    });
+}
 module.exports = {
     getNewCommentsCount : getNewCommentsCount,
     listAllCommentsSwnapshot: listAllCommentsSwnapshot,
@@ -203,5 +213,6 @@ module.exports = {
 
 
 
-    addNewsComment: addNewsComment
+    addNewsComment: addNewsComment,
+    addPizzaComment: addPizzaComment
 }

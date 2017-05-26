@@ -305,6 +305,47 @@ function getPizzaList(){
 
     });
 }
+function getPizzaById(id){
+    return pizza.find({
+         attributes:["id","nom","picture","long_desc","slogan","prix_small","prix_big",'id_category',
+        [sequelize.fn("AVG", sequelize.col("comments.note")), "note"]],
+        where:{
+            id:id
+        },
+         include:[
+            {
+                model:ingredients,
+                attributes:['nom','description'],
+                as: "base",
+                where:{
+                    dispo:true
+                }
+            },
+            {
+                model:ingredients,
+                attributes:['nom','description'],
+               
+            },
+            {
+                model:comments,
+                attributes:["texte","date","note"],
+                where:{
+                    etat:"published"
+                },
+                required:false,
+                include:{
+                    model:users,
+                    attributes:["id","nom","prenom"],
+                    
+                }
+            }
+        ],
+        group:["pizzas.id","pizzas.picture","pizzas.long_desc","pizzas.nom","pizzas.slogan","prix_small","prix_big",'id_category','active',
+        "base.id","base.nom","base.dispo","ingredients.id","ingredients.nom","ingredients.dispo","ingredients.pizza_ingredient.id_pizza",
+        "ingredients.pizza_ingredient.id_ingredient","comments.comments_pizzas.id_pizza","comments.comments_pizzas.id_comment",
+        "comments.id","comments.user.id"]
+    })
+}
 module.exports = {
 
     listAllPizzasSnapshot: listAllPizzasSnapshot,
@@ -314,5 +355,6 @@ module.exports = {
     setPizzaActive:setPizzaActive,
 
     getPizzasCount: getPizzasCount,
-    getPizzaList: getPizzaList
+    getPizzaList: getPizzaList,
+    getPizzaById: getPizzaById
 }

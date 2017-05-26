@@ -1,7 +1,13 @@
-import {Component} from "@angular/core";
+import {Component, Inject} from "@angular/core";
 import { DOCUMENT } from "@angular/platform-browser";
 import {WSProvider} from "../ws.provider";
+import {StateProvider} from "../state.provider";
+import {Router, NavigationStart} from "@angular/router";
+
+
 declare var ol: any;
+const KEY:string = "MAIN";
+
 
 @Component({
     selector:"pizza-main",
@@ -17,9 +23,26 @@ export default class MainComponent{
     hasmore:boolean = true;
     is_loading:boolean = false;
 
+    router_subscribe = null;
 
-    constructor(private _ws:WSProvider){}
+    constructor(private _router:Router,private _ws:WSProvider, private _state:StateProvider){
+        
+    }
     ngOnInit(){
+        //restaure l'etat de la page
+        let state = this._state.loadstate(KEY);
+        this.offset = state.offset || 0;
+       
+        this.router_subscribe = this._router.events.subscribe((event) => {
+            if(event instanceof NavigationStart) {
+                this._state.savestate(KEY,{scrollY:document.documentElement.scrollTop || document.body.scrollTop, offset:this.offset});
+            }
+            // NavigationEnd
+            // NavigationCancel
+            // NavigationError
+            // RoutesRecognized
+        });
+
         //met en place les listeners???
         let map = new ol.Map({
             target: 'map',
@@ -55,8 +78,15 @@ export default class MainComponent{
                 this.hasmore = false;
             }
             this.is_loading=false;
-        })
+        });
+        
+        setTimeout(()=> window.scrollTo(0,state.scrollY || 0), 100);
+        
     }
+    ngOnDestroy(){
+        this.router_subscribe.unsubscribe();
+    }
+   
 
     toggleMenu(evt){        
         this.show_menu = !this.show_menu;

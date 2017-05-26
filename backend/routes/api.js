@@ -97,7 +97,7 @@ api_router.post("/user", function(req,res,next){
       })
   });
 });
-
+//recuper les news -vues
 api_router.get('/lastnewsexcerpt',function(req,res,next){
    let offset = req.query.offset || 0;
 
@@ -108,6 +108,7 @@ api_router.get('/lastnewsexcerpt',function(req,res,next){
       res.json(500,{error:0,msg:"Erreur db"});
     })
 })
+//recupere une news -details
 api_router.get('/news/:id',function(req,res,next){
     req.checkParams("id").isInt();
     req.getValidationResult().then( result=>{
@@ -127,6 +128,7 @@ api_router.get('/news/:id',function(req,res,next){
       res.json(dt);//la news
     })
 })
+//post un comment sur une news
 api_router.post("/news/:id",function(req,res,next){
     //ajoutte un nouveau commentaire 
     let uid = req.user.id;
@@ -142,7 +144,34 @@ api_router.post("/news/:id",function(req,res,next){
     })
 });
 
+//details sur une pizza
+api_router.get("/pizzas/:id", function(req,res,next){
+  db_pizzas.getPizzaById(req.params.id).then(dt=>{
+      res.json(dt);
+    }).catch(err=>{
+      console.log(err);
+      res.status(500);
+      res.json({error:1,msg:"Erreur db"});
+    })
+})
+//post un comment pour une pizza
+api_router.post("/pizzas/:id", function(req,res,next){
+    //enregistre un nouveau message pour une pizza!!!
+    let uid = req.user.id;
+    let newsid = req.params.id;
+    let msg = req.body.msg;
+    let note = req.body.note || 4;
 
+    if(!msg) return res.json({error:1,msg:"empty"});
+
+    //enregistre le comment 
+    db_comments.addPizzaComment(uid,newsid,msg, note).then(dt=>{
+      res.json({error:0,msg:"OK"});
+    }).catch(err=>{
+      res.json(500,{error:1,msg:"une couille dans le potage"});
+    })
+})
+//liste des pizzas
 api_router.get("/pizzas", function(req,res,next){
   //renvoie la liste des pizzas
   db_pizzas.getPizzaList().then(dt=>{
@@ -152,7 +181,8 @@ api_router.get("/pizzas", function(req,res,next){
     res.status(404);
     res.end("nope");
   })
-})
+});
+
 router.use("/client",authController.isAuth, api_router);//routes protégées
 
 module.exports = router;

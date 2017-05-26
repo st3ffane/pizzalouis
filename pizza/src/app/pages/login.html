@@ -18,7 +18,7 @@
 						</div>
 						<p *ngIf="error" class="alert alert-danger">{{error}}</p>
 						<div *ngIf="!is_processing">
-								<input [disabled]="!login.form.valid" class="btn btn-primary btn-lg" type="submit" value="Connecter vous">
+								<input [disabled]="!login.form.valid" class="btn btn-primary btn-lg" type="submit" value="Connectez vous">
 						</div>
 						<div *ngIf="is_processing">
 							<p>Authentification en cours, merci de patienter....
@@ -27,7 +27,7 @@
 				</div>
 				<div class="row">
                     
-					<p class="fadeInUp animated">ou <a routerLink="/register" class="btn btn-primary">Créer votre compte gratuitement!</a></p>
+					<p class="fadeInUp animated">ou <a routerLink="/register" class="btn btn-primary">Créez votre compte gratuitement!</a></p>
 				</div>
 				
 			</div>

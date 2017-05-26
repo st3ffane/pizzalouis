@@ -8,5 +8,7 @@ import {Component} from "@angular/core";
     styleUrls:['./panier.scss']
 })
 export default class PanierComponent{
-
+    ngOnInit(){
+        window.scrollTo(0,0);
+    }
 }

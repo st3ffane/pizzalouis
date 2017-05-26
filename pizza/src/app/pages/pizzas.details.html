@@ -1,27 +1,41 @@
 <div id="fh5co-testimonials" data-section="testimonials">		
-		<div class="container">
+		<div *ngIf="pizza" class="container">
 			<div class="row">
-				<img class="news-img" src="assets/images/back.jpg">
+				<img class="news-img" [src]="'/images/pizzas/'+pizza.picture">
 			</div>
 			<div class="row">
 				<div class="col-md-12 section-heading text-center">
-					<h2 class="fadeInUp animated">La Copparella</h2>
-					<h3 class="fadeInUp animated">Slogan de la pizza!</h3>
+					<h2 class="fadeInUp animated title">{{pizza.nom}}</h2>
+					<p class="note">
+								<i class="icon-star" aria-hidden="true" *ngIf='pizza.note>0'></i>
+								<i class="icon-star" aria-hidden="true" *ngIf='pizza.note>1'></i>
+								<i class="icon-star" aria-hidden="true" *ngIf='pizza.note>2'></i>
+								<i class="icon-star" aria-hidden="true" *ngIf='pizza.note>3'></i>
+								<i class="icon-star" aria-hidden="true" *ngIf='pizza.note>4'></i>
+							</p>
+					<h3 class="fadeInUp animated slogan">{{pizza.slogan}}</h3>
 					<div class="row">
 						<div class="col-md-8 col-md-offset-2 subtext fadeInUp animated">
-							<h3>une description longue de la pizza pour donner envie</h3>
+							<h3>{{pizza.long_desc}}</h3>
 						</div>
 						<div class="col-md-8 col-md-offset-2 subtext fadeInUp animated">
-							
-							<p>ingredient1,ingredient2, iingredient3, ingredient3, ingredient3, ingredient3</p>
+							<div><strong>{{pizza.base.nom}}</strong><br/>
+							<span>{{pizza.base.description}}</span></div>
+							<ul class="ing-list">
+								<li *ngFor="let ing of pizza.ingredients">
+									<strong>{{ing.nom}}</strong><br/>
+									<span>{{ing.description}}</span>
+									
+								</li>
+							</ul>
 						</div>
 						<div class="tarif fadeInUp animated">
 								<div>
-									<div><span>24cm:</span><span class="h2" style="display:inline-block">12€</span></div>
+									<div><span>24cm:</span><span class="h2" style="display:inline-block"><p>{{pizza.prix_small}}</p></span></div>
 									<h1 class="number">0</h1>
 								</div>
 								<div>
-									<div><span>33cm:</span><span class="h2" style="display:inline">16€</span></div>
+									<div><span>33cm:</span><span class="h2" style="display:inline"><p>{{pizza.prix_big}}</p></span></div>
 									<h1 class="number">0</h1>
 								</div>
 							</div>
@@ -33,17 +47,22 @@
 					</div>
 				</div>
 			</div>
-			<div class="row">
+			<div class="row" *ngFor="let comment of pizza.comments">
 				<div class="col-md-4">
 					<div class="box-testimony fadeInUp animated">
 						<blockquote>
 							<span class="quote"><span><i class="icon-quote-left"></i></span></span>
-							<p>&ldquo;contenu du message du client.&rdquo;</p>
+							<p>&ldquo;{{comment.texte}}&rdquo;</p>
 							<div class="note">
-							<i class="icon-star" aria-hidden="true"></i><i class="icon-star" aria-hidden="true"></i><i class="icon-star" aria-hidden="true"></i>
-							</div>
+							<p class="note">
+								<i class="icon-star" aria-hidden="true" *ngIf='comment.note > 0'></i>
+								<i class="icon-star" aria-hidden="true" *ngIf='comment.note>1'></i>
+								<i class="icon-star" aria-hidden="true" *ngIf='comment.note>2'></i>
+								<i class="icon-star" aria-hidden="true" *ngIf='comment.note>3'></i>
+								<i class="icon-star" aria-hidden="true" *ngIf='comment.note>4'></i>
+							</p></div>
 						</blockquote>
-						<p class="author">Prenom client <span class="subtext">le 12/05/2017</span></p>
+						<p class="author">{{comment.user.nom}} <span class="subtext">le {{comment.date |readableDate}}</span></p>
 					</div>
 					
 				</div>
@@ -54,27 +73,35 @@
 					<div class="box-testimony fadeInUp animated full-size">
 
 						<blockquote>
-							<form>
+							<form #commentForm="ngForm" (ngSubmit)="processForm()">
 
 								<div class="form-group">
-									<label>Ajouter un message</label>
-									<textarea rows="5" class="form-control"></textarea>
+									<label>Ajoutez un message</label>
+									<textarea required (change)="msg_text=$event.target.value" rows="5" class="form-control">{{msg_text}}</textarea>
 								</div>
 								<div class="form-group">
 									<label>Notez cette pizza</label>
-									<i class="icon-star" aria-hidden="true">
-									</i>
-                                    <i class="icon-star" aria-hidden="true">
-									</i>
-                                    <i class="icon-star" aria-hidden="true"></i>
-
-									<i class="icon-star" aria-hidden="true">
-									</i><i class="icon-star" aria-hidden="true"></i>
+									<fieldset>
+									<span class="star-cb-group">
+									<input type="radio" [(ngModel)]="note" id="rating-5" name="rating" value="5" /><label for="rating-5">5</label>
+									<input type="radio" [(ngModel)]="note" id="rating-4" name="rating" value="4" checked="checked" /><label for="rating-4">4</label>
+									<input type="radio" [(ngModel)]="note" id="rating-3" name="rating" value="3" /><label for="rating-3">3</label>
+									<input type="radio" [(ngModel)]="note" id="rating-2" name="rating" value="2" /><label for="rating-2">2</label>
+									<input type="radio" [(ngModel)]="note" id="rating-1" name="rating" value="1" /><label for="rating-1">1</label>
+									<input type="radio" [(ngModel)]="note" id="rating-0" name="rating" value="0" class="star-cb-clear" /><label for="rating-0">0</label>
+									</span>
+								</fieldset>
 							
 								</div>
-								<div class="form-group">
-									<button class="btn btn-primary btn-lg full-size" type="submit">Poster votre message</button>
+								<p *ngIf="error" class="alert alert-danger">{{error}}</p>
+								<p *ngIf="success" class="alert alert-success">Nous vous remercions pour votre message</p>
+								<div *ngIf="!is_processing">
+										<button [disabled]="!commentForm.form.valid" class="btn btn-primary btn-lg full-size" type="submit">Postez votre message</button>
+								</div>
+								<div *ngIf="is_processing">
+									<p>Envoie du message....
 								</div> 
+								
 							</form>
 						</blockquote>
 						
@@ -84,7 +111,9 @@
 			</div>
 		</div>
 	</div>
-
+	<div *ngIf="!pizza">
+		Chargement des données, merci de patienter....
+	</div>
 	<a class="btn btn-floating btn-lg red" href="panier.html">
             <i class="icon-wallet"></i>
           </a>

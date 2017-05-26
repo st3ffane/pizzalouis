@@ -22,6 +22,9 @@ export default class CompteComponent{
 
     }
     ngOnInit(){
+        window.scrollTo(0,0);
+
+        
         this.error = null;
         this.is_loading = true;
         this._ws.loadUserDetails().then(dt=>{
