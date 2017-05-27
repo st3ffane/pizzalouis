@@ -11,3 +11,7 @@
 .js .single-animate {
   opacity: 0;
 }
+
+[data-braintree-id="toggle"] {
+  display: none;
+}

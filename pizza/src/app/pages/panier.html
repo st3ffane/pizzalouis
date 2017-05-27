@@ -74,10 +74,21 @@
 
 						</div>
 						<div class="col-md-4 col-md-offset-4 single-animate animate-features-3">
-							<button class="btn btn-primary btn-block full-size" type="button" (click)="openCheckout()">Payer via CB -stripe</button>
-							<div id="dropin-container"></div>
-							<input [disabled]="!cardForm.form.valid" type="submit" class="btn btn-primary btn-block full-size" value="payer via CB (stripe)">
+							<input type="hidden" [(ngModel)]="nonce" required name="nonce" >
 							
+							<div *ngIf="!instance">
+								<!-- formulaire paypal -->
+								<button *ngIf="!is_processing" class="btn btn-primary btn-block full-size" type="button" (click)="openCheckout()">Payer via PAYPAL</button>
+								<div *ngIf="is_processing" class="loader"></div>
+							</div>
+							<div style="margin-bottom:10px;">
+								<div id="dropin-container"></div>
+								<button *ngIf="instance && display_command" [disabled]="is_processing" type="button" class="btn btn-primary btn-block full-size" (click)="requestPayload()">Validez</button>
+							</div>
+							
+							<p *ngIf="error" class="alert alert-danger">{{error}}</p>
+							<input *ngIf="!is_processing" [disabled]="!cardForm.form.valid" type="submit" class="btn btn-primary btn-block full-size" value="Passez votre commande">
+							<div *ngIf="is_processing && cardForm.form.valid" class="loader"></div>
 						</div>
 					</form>
 					</div>
@@ -97,5 +108,4 @@
 			
 		</div>
 	</div>
-
 
