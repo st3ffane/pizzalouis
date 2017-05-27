@@ -11,6 +11,9 @@ import { CanActivate }    from '@angular/router';
 @Injectable()
 export class WSProvider implements CanActivate{
     auth_token:string = null;//par defaut, non identifier
+    pizzas = [];//pour eviter des les recharger a chaque fois 
+
+
 
     constructor(private _http:Http, private _route:Router){}
 
@@ -64,7 +67,11 @@ export class WSProvider implements CanActivate{
 
 
     public getPizzasList(){
-        return this.sendGetToServer("/api/client/pizzas");
+        if(this.pizzas.length>0) return Promise.resolve(this.pizzas);
+        return this.sendGetToServer("/api/client/pizzas").then(dt=>{
+            this.pizzas = dt;
+            return dt;
+        });
     }
     public loadPizza(id){
         return this.sendGetToServer("/api/client/pizzas/"+id);
@@ -72,6 +79,19 @@ export class WSProvider implements CanActivate{
     public postPizzaComment(id, msg, note){
         return this.sendToServer("/api/client/pizzas/"+id,'post',{msg:msg, note:note});
     }
+
+
+    //PAYPAL: recupere un token client pour le paiement
+    public getClientToken(){
+        return this.sendGetToServer("/api/client/client_token");
+    }
+
+    public postCommand(payementid, card){
+        card.payementid = payementid;
+        return this.sendToServer("/api/client/commande","post",card);
+    }
+
+
     private sendGetToServer(url,datas?:string){
         let headers =  new Headers({'Content-Type': 'application/json'});
         console.log("Authoticate: "+this.auth_token)

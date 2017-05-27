@@ -60,25 +60,6 @@ margin: 2px;
 	margin: 0 auto;
     }
 }
-.tarif, .tarif div div{
-	display: flex;
-	    flex-direction: row;
-	    align-items: baseline;
-	    justify-content: space-between;
-	margin:0 12px;
-}
-.tarif>div:first-child{
-	border-right: 1px dashed green;
-    padding-right: 12px;
-}
-.tarif div{
-	flex-grow: 1;
-}
-.tarif h1{
-	text-align: center;
-	    margin: 0;
-	line-height:1em;
-}
 
 
 .slogan{

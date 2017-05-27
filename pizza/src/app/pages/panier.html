@@ -11,60 +11,94 @@
 				</div>
 			</div>
 			<div class="row row-bottom-padded-sm">
-				<div class="col-md-4 col-sm-6 col-xs-6 col-xxs-12 fh5co-service fadeInUp animated">
-					<div class="fh5co-icon"><i class="icon-like"></i></div>
-					<div class="fh5co-desc">
-						<h3>La Copparella</h3>
-						<div class="input-group">
-						    <span class="input-group-addon">24cm</span>
-						    <input id="email" type="number" class="form-control" name="email" placeholder="Nbr de pizzas 24cm">
-						  </div>
-						<div class="input-group">
-						    <span class="input-group-addon">33cm</span>
-						    <input id="email" type="number" class="form-control" name="email" placeholder="Nbr de pizzas 33cm">
-						  </div>
-					</div>	
-				</div>
-				<div class="col-md-4 col-sm-6 col-xs-6 col-xxs-12 fh5co-service fadeInUp animated">
-					<div class="fh5co-icon"><i class="icon-eye"></i></div>
-					<div class="fh5co-desc">
-						<h3>La Fiame</h3>
-						<div class="input-group">
-						    <span class="input-group-addon">24cm</span>
-						    <input id="email" type="number" class="form-control" name="email" placeholder="Nbr de pizzas 24cm">
-						  </div>
-						<div class="input-group">
-						    <span class="input-group-addon">33cm</span>
-						    <input id="email" type="number" class="form-control" name="email" placeholder="Nbr de pizzas 33cm">
-						  </div>
+
+
+
+				<div class="col-md-3 col-sm-6" *ngFor="let item of card.pizzas">
+					<div class="price-box to-animate">
+						<h2 class="pricing-plan">{{item.pizza.nom}}</h2>
+						<p>{{item.pizza.slogan}}</p>
+						<hr>
+						<ul class="pricing-info">
+							<li *ngIf="item.small" >
+								<span class="big">{{item.small}}</span><span> pizza(s) de 24cm</span>
+								(<div class="price carditem">{{item.pizza.prix_small}}<sup class="currency">€</sup></div>)								
+							</li>
+							<li *ngIf="item.big">
+								<span class="big">{{item.big}}</span><span> pizza(s) de 33cm</span>
+								(<div class="price carditem">{{item.pizza.prix_big}}<sup class="currency">€</sup></div>)
+								
+							</li>
+						</ul>
+						<hr>
+						<div class="price subtotal">total:  {{item | totalpizza}}<sup class="currency">€</sup></div>	
 					</div>
 				</div>
 
-				<div class="col-md-4 col-sm-6 col-xs-6 col-xxs-12 fh5co-service fadeInUp animated">
+
+				<!--div class="col-md-4 col-sm-6 col-xs-6 col-xxs-12 fh5co-service fadeInUp animated" *ngFor="let item of card.pizzas">
+					<div class="fh5co-icon"><i class="icon-like"></i></div>
+					<div class="fh5co-desc">
+						<h3>{{item.name}}</h3>
+						<div *ngIf="item.size == 0" class="input-group">
+						    <span class="input-group-addon">24cm</span>
+						    <input readonly id="email" type="number" class="form-control" name="email" [value]="item.qtte" placeholder="Nbr de pizzas 24cm">
+						  </div>
+						<div *ngIf="item.size == 1" class="input-group">
+						    <span class="input-group-addon">33cm</span>
+						    <input readonly id="email" type="number" class="form-control" [value]="item.qtte" name="email" placeholder="Nbr de pizzas 33cm">
+						  </div>
+					</div>	
+				</div-->
+
+
+				<div class="col-md-3 col-sm-6 to-animate">
+					<div class="price-box popular">
+					<form #cardForm="ngForm" (ngSubmit)="processForm()">
+						
+						<div class="popular-text">Total de votre commande</div>
+						<h2 class="pricing-plan">&nbsp;</h2>
+						<div class="price">{{card.total}}<sup class="currency">€</sup></div>
+						<hr/>
+						<p>Informations complémentaires:</p>
+						<div class="form-group  fadeInUp animated">
+							<label>A quelle heure souhaitez vous récuperer votre commande? (17h30-21h30)</label>
+							<input type="time" [(ngModel)]="retrait" name="retrait" class="form-control" required>
+							<div *ngIf="date_error" class="alert alert-danger">
+								{{date_error}}
+							</div>
+						</div>
+						<div class="form-group  fadeInUp animated">
+							<label>Vous avez un désir particulier?</label>
+							<textarea class="form-control" rows="3"(change)="message=$event.target.value" rows="5" class="form-control">{{message}}</textarea>
+
+						</div>
+						<div class="col-md-4 col-md-offset-4 single-animate animate-features-3">
+							<button class="btn btn-primary btn-block full-size" type="button" (click)="openCheckout()">Payer via CB -stripe</button>
+							<input [disabled]="!cardForm.form.valid" type="submit" class="btn btn-primary btn-block full-size" value="payer via CB (stripe)">
+							
+						</div>
+					</form>
+					</div>
+				</div>
+
+
+				<!--div class="col-md-4 col-sm-6 col-xs-6 col-xxs-12 fh5co-service fadeInUp animated">
 					<div class="fh5co-icon"><i class="icon-eye"></i></div>
 					<div class="fh5co-desc">
 						<p>Total de votre commande</p>
-						<h2 style="text-align:center;">23€50</h2>
+						<h2 style="text-align:center;"><div class="price">{{card.total}}<sup class="currency">€</sup></div></h2>
 					</div>
-				</div>
+				</div-->
 				
 				<div class="clearfix visible-sm-block visible-xs-block"></div>
 			</div>
-			<div class="row">
-				<div class="form-group  fadeInUp animated">
-					<label>A quelle heure souhaitez vous récuperer votre commande?</label>
-					<input type="time" class="form-control">
-
-				</div>
-				<div class="form-group  fadeInUp animated">
-					<label>Vous avez un désir particulier?</label>
-					<textarea class="form-control" rows="3"></textarea>
-
-				</div>
-				<div class="col-md-4 col-md-offset-4 single-animate animate-features-3">
-					<a href="#" class="btn btn-primary btn-block">payer via PAypal</a>
-					<a href="#" class="btn btn-primary btn-block">payer via CB</a>
-				</div>
-			</div>
+			
 		</div>
 	</div>
+
+<div *ngIf="show_checkout" id="myModal" class="modal fade" role="dialog">
+  <div class="modal-dialog" id="dropin-container">
+	
+  </div>
+</div>

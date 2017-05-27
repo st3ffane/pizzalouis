@@ -1,0 +1,18 @@
+
+    <div class="tarif to-animate">
+        <div>
+            
+            <div><span>24cm:</span><h2 style="display:inline-block"><div class="price">{{prixsmall}}<sup class="currency">€</sup></div></h2></div>
+            <a (click)="addSmall()" class="btn btn-primary btn-sm action">Ajouter une 24cm</a>
+            <h1 class="number">{{small_count}}</h1>
+            <a  (click)="deleteSmall()" class="btn btn-secondary btn-sm action">retirer une 24cm</a>
+        </div>
+        <div>
+            
+            <div><span>33cm:</span><h2 style="display:inline"><div class="price">{{prixbig}}<sup class="currency">€</sup></div></h2></div>
+            <a (click)="addBig()" class="btn btn-primary btn-sm action">Ajouter une 33cm</a>
+            <h1 class="number">{{big_count}}</h1>
+            <a  (click)="deleteBig()" class="btn btn-secondary btn-sm action">retirer une 33cm</a>
+        </div>
+    </div>
+   

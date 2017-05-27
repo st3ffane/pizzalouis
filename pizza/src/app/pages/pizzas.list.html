@@ -32,7 +32,7 @@
 							<p>
 								<a [routerLink]="['/pizzas',pizza.id]" class="btn btn-secondary btn-sm action full-size">Plus de details</a>
 							</p>
-							<div class="tarif to-animate">
+							<!--div class="tarif to-animate">
 								<div>
 									<div><span>24cm:</span><h2 style="display:inline-block">{{pizza.prix_small}}€</h2></div>
 									<h1 class="number">0</h1>
@@ -41,12 +41,10 @@
 									<div><span>33cm:</span><h2 style="display:inline">{{pizza.prix_big}}€</h2></div>
 									<h1 class="number">0</h1>
 								</div>
-							</div>
+							</div-->
+							<pizza-counter [pizzaid]="pizza.id" [prixsmall]="pizza.prix_small" [prixbig]="pizza.prix_big" ></pizza-counter>
 							
-							<p class="to-animate"><a href="pizzas.html" class="btn btn-primary btn-sm action">Ajouter une 33cm</a>
-							<a href="#" class="btn btn-primary btn-sm action">Ajouter une 24cm</a></p>
-							<p class="to-animate"><a href="pizzas.html" class="btn btn-secondary btn-sm action">retirer une 33cm</a>
-							<a href="#" class="btn btn-secondary btn-sm action">retirer une 24cm</a></p>
+							
 						</div>
 					</div>
 					<!-- Press Item -->
@@ -59,7 +57,7 @@
 	</div>
 	
 	
-          <a class="btn btn-floating btn-lg red" href="panier.html">
+          <a class="btn btn-floating btn-lg red" routerLink='/panier'>
             <i class="icon-wallet"></i>
           </a>
           

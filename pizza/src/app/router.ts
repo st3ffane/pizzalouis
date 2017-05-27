@@ -61,6 +61,7 @@ const routes = [
         component:MainComponent,
         canActivate: [WSProvider]
     },
+    
     {
         path:"**",
         redirectTo:"/login"

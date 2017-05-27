@@ -1,0 +1,38 @@
+.tarif, .tarif div div{
+	display: flex;
+	    flex-direction: row;
+	    align-items: baseline;
+	    justify-content: space-between;
+	margin:0 12px;
+	color:black!important;
+}
+.tarif{
+    margin: 0;
+}
+.tarif>div:first-child{
+	border-right: 1px dashed green;
+    padding-right: 6px;
+}
+.tarif>div:last-child{
+    padding-left:6px;
+}
+.tarif div{
+	flex-grow: 1;
+    //width: 50%;
+}
+.tarif h1{
+	text-align: center;
+	    margin: 0;
+	line-height:2em;
+	color:black!important;
+}
+.tarif h2{
+	font-weight: 300;
+}
+.tarif a {
+    padding: 10px 7px !important;
+    margin: 0 10px;
+}
+.number{
+    line-height: 2em;
+}

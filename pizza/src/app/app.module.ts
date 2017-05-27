@@ -10,16 +10,20 @@ import {PAGES} from './pages/pages';
 import "./rxjs-operators";
 import {WSProvider} from "./ws.provider";
 import {StateProvider} from "./state.provider";
-
+import {PanierProvider} from "./panier.provider";
 
 
 import {ReadableDatePipe} from "./pipes/date";
 import {BypassCSSPipe} from "./pipes/bypass.css";
+import {TotalPizzaPipe} from "./pipes/total.pipe";
+
+
 @NgModule({
   declarations: [
     AppComponent,
     BypassCSSPipe,
     ReadableDatePipe,
+    TotalPizzaPipe,
     //les pages de l'application 
     ...PAGES
   ],
@@ -30,7 +34,7 @@ import {BypassCSSPipe} from "./pipes/bypass.css";
     Ng2PageScrollModule.forRoot(),
     Routing
   ],
-  providers: [WSProvider,StateProvider],
+  providers: [WSProvider,StateProvider, PanierProvider],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
