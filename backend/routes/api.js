@@ -210,7 +210,7 @@ api_router.get("/client_token", function (req, res) {
 api_router.post("/commande", function (req, res) {
   //recup infos de la commande et valide.....
   var amount = req.body.total;
-
+  console.log("nonce: ",req.body.payment_method_nonce);
   //le mode de paiement
   var nonceFromTheClient = nonces;//pour le sandbox, sinon: req.body.payment_method_nonce;
   gateway.transaction.sale({
@@ -232,7 +232,7 @@ api_router.post("/commande", function (req, res) {
       res.json({error:1, msg:result.errors.deepErrors()});
       return;
     }
-
+    console.log(result)
     //paiement OK, enregistre en base
     //.....
 

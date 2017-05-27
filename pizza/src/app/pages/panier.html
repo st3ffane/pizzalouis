@@ -75,6 +75,7 @@
 						</div>
 						<div class="col-md-4 col-md-offset-4 single-animate animate-features-3">
 							<button class="btn btn-primary btn-block full-size" type="button" (click)="openCheckout()">Payer via CB -stripe</button>
+							<div id="dropin-container"></div>
 							<input [disabled]="!cardForm.form.valid" type="submit" class="btn btn-primary btn-block full-size" value="payer via CB (stripe)">
 							
 						</div>
@@ -97,8 +98,4 @@
 		</div>
 	</div>
 
-<div *ngIf="show_checkout" id="myModal" class="modal fade" role="dialog">
-  <div class="modal-dialog" id="dropin-container">
-	
-  </div>
-</div>
+
