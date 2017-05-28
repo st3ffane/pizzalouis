@@ -26,33 +26,19 @@
                                 <p>La liste se met automatiquement a jour dès qu'une nouvelle commande arrive!
                             </div>
                                 <thead>
-                                    <tr>
-                                        <th>Nom</th>
-                                        <th>Base</th>
-                                        <th>Ingredients</th>
-                                        <th>Catégorie</th>
-                                        <th>Prix small</th>
-                                        <th>Prix Big</th>
-                                        <th>Note</th>
-                                        <th>Active</th>
-                                    </tr>
+                                     <thead>
+                                        <tr>
+                                            <th>Date commande</th>
+                                            <th>Date Retrait</th>
+                                            <th>Client</th>
+                                            <th>Id Paiement</th>
+                                            <th>Pizzas</th>
+                                            <th>message</th>
+                                        </tr>
+                
                                 </thead>
                                 <tbody>
-                                    {{#each products}}
-                                    <tr class="odd gradeX">
-                                        <td><a href="/admin/pizzaedit/{{id}}" title="Cliquez pour editer cette recette">{{nom}}</a></td>
-                                        <td>{{base}}</td>
-                                        <td>{{#linearizeArray ingredients}}{{this}}{{/linearizeArray}}</td>
-                                        <td>{{id_category}}</td>
-                                        <td class="text-center">{{this.prix_small}}</td>
-                                        <td class="text-center">{{prix_big}}</td>
-                                        <td class="text-center">{{#formatNumber note }}{{this}}{{/formatNumber}}</td>
-                                        <td class="center"><label >
-                                                    <input  id="check-{{id}}" type="checkbox" onchange="activatepizza({{id}});" data-toggle="toggle" {{#ifEq active true}}checked="true"{{/ifEq}}>
-                                                    <span id="text-{{id}}">{{#ifEq active true}}Active{{else}}Inactive{{/ifEq}}</span>
-                                                </label></td>
-                                    </tr>
-                                    {{/each}}
+                                    
                                     
                                 </tbody>
                             </table>
@@ -86,18 +72,116 @@
                     </div>
                 </div>
             </div>
-
-            <script>
-    $(document).ready(function() {
-        $('table').each( (i,elem)=>{
-                $(elem).DataTable({
-                "filter": true,
-                "pagingType": "simple_numbers",
-                "orderClasses": false,
-                "order": [[0, "asc"]],
-                "info": false,
-                responsive: true
-            });
-        });
+<script src="/javascripts/socket.io.js"></script>
+<script>  
+$(document).ready(function() {
+    ;
+    //init la table
+    var products = $('#products').DataTable({
+        filter:false,
+        "columns" : [
+                    { "data": "date_cmd" },
+                    { "data": "date_retrait" },
+                    { "data": "client" },
+                    { "data": "payement_id" },
+                    { "data": "pizzas" },
+                    { "data": "message" },
+                ],
+        columnDefs: [ 
+            {
+                targets: 0,
+                render: function(from){
+                    var d = new Date(from);
+                    return d.toLocaleDateString();
+                },
+                bSortable: false
+            },
+            {
+                targets: 1,
+                render: function(from){
+                    var dNow = new Date(from);
+                    var min = dNow.getMinutes().toLocaleString(
+                            'fr-FR', // use a string like 'en-US' to override browser locale
+                            { minimumIntegerDigits: 2 }
+                            );
+                    var month = (dNow.getMonth()+1).toLocaleString(
+                            'fr-FR', // use a string like 'en-US' to override browser locale
+                            { minimumIntegerDigits: 2 }
+                            );
+                    return  dNow.getHours() + ':' + min+' '+dNow.getDate() + '/' +month + '/'+ dNow.getFullYear();
+                },
+                bSortable: false
+            },
+            {
+                targets: 2,
+                render: function(data, type, row, meta){
+                    console.log(data);
+                    return 'un client';
+                    //return data.prenom+" "+data.nom;
+                },
+                 bSortable: false
+            },
+            {
+                targets: 3,
+                render: function(data, type, row, meta){
+                    
+                    ret=data;
+                    
+                    return ret;
+                },
+                bSortable: false
+            },
+            {
+                targets: 4,
+                render: function(data, type, row, meta){
+                    var ret = "<ul>";
+                    for (let p of data){
+                        ret+="<li>"+p.qtte+" "+p.pizza+ (p.size? ' 33cm' : ' 24cm')+"</li>"
+                    }
+                    return ret;
+                },
+                bSortable: false
+            },
+            {
+                targets:5,
+                bSortable: false
+            }
+            
+            
+        ]
     });
-    </script>
+
+
+    //connection au serveur socketIO
+    var socket = io.connect('http://localhost:5000');
+    socket.on('connect', function(data) {
+        //socket.emit('join', 'Hello World from client');
+    });
+    socket.on('hello', function(datas){
+        //initialisation
+        //ajoute les données à la table
+        console.log(datas);
+        for(var i in datas.aaData){
+            var dt = datas.aaData[i];            
+            products.row.add(dt).draw();
+        }
+
+        
+    })
+    socket.on('new_commande', function(data) {
+        //met a jour les données de la page
+    });
+    socket.on('error', function(datas){
+        //une erreur qqpart, affiche qqchose....
+
+
+    })
+
+});
+
+
+
+
+
+</script>
+         

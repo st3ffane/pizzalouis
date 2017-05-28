@@ -1,14 +1,18 @@
 import {Injectable} from "@angular/core";
 import {WSProvider} from "./ws.provider";
 
-
 @Injectable()
 export class PanierProvider{
-    panier:any = {};
-
+        panier:any = {
+            location: {
+                latitude:43.669070,
+                longitude:-1.105356
+            }
+    };
+    
     constructor(private _ws:WSProvider){}
 
-
+    
     addToCard(id, type, count){
         //ajoute au panier
         if(!this.panier[id]){
@@ -37,9 +41,10 @@ export class PanierProvider{
             for (let pid in this.panier){
                 let p = this.panier[pid];
                 let pizza = this.getPizzaById(pid, pizzas);
-                console.log(pizza)
+                
                 if(!pizza) continue;
                 let com = {
+                    id: pid,
                     pizza: pizza,
                     small: undefined,
                     big:undefined

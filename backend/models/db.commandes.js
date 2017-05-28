@@ -37,11 +37,64 @@ function getNewCommandesCount(req,res,next){
 
 function getCommandesInfosForToday(req,res,next){
     //renvois l'heure de la commande et le lieu de commande 
-   SEQ.query(` SELECT location, date_retrait, id,
-   `).then(dt=>{
+    
+   
 
-        next();
-    }).catch(err=>next(err));
+        let orderby=["date_retrait","DESC"];//par defaut, les dernieres en premier
+        let today = new Date();
+        let start_day = new Date(today.getFullYear(), today.getMonth(), today.getDate(), 17, 30, 00);
+        //recupere les commandes
+        return commandes.findAll({
+            where:{
+                date_retrait:{
+                    $gt:start_day
+                }
+            },
+            include:[
+                {
+                    model: cp,
+                    attributes:["qtte","size"],
+                    include:[{
+                        model:pizza,
+                        attributes:["nom"]
+                    }]
+                },
+                {
+                    model: users,
+                    attributes:['id','nom','prenom'],
+                    
+                }
+            ],
+            
+            order:[orderby]
+        }).then(dt=>{
+            let cs  = dt.map(el=>{
+                let e = el.dataValues;
+                
+                e.pizzas = el.commandes_pizzas.map(p=>{
+                    let dv = p.dataValues;
+                    let pz = {
+                        qtte: dv.qtte,
+                        size: dv.size,
+                        pizza: dv.pizza.dataValues.nom
+                    };
+                    return pz;
+                    
+                
+                });
+                e.client = el.user.dataValues;
+                return e;
+            });
+            let _commandes ={
+                recordsTotal: cs.length,//totalnews, //a voir
+                recordsFiltered : cs.length,
+               
+                aaData:cs
+            } ;
+            return _commandes; //renvoie les commandes déja passées pour aujourd'hui
+
+
+        });
 }
 
 
@@ -136,8 +189,99 @@ function getCommandsSnapshot(req,res,next){
         });
 }
 
+//save une commande, card: objet récupéré via l'appli
+//mobile
+/*
+    card:{
+        location:{
+            latitude,
+            longitude
+        },
+        id_pizza:[small_qtte, big_qtte]
+    }
+
+    date_cmd:{type:sequelize.DATE},
+    payement_id:{type:sequelize.STRING},//a voir plus tard
+    message:{type:sequelize.STRING},//un message pour cette commande si existe
+    date_retrait:{type:sequelize.DATE},
+    location:{type:sequelize.GEOMETRY}//depuis ou on a passé la commande
+*/
+function saveCommande(from, card, transaction, amount){
+    //crée une nouvelle commande
+    return SEQ.query(`
+    INSERT INTO commandes(date_retrait,payement_id,message,id_client,location,prix)
+    VALUES ('${card.retrait}','${transaction}','${card.message}',${from},'(${card.location.latitude},${card.location.longitude})',${amount}) RETURNING id;`).then(success=>{
+        console.log(success);
+        //recup le dernier id...
+        let last_id = success[0].id;
+
+
+      //commandes/pizzas
+      let q = ["INSERT INTO commandes_pizzas VALUES"];
+      for(let pizza of card.pizzas){
+          if(pizza.small){
+            q.push(`(${last_id},${pizza.id},${pizza.small},false)`);
+          }
+          if(pizza.big){
+              q.push(`(${last_id},${pizza.id},${pizza.big},true)`);
+          }
+          q.push(",");
+          
+      }
+      q.pop();
+      q.push(";");
+      return SEQ.query(q.join(' ')); 
+    });
+    /*return commandes.create({
+        payement_id: transaction,
+        message: card.message,
+        date_retrait: new Date(card.retrait),
+        location:{
+            type:'point',
+            coordinates:[card.location.latitude,card.location.longitude]
+        },
+        id_client: from
+    });*/
+}
+//recupere le total de la commande
+function getCommandeTotalAmount(pizzas){
+    //recupe les ids des pizzas
+    let ids = pizzas.map(el=>el.id);
+    return pizza.findAll({
+        attributes:['id','prix_small','prix_big'],
+        where:{
+            id:{
+                $in:ids
+            }
+        }
+    }).then( tarifs=>{
+        //calcule la somme de la commande 
+        let total = 0;
+        for(let pizza of pizzas){
+            //recupere les prix
+            let price = getPizzaPriceById(pizza.id, tarifs);
+            let small = pizza.small || 0;
+            let big = pizza.big || 0;
+            total += small * price.prix_small + big * price.prix_big;
+        }
+        
+        return total;
+    });
+}
+
+
+function getPizzaPriceById(id, prices){
+    for (let p of prices){
+        if(p.id == id) return p;
+    }
+    return {prix_small:0,prix_big:0};
+}
 module.exports = {
     getNewCommandesCount : getNewCommandesCount,
     getCommandesInfosForToday : getCommandesInfosForToday,
-    getCommandsSnapshot : getCommandsSnapshot
+    getCommandsSnapshot : getCommandsSnapshot,
+
+
+    saveCommande:saveCommande,
+    getCommandeTotalAmount:getCommandeTotalAmount
 }

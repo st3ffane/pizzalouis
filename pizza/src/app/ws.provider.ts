@@ -12,12 +12,24 @@ import { CanActivate }    from '@angular/router';
 export class WSProvider implements CanActivate{
     auth_token:string = null;//par defaut, non identifier
     pizzas = [];//pour eviter des les recharger a chaque fois 
+    location:any =  {
+                latitude:43.669070,
+                longitude:-1.105356
+            };
+
+    getLocation() {
+        if (navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition((pos)=>{
+                this.location = pos;
+            });
+        }
+    }
+    constructor(private _http:Http, private _route:Router){
+        
+    }
 
 
-
-    constructor(private _http:Http, private _route:Router){}
-
-
+    
     canActivate() {    
         console.log("Authenticated? ",this.isAuthenticate())
         if (this.isAuthenticate()) return true;
@@ -86,9 +98,52 @@ export class WSProvider implements CanActivate{
         return this.sendGetToServer("/api/client/client_token");
     }
 
-    public postCommand(payementid, card){
-        card.payementid = payementid;
-        return this.sendToServer("/api/client/commande","post",card);
+    private getPizzaById(id, pizzas){
+        for (let p of pizzas){
+            console.log(p)
+            if(p && p.id == id) return p;
+        }
+
+
+    }
+
+    public postCommand(payementid, card, date_retrait, message){
+       
+        //renvois les infos de la card       
+        
+            let pizzas = this.pizzas;
+            let cardarr = [];
+            
+            console.log(card)
+            for (let pizza of card.pizzas){
+                
+                
+                console.log(pizza)
+                let com = {
+                    id: pizza.id,
+                    small: pizza.small,
+                    big:pizza.big
+                };
+                
+                cardarr.push(com);
+
+            }
+            let today = new Date();
+            //heure et minutes de la livraison
+            let time = date_retrait.split(':');
+            //l'heure de retrait
+            console.log(time);
+            //infos autre:
+            let commande = {
+                nonce: payementid,
+                pizzas: cardarr,
+                retrait: new Date(today.getFullYear(), today.getMonth(), today.getDate(), +time[0], +time[1], 0),
+                message: message,
+                location: this.location
+            }
+    
+        
+        return this.sendToServer("/api/client/commande","post",commande);
     }
 
 

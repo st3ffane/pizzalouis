@@ -12,6 +12,9 @@ var db_users = require('../models/db.users');
 var db_news = require("../models/db.news");
 var db_comments = require("../models/db.comments");
 var db_pizzas = require("../models/db.pizzas");
+var db_commandes = require("../models/db.commandes");
+
+
 
 function genTokenForUser(req, res, next){
     
@@ -209,40 +212,64 @@ api_router.get("/client_token", function (req, res) {
 });
 api_router.post("/commande", function (req, res) {
   //recup infos de la commande et valide.....
-  var amount = req.body.total;
-  console.log("nonce: ",req.body.payment_method_nonce);
-  //le mode de paiement
-  var nonceFromTheClient = nonces;//pour le sandbox, sinon: req.body.payment_method_nonce;
-  gateway.transaction.sale({
-    amount: amount,
-    paymentMethodNonce: nonceFromTheClient,
-    options: {
-      submitForSettlement: true
-    }
-  }, function (err, result) {
-    if(err){
-      res.status(500);
-      res.json({error:2,msg:"Paiement refusé"});
-      return;
-    }
+ 
 
-    if(!result.success){
-      //echec de la transaction
-      res.status(500);
-      res.json({error:1, msg:result.errors.deepErrors()});
-      return;
-    }
-    console.log(result)
-    //paiement OK, enregistre en base
-    //.....
+   //la commande
+    let card = req.body;
+   db_commandes.getCommandeTotalAmount(card.pizzas).then(amount=>{
+      //le mode de paiement
+     
+      var nonceFromTheClient = nonces;//pour le sandbox, sinon: req.body.payment_method_nonce;
 
-    //envoie un mail de confirmation
-    //...
+      //demande le paiement
+      gateway.transaction.sale({
+        amount: amount,
+        paymentMethodNonce: nonceFromTheClient,
+        options: {
+          submitForSettlement: true
+        }
+      }, function (err, result) {
+        //retour de paypal, verifie si le paiemennt a ete accepté
 
-    //retourne success
-    res.json({error:0, msg:"Success"});
+        if(err){
+          res.status(500);
+          return res.json({error:2,msg:"Paiement refusé"});
+        }
+
+        if(!result.success){
+          //echec de la transaction
+          res.status(500);
+          return res.json({error:2,msg:"Echec de la transaction"});         
+        }
+
+        //sauvegarde la commande
+        db_commandes.saveCommande(req.user.id, card, result.transaction.id, amount).then( success=>{          
+            //envoie un mail de confirmation
+            return true;
+        })
+        
+        .then( succes=>{
+          //previens socketIO de se mettre a jour
+
+          //tout est fini, renvoie un code de success
+          res.json({error:0, msg:"Success"});
+        })
+        .catch (err=>{
+              res.status(500);
+              return res.json({error:2,msg:err});
+        });
+        
+        
+      });
+
+
+    }).catch (err=>{
+          res.status(500);
+          return res.json({error:2,msg:err});
+    })
+
   });
-});
+  
 
 router.use("/client",authController.isAuth, api_router);//routes protégées
 

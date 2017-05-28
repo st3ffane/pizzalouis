@@ -7,6 +7,8 @@ var bodyParser = require('body-parser');
 var expressValidator = require('express-validator')
 
 
+var io_server = require("./ioapp");
+
 
 //crée les relations entre les tables de la base 
 require("./models/relations");
@@ -26,6 +28,8 @@ var authController = require("./strategy");
 
 
 var app = express();
+io_server.init_server(require('http').createServer(app));
+
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));

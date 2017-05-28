@@ -28,6 +28,8 @@ export default class PanierComponent{
 
     
     constructor(private _panier:PanierProvider, private _ws:WSProvider, private _router:Router){}
+
+    
     ngOnInit(){
         window.scrollTo(0,0);
         this.instance = null;
@@ -48,12 +50,12 @@ export default class PanierComponent{
 
         //lance paypal????
         this.is_processing =true;
-        this._ws.postCommand("fake-valid-nonce", this.card).then( dt=>{
-                            //tout est OK, file a la derniere page
-                            
+        this._ws.postCommand("fake-valid-nonce", this.card, this.retrait, this.message).then( dt=>{
+                            //tout est OK, file a la derniere page                            
                             this._router.navigate(['/complete']);
                         }).catch(err=>{
                             this.error = err;
+                            console.log(err);
                             this.is_processing =false;
                         });
         
