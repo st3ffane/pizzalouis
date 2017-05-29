@@ -15,8 +15,8 @@ var commandes = SEQ.define('commandes',{
     payement_id:{type:sequelize.STRING},//a voir plus tard
     message:{type:sequelize.STRING},//un message pour cette commande si existe
     date_retrait:{type:sequelize.DATE},
-    location:{type:sequelize.GEOMETRY('Point')}//depuis ou on a passé la commande
-
+    location:{type:sequelize.GEOMETRY('Point')},//depuis ou on a passé la commande
+    prix:{type:sequelize.FLOAT}
     }, 
     {
         tableName: 'commandes',

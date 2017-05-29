@@ -33,6 +33,7 @@
                                             <th>Client</th>
                                             <th>Id Paiement</th>
                                             <th>Pizzas</th>
+                                            <th>Prix</th>
                                             <th>message</th>
                                         </tr>
                 
@@ -59,6 +60,7 @@ $(document).ready(function() {
                     { "data": "client" },
                     { "data": "payement_id" },
                     { "data": "pizzas" },
+                    { "data": "prix" },
                     { "data": "message" },
                 ],
         columnDefs: [ 
@@ -73,7 +75,7 @@ $(document).ready(function() {
             {
                 targets: 1,
                 render: function(from){
-                    console.log(from)
+                    
                     var dNow = new Date(from);
                     var min = dNow.getMinutes().toLocaleString(
                             'fr-FR', // use a string like 'en-US' to override browser locale
@@ -115,8 +117,13 @@ $(document).ready(function() {
                 },
                 bSortable: false
             },
+            
             {
                 targets:5,
+                bSortable: false
+            },
+            {
+                targets:6,
                 bSortable: false
             }
             
@@ -153,6 +160,7 @@ $(document).ready(function() {
         
         for(var i in datas.aaData){
             var dt = datas.aaData[i];            
+            console.log(dt)
             products.row.add(dt).draw();
         }
         //products.rowReordering();   

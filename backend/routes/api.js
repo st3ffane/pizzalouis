@@ -272,7 +272,8 @@ api_router.post("/commande", function (req, res) {
               },
               message: card.message,
               pizzas:pizzas,
-              payement_id: result.transaction.id
+              payement_id: result.transaction.id,
+              prix: amount
             });
             //renvoie OK
             res.json({error:0, msg:"Success"});
