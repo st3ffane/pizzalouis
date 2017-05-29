@@ -42,7 +42,7 @@ function getCommandesInfosForToday(req,res,next){
 
         let orderby=["date_retrait","DESC"];//par defaut, les dernieres en premier
         let today = new Date();
-        let start_day = new Date(today.getFullYear(), today.getMonth(), today.getDate(), 17, 30, 00);
+        let start_day = new Date(today.getFullYear(), today.getMonth(), today.getDate(), 17, 00, 00);
         //recupere les commandes
         return commandes.findAll({
             where:{
@@ -221,11 +221,13 @@ function saveCommande(from, card, transaction, amount){
       for(let pizza of card.pizzas){
           if(pizza.small){
             q.push(`(${last_id},${pizza.id},${pizza.small},false)`);
+            q.push(",");
           }
           if(pizza.big){
               q.push(`(${last_id},${pizza.id},${pizza.big},true)`);
+              q.push(",");
           }
-          q.push(",");
+          
           
       }
       q.pop();

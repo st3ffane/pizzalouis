@@ -210,6 +210,11 @@ api_router.get("/client_token", function (req, res) {
     res.json({token:response.clientToken});
   });
 });
+
+
+
+var io = require("../ioapp");
+
 api_router.post("/commande", function (req, res) {
   //recup infos de la commande et valide.....
  
@@ -245,14 +250,32 @@ api_router.post("/commande", function (req, res) {
         //sauvegarde la commande
         db_commandes.saveCommande(req.user.id, card, result.transaction.id, amount).then( success=>{          
             //envoie un mail de confirmation
-            return true;
-        })
-        
-        .then( succes=>{
-          //previens socketIO de se mettre a jour
 
-          //tout est fini, renvoie un code de success
-          res.json({error:0, msg:"Success"});
+            //previens socketIO
+            //'${card.retrait}','${transaction}','${card.message}',${from},'(${card.location.latitude},${card.location.longitude})',${amount}
+
+            let pizzas = [];
+            for (let p of card.pizzas){
+              pizzas.push({
+                  size: p.big ? true : false,
+                  qtte: p.big || p.small,
+                  pizza: p.nom
+                });
+            }
+            //envoie le message
+            io.alertNewCommand({
+              date_cmd: new Date(),
+              date_retrait: card.retrait,
+              client:{
+                prenom: req.user.prenom,
+                nom:req.user.nom
+              },
+              message: card.message,
+              pizzas:pizzas,
+              payement_id: result.transaction.id
+            });
+            //renvoie OK
+            res.json({error:0, msg:"Success"});
         })
         .catch (err=>{
               res.status(500);

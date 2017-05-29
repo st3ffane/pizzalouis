@@ -20,12 +20,16 @@ export class WSProvider implements CanActivate{
     getLocation() {
         if (navigator.geolocation) {
             navigator.geolocation.getCurrentPosition((pos)=>{
-                this.location = pos;
+                console.log(pos)
+               this.location ={
+                    latitude:pos.coords.latitude,
+                    longitude:pos.coords.longitude
+                };
             });
         }
     }
     constructor(private _http:Http, private _route:Router){
-        
+        this.getLocation();
     }
 
 
@@ -120,7 +124,8 @@ export class WSProvider implements CanActivate{
                 
                 console.log(pizza)
                 let com = {
-                    id: pizza.id,
+                    id: pizza.pizza.id,
+                    nom: pizza.pizza.nom,
                     small: pizza.small,
                     big:pizza.big
                 };

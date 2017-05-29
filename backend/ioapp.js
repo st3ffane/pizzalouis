@@ -11,16 +11,16 @@ module.exports = {
         server.listen(5000);//le serveur http ecoute sur le port 5000
         server.on('connection', function(client) {  
             console.log('Client connected...');
-            /*if(client_admin){
+            if(client_admin){
                 //refuse
                 client.disconnect();
                 return;
-            }*/
+            }
 
         
             client.on("disconnect", ()=>{
                 console.log("End connection for client...");
-                client_admin = undefined;
+                client_admin = null;
             });
             client_admin = client;
 
@@ -34,9 +34,10 @@ module.exports = {
         });
     },
 
-    newcommande: function (cmd_infos){
-        //envoie un message pour indiquer une nouvelle commande!!!!
-        if(!server || !client_admin) return;
-        client_admin.emit("new_commande", cmd_infos);
+    alertNewCommand: function (cmd_infos){
+        if(server && client_admin){
+            client_admin.emit('new_commande', cmd_infos);
+        }
     }
+    
 }

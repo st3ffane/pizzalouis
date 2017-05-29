@@ -44,34 +44,8 @@
                             </table>
                             
                         </div>
-               <!-- graph de ventes -->
-               <div class="panel panel-default">
-                        <div class="panel-heading">
-                           Heures de retrait
-                        </div>
-                        <!-- /.panel-heading -->
-                        <div class="panel-body">
-                            {{> ventes.graph this}}
-                        </div>
-                        <!-- /.panel-body -->
-                    </div>
-                </div>
-            </div>
-
-
-            <div class="row">
-                <div class="col-lg-12">
-                    
-                    <div class="panel panel-default">
-                        <div class="panel-heading">
-                           Géolocatisation des commandes
-                        </div>
-                        <div class="panel-body">
-                            {{>geoloc this}}
-                        </div>
-                    </div>
-                </div>
-            </div>
+               
+<div id="snackbar">un message important</div>
 <script src="/javascripts/socket.io.js"></script>
 <script>  
 $(document).ready(function() {
@@ -99,6 +73,7 @@ $(document).ready(function() {
             {
                 targets: 1,
                 render: function(from){
+                    console.log(from)
                     var dNow = new Date(from);
                     var min = dNow.getMinutes().toLocaleString(
                             'fr-FR', // use a string like 'en-US' to override browser locale
@@ -110,14 +85,12 @@ $(document).ready(function() {
                             );
                     return  dNow.getHours() + ':' + min+' '+dNow.getDate() + '/' +month + '/'+ dNow.getFullYear();
                 },
-                bSortable: false
+                bSortable: true
             },
             {
                 targets: 2,
                 render: function(data, type, row, meta){
-                    console.log(data);
-                    return 'un client';
-                    //return data.prenom+" "+data.nom;
+                    return data.prenom+" "+data.nom;
                 },
                  bSortable: false
             },
@@ -150,7 +123,24 @@ $(document).ready(function() {
             
         ]
     });
+    //les selections visuelles
+    $('#products tbody').on( 'click', 'tr', function () {
 
+
+        if ( $(this).hasClass('livree') ) {
+            $(this).removeClass('livree');
+        }
+        else if ( $(this).hasClass('prete') ){
+            $(this).removeClass('prete');
+            $(this).addClass('livree');
+        } else {
+            $(this).addClass('prete');
+        }
+    } );
+
+
+
+    var toast = $('#snackbar');//le toast events
 
     //connection au serveur socketIO
     var socket = io.connect('http://localhost:5000');
@@ -160,16 +150,22 @@ $(document).ready(function() {
     socket.on('hello', function(datas){
         //initialisation
         //ajoute les données à la table
-        console.log(datas);
+        
         for(var i in datas.aaData){
             var dt = datas.aaData[i];            
             products.row.add(dt).draw();
         }
-
+        //products.rowReordering();   
         
     })
-    socket.on('new_commande', function(data) {
+    socket.on('new_commande', function(dt) {
         //met a jour les données de la page
+         products.row.add(dt).draw();
+         toast.text("Nouvelle commande: "+dt.client.prenom+" "+dt.client.nom);
+         if(!toast.hasClass('show')) toast.addClass('show');
+         //timer pour l'arret
+         setTimeout(function(){ toast.removeClass('show'); }, 3000);
+         //products.rowReordering();   
     });
     socket.on('error', function(datas){
         //une erreur qqpart, affiche qqchose....

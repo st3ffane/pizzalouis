@@ -26,7 +26,7 @@ var stats  = require("./stats");//router pour affichage des statistiques
 
 /* GET page d'acceuil. */
 router.get('/', dbComments.getNewCommentsCount,
-    dbCommandes.getNewCommandesCount,
+    //dbCommandes.getNewCommandesCount,
     dbUsers.getUsersCount,
     dbpizza.getPizzasCount,
     dbing.getIngredientsCount,
@@ -44,13 +44,13 @@ function(req, res, next) {
               color:"panel-primary",
               link:"/admin/comments"
           },
-          {
+          /*{
               icon:"fa-shopping-cart",
               label:"Commandes en attentes!",
               count:req._commandes_count,
               color:"panel-green",
               link:"/admin/commandes"
-          },
+          },*/
           {
               icon:"fa-user",
               label:"Inscripts!",
