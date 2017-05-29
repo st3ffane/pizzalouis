@@ -40,15 +40,23 @@
                                     {{#each products}}
                                     <tr class="odd gradeX">
                                         <td><a href="/admin/pizzaedit/{{id}}" title="Cliquez pour editer cette recette">{{nom}}</a></td>
-                                        <td>{{base}}</td>
-                                        <td>{{#linearizeArray ingredients}}{{this}}{{/linearizeArray}}</td>
+                                        <td> <a href="/admin/ingredientedit/{{base.id}}" {{#ifEq base.dispo false}}style="color:red;"{{/ifEq}}>{{base.nom}}</a></td>
+                                        <td>
+                                            {{#each ingredients}}
+                                                <a href="/admin/ingredientedit/{{this.id}}" {{#ifEq this.dispo false}}style="color:red;"{{/ifEq}}>{{this.nom}}</a>
+                                            {{/each}}
+                                           
+                                            
+                                        </td>
                                         <td>{{id_category}}</td>
                                         <td class="text-center">{{this.prix_small}}</td>
                                         <td class="text-center">{{prix_big}}</td>
                                         <td class="text-center">{{#formatNumber note }}{{this}}{{/formatNumber}}</td>
                                         <td class="text-center"><a href="/admin/comments?from_pizza={{id}}" title="Voir tous les commentaires">{{commentsCount}}</a></td>
                                         <td class="center"><label >
-                                                    <input  id="check-{{id}}" type="checkbox" onchange="activatepizza({{id}});"  {{#ifEq active true}}checked="true"{{/ifEq}}>
+                                                    <input  id="check-{{id}}" type="checkbox"
+                                                    {{#noinactive this}} onchange="activatepizza({{id}});" {{#ifEq active true}}checked="true"{{/ifEq}} 
+                                                    {{else}} disabled="true" style="cursor:not-allowed!important;"{{/noinactive}}  >
                                                     <span id="text-{{id}}">{{#ifEq active true}}Active{{else}}Inactive{{/ifEq}}</span>
                                                 </label></td>
                                     </tr>

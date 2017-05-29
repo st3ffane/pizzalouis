@@ -1,0 +1,48 @@
+<div class="row paypal">
+    <br/>
+                <div class="col-lg-12">
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+                            Information Payement.
+                        </div>
+                        <div class="panel-body">
+                            
+                            <div class="form-group">
+                                <label >Identifiant</label>
+                                <p class="form-control-static">{{transaction.id}}</p>
+                            </div>
+                            <div class="form-group">
+                                <label>Crée le</label>
+                                <p class="form-control-static">{{#formatDate transaction.createdAt 'dddd DD.MM.YYYY HH:mm'}}{{this}}{{/formatDate}}</p>
+                            </div>
+                            <div class="form-group">
+                                <label>Valeur</label>
+                                <p class="form-control-static">{{transaction.amount}}€</p>
+                            </div>
+
+                           
+                            <div class="form-group">
+                                <label >Moyen de paiement</label>
+                                <p class="form-control-static">{{transaction.creditCard.cardType}}</p>
+                            </div>
+                             <div class="form-group">
+                                <label >Expiration</label>
+                                <p class="form-control-static">{{transaction.creditCard.expirationDate}}</p>
+                            </div>
+                            <div class="form-group">
+                                <label >Propriétaire</label>
+                                <p class="form-control-static">{{transaction.creditCard.cardholderName}}</p>
+                            </div>
+                            <div class="form-group">
+                                <label >Numéro (masqué)</label>
+                                <p class="form-control-static">{{transaction.creditCard.maskedNumber}}</p>
+                            </div>
+
+                        </div>
+                        <div class="panel-footer">
+                            
+                        </div>
+                    </div>
+                </div>
+                
+            </div>

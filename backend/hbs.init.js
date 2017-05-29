@@ -24,7 +24,19 @@ hbs.registerHelper('linearizeArray', function(v, options) {
   }
   return options.inverse(this);
 });
+hbs.registerHelper("noinactive",function(v,options){
+  var ingr = v.ingredients;
+  var base = v.base;
 
+  if(base.dispo){
+    for(let i of ingr){
+      if(!i.dispo)return options.inverse(this);
+    }
+    return options.fn(this);
+  }
+  //sinon, inactive
+  return options.inverse(this);
+});
 
 const DAYS = ['Dimanche','Lundi','Mardi','Mercredi','Jeudi','Venderdi','Samedi'];
 const MONTH = ['Janvier','Février','Mars','Avril','Mai','Juin','Juillet','Aout','Septembre','Octobre','Novembre','Décembre'];

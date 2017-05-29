@@ -325,13 +325,21 @@ router.get('/users/:id',dbUsers.getUserDetails,function(req,res,next){
 
 
 //historique de commandes //////////////////////////////////////////////////////////////////////////////////////////
-
+//affichage des infos sur un paiement /////////////////////////////////////////////////////////////////////////////
+var gateway = require("../middlewares/braintree.pizza.js");
+router.get("/payements/:id", function(req,res,next){
+    gateway.transaction.find(req.params.id, function (err, transaction) {
+        console.log(transaction)
+        res.render('payements', {transaction: transaction});
+    });
+});
 router.get("/commandes/api",dbCommandes.getCommandsSnapshot,function(req,res,next){
     res.json(req._commandes);
 });
 router.get("/commandes",function(req,res,next){
     res.render("commandes",{});
 });
+
 
 router.use('/stats', stats);
 

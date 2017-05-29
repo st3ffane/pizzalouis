@@ -222,3 +222,17 @@ However, delay the fade out process for 2.5 seconds */
 .livree:hover{
   background-color: #75d075!important;
 }
+
+
+.paypal label{
+  display: inline-block;
+    max-width: 100%;
+    margin-bottom: 5px;
+    font-weight: 700;
+    width: 200px;
+    text-align: right;
+    margin-right: 10px;
+}
+.paypal p{
+  display:inline;
+}

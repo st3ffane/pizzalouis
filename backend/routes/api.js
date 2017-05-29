@@ -188,7 +188,7 @@ api_router.get("/pizzas", function(req,res,next){
 
 
 //Paiement via paypal!!!
-var braintree = require("braintree");
+/*var braintree = require("braintree");
 const MerchantId = "x4g5njd8f7mf456s";
 const publickey = "ks4pzd66qsdpxjwg";
 const privatekey = "d26e1166f42ccbb00607ffd7e528c0b3";
@@ -203,7 +203,8 @@ var gateway = braintree.connect({
   merchantId: MerchantId,
   publicKey: publickey,
   privateKey: privatekey
-});
+});*/
+var gateway = require("../middlewares/braintree.pizza.js");
 //genere un token de paiement pour le client
 api_router.get("/client_token", function (req, res) {
   gateway.clientToken.generate({}, function (err, response) {

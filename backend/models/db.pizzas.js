@@ -34,12 +34,12 @@ function listAllPizzasSnapshot(req,res,next){
          include:[
              {
                 model:ingredients,
-                attributes:['nom'],
+                attributes:['id','nom', 'dispo'],
                 as: "base"
             },
             {
                 model:ingredients,
-                attributes:['nom']
+                attributes:['id','nom','dispo']
             },
             {
                 model:comments,
@@ -57,10 +57,10 @@ function listAllPizzasSnapshot(req,res,next){
                 pizzas: dt.map(el=>{
                     let p = el.dataValues;
                     
-                    p.ingredients = p.ingredients.map(ing=>{
+                    /*p.ingredients = p.ingredients.map(ing=>{
                         return ing.dataValues.nom;
-                    });
-                    p.base = el.base.dataValues.nom;
+                    });*/
+                    //p.base = el.base.dataValues.nom;
                     return p;
                 })
             }
