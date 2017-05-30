@@ -10,10 +10,10 @@ import PizzaDetailsComponent from "./pizza.details";
 import PanierComponent from './panier';
 
 
-import CheckoutComponent from "./components/checkout";
+import TimePickerComponent from "./components/time.picker";
 import {Counter} from "./components/counter";
 
 export const PAGES=[AccueilComponent, LoginComponent, RegisterComponent,
     MainComponent, CompteComponent, NewsComponent, CompleteComponent,
     PizzasListComponent, PizzaDetailsComponent, PanierComponent,
-    Counter, CheckoutComponent ];//etc...
+    Counter, TimePickerComponent ];//etc...

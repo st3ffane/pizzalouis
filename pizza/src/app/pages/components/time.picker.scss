@@ -1,0 +1,27 @@
+
+.timepicker{
+	width: 100%;
+    min-height: 200px;
+	display: flex;
+	flex-direction: row;
+	align-items: center;
+        justify-content: center;
+}
+.timepicker .elem{
+	display:flex;
+	flex-direction: column;
+min-width: 100px;
+text-align:center;
+margin: 10px;
+}
+.timepicker .elem button{
+
+}
+.timepicker .elem span{
+	padding: 20px 0;
+	font-size: 2em;
+	font-weight: 300;
+}
+:host{
+    min-height:220px;
+}

@@ -146,16 +146,11 @@ export class WSProvider implements CanActivate{
                 cardarr.push(com);
 
             }
-            let today = new Date();
-            //heure et minutes de la livraison
-            let time = date_retrait.split(':');
-            //l'heure de retrait
-            console.log(time);
             //infos autre:
             let commande = {
                 nonce: payementid,
                 pizzas: cardarr,
-                retrait: new Date(today.getFullYear(), today.getMonth(), today.getDate(), +time[0], +time[1], 0),
+                retrait: date_retrait,
                 message: message,
                 location: this.location
             }

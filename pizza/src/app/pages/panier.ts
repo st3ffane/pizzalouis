@@ -14,7 +14,7 @@ declare var braintree: any;//paypal
 export default class PanierComponent{
 
     card: any = {};
-    retrait="17:30:00";//heure de retrait 
+    retrait = 0;//="17:30:00";//heure de retrait 
     date_error = "";
     message:string = "";//message complémentaire
     nonce:string = null;//autorisation de paiements paypal
@@ -39,7 +39,7 @@ export default class PanierComponent{
     }
 
     processForm(){
-        this.date_error = "";
+        /*this.date_error = "";
         this.error = "";
         let now = new Date();
         //autorise l'heure actuelle + 30min comme minimum
@@ -57,7 +57,7 @@ export default class PanierComponent{
             this.date_error = "Les horaires d'ouvertures sont compris entre 17h30 et 21h30.";
             this.retrait = "17:30";
             return;
-        }
+        }*/
 
         //lance paypal????
         this.is_processing =true;
