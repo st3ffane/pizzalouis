@@ -2,7 +2,7 @@ import {Component} from "@angular/core";
 import {WSProvider} from "../ws.provider";
 import {StateProvider} from "../state.provider";
 import {Router, NavigationStart} from "@angular/router";
-
+import {PanierProvider} from "../panier.provider";
 const KEY:string = "PIZZA_LIST";
 
 
@@ -16,12 +16,15 @@ export default class PizzasListComponent{
     error:string = null;
 
     router_subscribe = null;
+    toolate:boolean = false;
+    
 
 
-    constructor(private _router:Router,private _ws:WSProvider, private _state:StateProvider){}
+    constructor(private _router:Router,private _ws:WSProvider, private _state:StateProvider, private _card:PanierProvider){}
     ngOnInit(){
 
 
+        this.toolate = this._ws.toolate;
         let state = this._state.loadstate(KEY);
 
         this.router_subscribe = this._router.events.subscribe((event) => {
@@ -44,5 +47,9 @@ export default class PizzasListComponent{
     }
     ngOnDestroy(){
         this.router_subscribe.unsubscribe();
+    }
+
+    hasitems():boolean{
+        return Object.keys(this._card.panier).length>0;
     }
 }

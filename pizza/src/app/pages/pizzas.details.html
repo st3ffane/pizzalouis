@@ -43,8 +43,8 @@
 							</div>
 						</div>
 
-						<pizza-counter [pizzaid]="pizza.id" [prixsmall]="pizza.prix_small" [prixbig]="pizza.prix_big" ></pizza-counter>
-							
+						<pizza-counter *ngIf="!toolate" [pizzaid]="pizza.id" [prixsmall]="pizza.prix_small" [prixbig]="pizza.prix_big" ></pizza-counter>
+						<p *ngIf="toolate">Désolé, les commandes sont terminées pour aujourd'hui...</p>
 							<!--div class="tarif fadeInUp animated">
 								<div>
 									<div><span>24cm:</span><span class="h2" style="display:inline-block"><div class="price">{{pizza.prix_small}}<sup class="currency">€</sup></div></span></div>
@@ -130,7 +130,7 @@
 	<div *ngIf="!pizza">
 		Chargement des données, merci de patienter....
 	</div>
-	<a class="btn btn-floating btn-lg red" routerLink='/panier'>
+	<a *ngIf="hasitems()" class="btn btn-floating btn-lg red  rippler" routerLink='/panier'>
             <i class="icon-wallet"></i>
           </a>
 

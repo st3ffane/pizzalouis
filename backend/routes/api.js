@@ -27,10 +27,10 @@ function genTokenForUser(req, res, next){
           res.json(403,{error:1,msg:"Unknown"});
           return;
         }
-
+        
         //genere un token 
         //cree un token et balance a l'utilisateur
-        var token = gen.genToken(dt);
+        var token = gen.genToken(dt[0]);
         res.send(200,{error:0,token:token});
 
 
@@ -215,7 +215,7 @@ api_router.get("/client_token", function (req, res) {
 
 
 var io = require("../ioapp");
-
+const nonces = "fake-valid-nonce";
 api_router.post("/commande", function (req, res) {
   //recup infos de la commande et valide.....
  
@@ -280,6 +280,7 @@ api_router.post("/commande", function (req, res) {
             res.json({error:0, msg:"Success"});
         })
         .catch (err=>{
+          console.log(err);
               res.status(500);
               return res.json({error:2,msg:err});
         });
@@ -289,8 +290,9 @@ api_router.post("/commande", function (req, res) {
 
 
     }).catch (err=>{
+      console.log(err);
           res.status(500);
-          return res.json({error:2,msg:err});
+          return res.json({error:3,msg:err});
     })
 
   });

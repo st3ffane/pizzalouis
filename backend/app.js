@@ -5,7 +5,7 @@ var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 var expressValidator = require('express-validator')
-
+var session = require("express-session");
 
 var io_server = require("./ioapp");
 
@@ -72,6 +72,7 @@ app.use(expressValidator({
 })); 
 
 app.use(cookieParser());
+app.use(session({secret: "password"}));
 app.use(express.static(path.join(__dirname, 'public')));
 
 
@@ -93,7 +94,81 @@ app.all('/api/*', function(req, res, next) {
   }
 });
 app.use('/api', api);//les api rest pour l'application mobile
-app.use("/admin", admin);//administration du site
+
+
+//la protection des urls
+var jwt = require("jwt-simple");
+function isadmin(req,res,next){
+  //verifie le cookie si contient le token, sinon, degage
+  
+  let token = req.session.token;
+  
+  if(!token) {
+     return res.redirect("/");
+  }
+  console.log("token: ",token);
+  var decoded = jwt.decode(token.token, gen.secret);
+            
+  if(decoded.exp <= Date.now()){
+      //token expires, redirect to loggin                
+      return cb(null, false);//mettre des infos ici...
+
+  }
+  
+  //token valide, passe au reste???
+  var duser = decoded.user;
+  console.log(duser);
+  if(duser && duser.role==1) next();
+  else{
+    console.log("not admin")
+    return res.redirect("/");
+  }
+};
+
+
+app.use("/admin",isadmin, admin);//administration du site
+app.get('/', function(req,res,next){
+  res.render("login",{
+    nomenu:true
+  });
+});
+
+var db_user = require("./models/db.users");
+var gen = require("./token");
+//verifie si tout est OK et genere un token pour l'utilisateur
+function genTokenForUser(req, res, next){
+    
+    if (!(req.body.username && req.body.password )) return res.json(403,{error:2, msg:'invalid parameters'}); //pas de reponse, ou inconnu
+
+    //verifie si l'utilisateur existe 
+    console.log(req.body.username, req.body.password)
+    db_user.authUser(req.body.username ,req.body.password).then( dt=>{
+        if (!dt){
+          res.redirect("/");
+          return;
+        }
+        
+        //genere un token 
+        //cree un token et balance a l'utilisateur
+        var token = gen.genToken(dt[0]);
+        //req.token=token.token;
+       //sauvegarde dans un cookie?
+       req.session.token=token;
+        next();//probleme, enregistre le token comment????
+
+
+
+    }).catch(err=>{
+      console.log(err);
+      res.redirect("/");
+    })
+    
+}
+app.post('/',genTokenForUser,
+  function(req, res) {
+    console.log("next ici...");
+    res.redirect('/admin');
+  });
 
 //debug only  //////////////////////
 app.use("/test",test);

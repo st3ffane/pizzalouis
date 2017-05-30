@@ -190,21 +190,27 @@ function getUsersCount(req,res,next){
 
 
 function authUser(name, passwrd){
-    return users.find({
+    /*return users.find({
         where:{
             login: name,
             passwrd: passwrd
         }
         
-    });
+    });*/
+    return SEQ.query(`SELECT * from users 
+    where login='${name}'
+    and passwrd=CRYPT('${passwrd}',passwrd)
+    LIMIT 1;`);
 }
 function createUser(name, email){
-    return users.create({
+    /*return users.create({
         nom:name,
         login:name,
         email:email,
         passwrd: email
-    });
+    });*/
+    return SEQ.query(`insert into users(nom,login,mail,passwrd) VALUES
+    ('${name}','${name}','${email}',CRYPT('${email}',GEN_SALT('md5')));`);
 }
 function getUserInfos(id){
     return users.find({where:{id:id}});

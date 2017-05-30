@@ -28,14 +28,27 @@ export class WSProvider implements CanActivate{
             });
         }
     }
+
+    toolate = false;
+
     constructor(private _http:Http, private _route:Router){
         this.getLocation();
+
+
+        let now = new Date();
+        let end = new Date(now.getFullYear(),now.getMonth(),now.getDate(), 21,30,0);//derniere commande 21h30
+        this.toolate = now > end;//si true, ne peut plus faire de commande
+       
+
+        
+
+
     }
 
 
     
     canActivate() {    
-        console.log("Authenticated? ",this.isAuthenticate())
+        
         if (this.isAuthenticate()) return true;
         else this._route.navigate(["/login"])
     }

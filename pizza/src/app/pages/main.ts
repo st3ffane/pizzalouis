@@ -3,7 +3,7 @@ import { DOCUMENT } from "@angular/platform-browser";
 import {WSProvider} from "../ws.provider";
 import {StateProvider} from "../state.provider";
 import {Router, NavigationStart} from "@angular/router";
-
+import {PanierProvider} from "../panier.provider";
 
 declare var ol: any;
 const KEY:string = "MAIN";
@@ -24,11 +24,17 @@ export default class MainComponent{
     is_loading:boolean = false;
 
     router_subscribe = null;
+    toolate: boolean;
 
-    constructor(private _router:Router,private _ws:WSProvider, private _state:StateProvider){
+
+    constructor(private _router:Router,private _ws:WSProvider, private _state:StateProvider, private _card:PanierProvider){
         
     }
     ngOnInit(){
+
+        this.toolate = this._ws.toolate;
+        this._card.emptyCard();//remet le panier a 0
+
         //restaure l'etat de la page
         let state = this._state.loadstate(KEY);
         this.offset = state.offset || 0;

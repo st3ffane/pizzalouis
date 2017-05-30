@@ -42,8 +42,8 @@
 									<h1 class="number">0</h1>
 								</div>
 							</div-->
-							<pizza-counter [pizzaid]="pizza.id" [prixsmall]="pizza.prix_small" [prixbig]="pizza.prix_big" ></pizza-counter>
-							
+							<pizza-counter *ngIf="!toolate" [pizzaid]="pizza.id" [prixsmall]="pizza.prix_small" [prixbig]="pizza.prix_big" ></pizza-counter>
+							<p *ngIf="toolate">Désolé, les commandes sont terminées pour aujourd'hui....</p>
 							
 						</div>
 					</div>
@@ -57,7 +57,7 @@
 	</div>
 	
 	
-          <a class="btn btn-floating btn-lg red" routerLink='/panier'>
+          <a *ngIf="hasitems()" class="btn btn-floating btn-lg red  rippler" routerLink='/panier'>
             <i class="icon-wallet"></i>
           </a>
           

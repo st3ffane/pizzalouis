@@ -45,7 +45,7 @@ export default class PanierComponent{
         //autorise l'heure actuelle + 30min comme minimum
         let min_hour = new Date(now.getTime() + 30*60000);
         //calcule la date minimale d'envois 
-        //probleme, si commande a 23h00???
+        
 	    let  minimal = new Date(now.getFullYear(),now.getMonth(),now.getDate(),17,30,0);
         minimal = min_hour > minimal ? min_hour : minimal;
 

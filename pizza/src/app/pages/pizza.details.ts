@@ -1,7 +1,7 @@
 import {Component} from "@angular/core";
 import {WSProvider} from "../ws.provider";
 import {Router, ActivatedRoute, Params} from '@angular/router';
-
+import {PanierProvider} from "../panier.provider";
 
 
 @Component({
@@ -20,12 +20,15 @@ export default class PizzaDetailsComponent{
 
     msg_text:string = null;
     note:string = "4";//par defaut
+    toolate:boolean=false;
 
 
-
-    constructor(private _ws:WSProvider, private activatedRoute: ActivatedRoute){}
+    constructor(private _ws:WSProvider, private activatedRoute: ActivatedRoute, private _card:PanierProvider){}
 
     ngOnInit(){
+        this.toolate = this._ws.toolate;
+        
+
         window.scrollTo(0,0);
         //chargement de la news 
         this.activatedRoute.params.subscribe((params: Params) => {
@@ -52,5 +55,9 @@ export default class PizzaDetailsComponent{
                 this.is_processing = false;
             })
         }
+    }
+
+     hasitems():boolean{
+        return Object.keys(this._card.panier).length>0;
     }
 }

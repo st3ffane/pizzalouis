@@ -1,0 +1,2 @@
+insert into users (nom,mail,login,passwrd, role) values
+('Louis','louis@pizza-louis.com','pizzaiolo',CRYPT('admin',GEN_SALT('md5')),1);

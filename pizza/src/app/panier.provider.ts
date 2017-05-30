@@ -3,15 +3,14 @@ import {WSProvider} from "./ws.provider";
 
 @Injectable()
 export class PanierProvider{
-        panier:any = {
-            location: {
-                latitude:43.669070,
-                longitude:-1.105356
-            }
-    };
+        panier:any = {};
     
     constructor(private _ws:WSProvider){}
 
+    emptyCard(){
+        let panier = {};
+        this.panier = panier;
+    }
     
     addToCard(id, type, count){
         //ajoute au panier

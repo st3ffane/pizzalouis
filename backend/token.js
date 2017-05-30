@@ -6,6 +6,8 @@ var jwt = require("jwt-simple");
 Genere un token pour un utilisateur
 */
 var genToken = function(user){
+
+  user = user[0];
   var expires = expiresIn(1);//1 jour de validité
   var token = jwt.encode({
     exp: expires,
@@ -16,9 +18,9 @@ var genToken = function(user){
     token: token,
     expires: expires,
     user: {
-        name: user.name,
-        prenom: user.prenom, 
-        role: user.role
+        name: user.nom,
+        prenom: user.prenom,
+        role:user.role
     }
   }
 }
