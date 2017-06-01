@@ -62,7 +62,7 @@ export class PanierProvider{
 
             }
             return {
-                total: total,
+                total: total.toFixed(2),
                 pizzas: card
             }
         });
