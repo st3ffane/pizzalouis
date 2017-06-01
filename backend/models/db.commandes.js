@@ -267,7 +267,7 @@ function getCommandeTotalAmount(pizzas){
             total += small * price.prix_small + big * price.prix_big;
         }
         
-        return total;
+        return total.toFixed(2);
     });
 }
 
