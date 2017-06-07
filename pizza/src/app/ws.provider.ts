@@ -160,6 +160,8 @@ export class WSProvider implements CanActivate{
     }
 
 
+    private SERVER_URL = "";// "http://192.168.1.16:3000/";//pour les tests
+
     private sendGetToServer(url,datas?:string){
         let headers =  new Headers({'Content-Type': 'application/json'});
         console.log("Authoticate: "+this.auth_token)
@@ -169,7 +171,7 @@ export class WSProvider implements CanActivate{
         }
         
 
-        return this._http.get(url,{ headers:headers}).toPromise().then(dt=>{
+        return this._http.get(this.SERVER_URL+url,{ headers:headers}).toPromise().then(dt=>{
             let d = dt.json();
             console.log(d)
             if(!d) throw ("no datas");
@@ -186,7 +188,7 @@ export class WSProvider implements CanActivate{
         }
         
 
-        return this._http.post(url,datas||{},{ headers:headers}).toPromise().then(dt=>{
+        return this._http.post(this.SERVER_URL+url,datas||{},{ headers:headers}).toPromise().then(dt=>{
             let d = dt.json();
             console.log(d)
             if(!d) throw ("no datas");

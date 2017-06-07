@@ -1,0 +1,56 @@
+Presentation Pizza-louis:
+Plan:
+	1 Présentations
+		1.1 Moi
+			42 ans, développeur Javascript NodeJS/Angular...
+		1.2 Wallie
+			Dans le cadre de la formation au Greta, j'ai effectué un stage de 3 semaines
+dans l'entreprise Wallie Création 
+développement de site internet et applications web
+Hossegor, Gérant Vincent PINTAT
+		1.3 Pizza Louis
+			Pizzeria familliale de Tercis les bains
+	2 Projet
+		2.1 Description des besoins
+			Permettre au client de commandes 1 ou plusieurs pizzas via son smartphone
+			permettre de gérer les recettes, ingrédients simplements
+			avoir la liste des commandes du jour et un historique des commandes
+			
+			récupérer des informations de consommation pour s'adapter (stock, pub...)
+				pizzas et ingrédients préférés
+				consommation des ingrédients (gestion des stocks)
+				répartition des commandes sur les jours / heures (gestion employés)
+				répartition géographique des commandes (publicité)
+	3 Réalisation
+		3.1 Technologies
+			Base de données: PostgreSQL
+			serveur: NodeJS + Express + middlewares (express-validator, sequelize, multer....)
+			admin front: template bootstrap+ JQuery
+			appli front: angular4 + template Bootstrap
+
+		3.2 Administration du site
+			Les recettes et ingrédients
+			News
+			Informations sur les clients
+			Commandes:
+				historique
+				temps réel
+			Statistiques:
+				gestion du stock/recettes
+				répartition des commandes
+				repartition géographique
+
+		3.3 Application mobile
+			workflow de l'application
+			login/create account
+			main page
+			news details
+			liste des pizzas
+			pizzas détails
+			le panier
+				récapitulatif
+				paypal
+			fin.
+	4 Remerciements
+
+
