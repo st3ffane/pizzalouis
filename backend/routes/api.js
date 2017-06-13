@@ -208,6 +208,11 @@ var gateway = require("../middlewares/braintree.pizza.js");
 //genere un token de paiement pour le client
 api_router.get("/client_token", function (req, res) {
   gateway.clientToken.generate({}, function (err, response) {
+    if(err){
+      console.log(err)
+      res.end(""+err);
+      return;
+    }
     res.json({token:response.clientToken});
   });
 });
