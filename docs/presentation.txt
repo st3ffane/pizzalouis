@@ -1,46 +1,75 @@
-Presentation Pizza-louis:
+Presentation Pizza-louis: total: 30min
 Plan:
-	1 Présentations
+	1 Présentations   DIAPO 1: Présentation  (1min)
 		1.1 Moi
 			42 ans, développeur Javascript NodeJS/Angular...
+
 		1.2 Wallie
 			Dans le cadre de la formation au Greta, j'ai effectué un stage de 3 semaines
-dans l'entreprise Wallie Création 
-développement de site internet et applications web
-Hossegor, Gérant Vincent PINTAT
-		1.3 Pizza Louis
-			Pizzeria familliale de Tercis les bains
-	2 Projet
+    dans l'entreprise Wallie Création 
+        - développement de site internet (Wordpress/php) et applications web (angular)
+        - Hossegor, Gérant Vincent PINTAT
+
+		
+	2 Projet DIAPO 2: Pizza Louis (1min)
+
+        Pizza Louis: Pizzeria familliale de Tercis les bains
+
 		2.1 Description des besoins
-			Permettre au client de commandes 1 ou plusieurs pizzas via son smartphone
-			permettre de gérer les recettes, ingrédients simplements
-			avoir la liste des commandes du jour et un historique des commandes
-			
-			récupérer des informations de consommation pour s'adapter (stock, pub...)
-				pizzas et ingrédients préférés
-				consommation des ingrédients (gestion des stocks)
-				répartition des commandes sur les jours / heures (gestion employés)
-				répartition géographique des commandes (publicité)
+			Permettre aux clients de commander  un repas simplement et rapidement grâce à leur smart phone
+                - pouvoir consulter la carte de la pizzeria
+	            - permettre de choisir une ou plusieurs pizzas de la carte
+	            - indiquer l’heure de retrait souhaitée
+	            - paiement en ligne  (paypal)
+
+            fournir à l’entreprise un ensemble d’outils afin d’améliorer leur service et leur réactivité			
+                - tenir a jour la liste des ingrédients/recettes proposés simplement
+	            - avoir la liste des commandes passées avec les informations de retrait en temps réél
+	            - profiter de statistiques d‘utilisation  :
+		                les ingrédients préférés
+		                la répartition des commandes heures/jours/semaine/mois…
+		                localisation des clients
+				
+
+
 	3 Réalisation
-		3.1 Technologies
-			Base de données: PostgreSQL
+		3.1 Technologies DIAPO 3: Technologies (1min)
+
+			Base de données: PostgreSQL pour réduire au maximum les erreurs/données incohérentes
 			serveur: NodeJS + Express + middlewares (express-validator, sequelize, multer....)
 			admin front: template bootstrap+ JQuery
 			appli front: angular4 + template Bootstrap
 
-		3.2 Administration du site
-			Les recettes et ingrédients
-			News
-			Informations sur les clients
-			Commandes:
-				historique
-				temps réel
-			Statistiques:
-				gestion du stock/recettes
-				répartition des commandes
-				repartition géographique
+		3.2 Administration du site DIAPO 4: Plan du site Admin
 
-		3.3 Application mobile
+			- Dashboard : la page d’accueil de l’administration. DIAPO 5: screen Dashboard
+        DataTable (plugin jquery) pour informer en temps réel des commandes
+                Serveur SocketIO pour etre averti en temps réel + alert
+
+	        - Carte/Pizzas :les recettes de la pizzeria, DIAPO 6: Screens Pizzas/ajout d'une recette
+        toggle-button (plugin JQuery)rapidement de supprimer/mettre à la carte une pizza.
+
+	        - Carte/Ingrédients : les ingrédients composant les recettes. DIAPO 7 screen Ingredients/ajout d'un ingredient
+         data-table de récapitulation + bouton vers un formulaire pour créer ou modifier les informations d’un ingrédient.
+    
+	        - News : data-table + toggle-button DIAPO 8 screen news+ajout news
+
+	        - Clients : la liste des inscrits sur l’application. DIAPO 9
+         +d’accéder aux informations d’un client,liste des commandes et les commentaires.
+         + webservice récuperation des clients
+
+	        - Commentaires : les commentaires postés par les clients,
+         toggle-button pour pouvoir publier ou non le commentaire (modération).
+        + webservice récuperation des commentaires
+
+	        - Statistiques : outils de reporting et d’informations sur les usages des clients de la pizzeria.
+		        - total des ventes : MorrisJS: graphique récapitulatif des ventes sur 12 mois, 30 jours, 7 jours
+                - infos pizzas/ingrédients/bases : informations sur les ventes par type de recette.
+		        - géolocalisation des clients : map OpenLayer les positions géographiques des commandes.
+                - Commandes : historique des commandes passées via l’application.
+
+		3.3 Application mobile  DIAPO XXX: workflow Application
+
 			workflow de l'application
 			login/create account
 			main page
