@@ -5,15 +5,17 @@ Plan:
 			42 ans, développeur Javascript NodeJS/Angular...
 		1.2 Wallie
 			Dans le cadre de la formation au Greta, j'ai effectué un stage de 3 semaines
-dans l'entreprise Wallie Création 
-développement de site internet et applications web
-Hossegor, Gérant Vincent PINTAT
+			dans l'entreprise Wallie Création 
+				développement de site internet et applications web
+				Hossegor, Gérant Vincent PINTAT
 		1.3 Pizza Louis
 			Pizzeria familliale de Tercis les bains
+			actuellement: client téléphone et commande, vient chercher 30 minutes min après
+
 	2 Projet
 		2.1 Description des besoins
 			Permettre au client de commandes 1 ou plusieurs pizzas via son smartphone
-			permettre de gérer les recettes, ingrédients simplements
+			permettre de gérer les recettes, ingrédients simplements et de ne proposer à la carte QUE les pizzas possibles
 			avoir la liste des commandes du jour et un historique des commandes
 			
 			récupérer des informations de consommation pour s'adapter (stock, pub...)
@@ -26,15 +28,21 @@ Hossegor, Gérant Vincent PINTAT
 			Base de données: PostgreSQL
 			serveur: NodeJS + Express + middlewares (express-validator, sequelize, multer....)
 			admin front: template bootstrap+ JQuery
-			appli front: angular4 + template Bootstrap
+			appli front: angular4 + template Bootstrap (uniquement le Bootstrap CSS)
 
 		3.2 Administration du site
-			Les recettes et ingrédients
+			Les recettes et ingrédients:
+				affichage des recettes/ingrédients + active/désactive rapide
+				Création d'une recette/ajout d'un ingrédient
 			News
+				création d'un news et publication
+				commentaires et modération
 			Informations sur les clients
+				liste des clients enregistrés dans l'application
+				informations sur un client
 			Commandes:
 				historique
-				temps réel
+				temps réel: socketIO
 			Statistiques:
 				gestion du stock/recettes
 				répartition des commandes
@@ -52,5 +60,3 @@ Hossegor, Gérant Vincent PINTAT
 				paypal
 			fin.
 	4 Remerciements
-
-
