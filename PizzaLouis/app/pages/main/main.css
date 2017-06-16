@@ -1,0 +1,40 @@
+.grey{
+    background-color: #f4f4f4;
+    padding: 20px;
+}
+label{
+  text-align: center;
+
+}
+.title, .name{
+  font-size: 30px;
+        line-height: 1.8em;
+        font-weight: 100;
+      margin-top: 100px;
+}
+.slogan, .citation{
+  font-size: 20px;
+  margin-top:60px;
+  margin-bottom: 60px;
+}
+.citation{
+    font-style: italic;
+}
+.line{
+  width: 200px;
+  height: 1px;
+  background-color: #65d269;
+  margin-bottom: 60px;
+}
+.small{
+    width:200px;
+    margin-bottom: 20px;
+    margin-top:20px;
+}
+.list-group{
+    margin-bottom: 50px;
+}
+.list-group-item{
+    background-color:white;
+    
+}

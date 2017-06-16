@@ -34,7 +34,13 @@ label{
       margin-top: 100px;
 }
 .slogan{
-  font-size: 20px;
+  font-size: 26px;
   margin-top:60px;
+  margin-bottom: 60px;
+}
+.line{
+  width: 200px;
+  height: 1px;
+  background-color: white;
   margin-bottom: 60px;
 }

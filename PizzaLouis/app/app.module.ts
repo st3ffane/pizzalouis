@@ -5,6 +5,8 @@ import { NativeScriptHttpModule } from "nativescript-angular/http";
 import { NativeScriptRouterModule } from "nativescript-angular/router";
 import { routes, navigableComponents } from "./app.routing";
 
+import {CitationPipe} from "./pipes/citation.pipe";
+
 
 import { AppComponent } from "./app.component";
 
@@ -19,7 +21,7 @@ import { WSProvider } from "./shared/ws/ws.provider";
            NativeScriptRouterModule,//ne pas oublier celui la!!!
            NativeScriptRouterModule.forRoot(routes)
            ],
-  declarations: [AppComponent,...navigableComponents],
+  declarations: [AppComponent,CitationPipe,...navigableComponents],
   providers:[WSProvider],
   bootstrap: [AppComponent]
 })

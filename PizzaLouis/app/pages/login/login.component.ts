@@ -13,8 +13,9 @@ import {GREEN} from "../../shared/colors";
   <StackLayout>
     <StackLayout>
       <Label class="title" text="Pizzas Louis"></Label>
-      <Label textWrap="true" class="slogan" text="la passion de la véritable pizza artisanale."></Label>
+      <Label textWrap="true" class="slogan" text="LA PASSION DE LA VERITABLE PIZZA ARTISANALE."></Label>
     </StackLayout>
+    <StackLayout class="line"></StackLayout>
     <StackLayout class="shrink">
     <TextField style.placeholderColor="white" hint="server local ip" [(ngModel)]="server_ip"
       autocorrect="false" autocapitalizationType="none"></TextField>

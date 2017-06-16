@@ -1,0 +1,27 @@
+<ScrollView>
+		<StackLayout class="grey">
+            <StackLayout>
+                <Label class="title" text="Notre carte"></Label>
+                <Label textWrap="true" class="slogan" text="Toutes nos pizzas sont fabriquées sur place de façon artisanale."></Label>
+                </StackLayout>
+            <StackLayout class="line"></StackLayout>
+
+			
+			<StackLayout class="list-group" *ngFor='let pizza of pizzas' >
+                
+                    <StackLayout *ngIf="pizza" class="list-group-item">
+                        <Image row="0" col="0" rowSpan="2" height="108" width="108"  [src]="pizza.picture" class="thumb p-16"></Image>
+                        
+                            <Label row="0" col="0" [text]="pizza.nom" class="name"></Label>
+                            <StackLayout class="line small"></StackLayout>
+                            <Label textWrap="true" row="1" col="0" class="slogan citation" [text]="pizza.slogan | citation"></Label>   
+                            
+                    </StackLayout>
+                
+            </StackLayout>
+
+            
+		</StackLayout>
+</ScrollView>
+	
+	

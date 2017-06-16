@@ -3,6 +3,7 @@
 Page {
   background-color: white;
   font-size: 15;
+  font-family: 'SourceSansPro-ExtraLight';
 }
 TextField {
   padding: 10;

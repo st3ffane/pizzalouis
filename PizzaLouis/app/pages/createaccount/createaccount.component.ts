@@ -13,6 +13,7 @@ import {Page} from "ui/page";
       <Label class="title" text="CREER UN COMPTE"></Label>
       <Label textWrap="true" class="slogan" text="Rien de plus simple! Il vous suffit de remplir le formulaire ci-dessous, et c'est tout."></Label>
     </StackLayout>
+    <StackLayout class="line"></StackLayout>
     <StackLayout>
     
     <TextField hint="Entrez votre prénom, il vous servira de login" [(ngModel)]="login"
@@ -21,7 +22,7 @@ import {Page} from "ui/page";
      </StackLayout>
     <ActivityIndicator [busy]="is_processing" [visibility]="is_processing ? 'visible' : 'collapse'" row="1" horizontalAlignment="center" verticalAlignment="center"></ActivityIndicator>
     
-      <Button text="CREER VOTRE COMPTE" [visibility]="is_processing ? 'collapse' : 'visible'"  (tap)="submit()"></Button>
+    <Button text="Créez votre compte" [visibility]="is_processing ? 'collapse' : 'visible'"  (tap)="submit()"></Button>
       
    
   </StackLayout>
