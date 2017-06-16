@@ -9,7 +9,6 @@
   margin-left: 16;
   margin-right: 16;
   margin-bottom: 10;
-  color:white;
   
 }
 button {
@@ -23,12 +22,11 @@ button:active{
 }
 
 label{
-  color:white;
   text-align: center;
 
 }
 .title{
-  font-size: 40px;
+  font-size: 30px;
         line-height: 1.8em;
         font-weight: 100;
       margin-top: 100px;

@@ -1,0 +1,5 @@
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+var color_1 = require("color");
+exports.GREEN = new color_1.Color("#65d269");
+//# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoiY29sb3JzLmpzIiwic291cmNlUm9vdCI6IiIsInNvdXJjZXMiOlsiY29sb3JzLnRzIl0sIm5hbWVzIjpbXSwibWFwcGluZ3MiOiI7O0FBQUEsK0JBQTRCO0FBR2YsUUFBQSxLQUFLLEdBQVMsSUFBSSxhQUFLLENBQUMsU0FBUyxDQUFDLENBQUMiLCJzb3VyY2VzQ29udGVudCI6WyJpbXBvcnQge0NvbG9yfSBmcm9tIFwiY29sb3JcIjtcblxuXG5leHBvcnQgY29uc3QgR1JFRU46Q29sb3IgPSBuZXcgQ29sb3IoXCIjNjVkMjY5XCIpO1xuIl19

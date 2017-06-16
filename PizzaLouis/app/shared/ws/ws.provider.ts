@@ -1,6 +1,6 @@
 import {Injectable} from "@angular/core";
 import {Http, Headers} from "@angular/http";
-//import {Router} from "@angular/router";
+import {Router} from "@angular/router";
 import 'rxjs/add/operator/toPromise';
 
 import { CanActivate }    from '@angular/router';
@@ -33,7 +33,7 @@ export class WSProvider implements CanActivate{
     private SERVER_URL = "";// "http://192.168.1.16:3000/";//pour les tests
 
 
-    constructor(private _http:Http){//, private _route:Router){
+    constructor(private _http:Http, private _route:Router){
         //this.getLocation();
 
 
@@ -54,7 +54,7 @@ export class WSProvider implements CanActivate{
     canActivate() {    
         
         if (this.isAuthenticate()) return true;
-        //else this._route.navigate(["/login"])
+        else this._route.navigate(["/login"])
     }
 
 
