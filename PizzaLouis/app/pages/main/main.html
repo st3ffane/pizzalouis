@@ -6,16 +6,32 @@
                 </StackLayout>
             <StackLayout class="line"></StackLayout>
 
-			
+			<ActivityIndicator [busy]="is_processing" [visibility]="is_processing ? 'visible' : 'collapse'" row="1" horizontalAlignment="center" verticalAlignment="center"></ActivityIndicator>
+    
 			<StackLayout class="list-group" *ngFor='let pizza of pizzas' >
                 
                     <StackLayout *ngIf="pizza" class="list-group-item">
-                        <Image row="0" col="0" rowSpan="2" height="108" width="108"  [src]="pizza.picture" class="thumb p-16"></Image>
+                        <Image   height="auto" width="98%"  [src]="pizza.picture |tourl" class="thumb p-16"></Image>
                         
                             <Label row="0" col="0" [text]="pizza.nom" class="name"></Label>
                             <StackLayout class="line small"></StackLayout>
-                            <Label textWrap="true" row="1" col="0" class="slogan citation" [text]="pizza.slogan | citation"></Label>   
+                            <StackLayout horizontalAlignment="center" class="stars" width="100%" orientation="horizontal">
+                                <Image class="icon-star"  src="~/images/star.png" *ngIf='pizza.note>0'></Image>
+								<Image class="icon-star"  src="~/images/star.png" *ngIf='pizza.note>1'></Image>
+								<Image class="icon-star" src="~/images/star.png" *ngIf='pizza.note>2'></Image>
+								<Image class="icon-star"  src="~/images/star.png" *ngIf='pizza.note>3'></Image>
+								<Image class="icon-star" src="~/images/star.png" *ngIf='pizza.note>4'></Image>
+								
+                            </StackLayout>
                             
+                            
+                            <Label textWrap="true" row="1" col="0" class="slogan citation" [text]="pizza.slogan | citation"></Label>   
+                            <GridLayout columns="50, auto" columns="auto, *" rows="auto, auto" class="infos">
+                            <Label class="details-title" row="0" col="0" text="Base:"></Label> <Label class="strong" textWrap="true" row="0" col="1"  [text]='pizza.base.nom'></Label>
+							<Label class="details-title" row="1" col="0" text="Ingrédients:"></Label> <Label class="strong" row="1" textWrap="true" col="1"  [text]='pizza.ingredients'></Label>
+							
+							 </GridLayout>
+                             <Button class="simple" text="Plus de détails" [nsRouterLink]="['/pizzas',pizza.id]" pageTransition="flip" ></Button>
                     </StackLayout>
                 
             </StackLayout>

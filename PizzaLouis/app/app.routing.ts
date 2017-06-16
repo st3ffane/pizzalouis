@@ -1,6 +1,7 @@
 import {LoginComponent} from "./pages/login/login.component";
 import {MainComponent} from "./pages/main/main.component";
 import {CreateAccountComponent} from './pages/createaccount/createaccount.component';
+import {DetailsComponent} from "./pages/details/details.component";
 
 import {WSProvider} from "./shared/ws/ws.provider";
 
@@ -56,6 +57,11 @@ export const routes=[
         component:CreateAccountComponent
     },
     {
+        path:"pizzas/:id",
+        component:DetailsComponent,
+        canActivate: [WSProvider]
+    },
+    {
         path:"**",
         redirectTo:"/login"
     },
@@ -64,4 +70,5 @@ export const navigableComponents = [
     LoginComponent,
     MainComponent,
     CreateAccountComponent,
+    DetailsComponent
 ];

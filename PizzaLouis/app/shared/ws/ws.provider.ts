@@ -30,7 +30,7 @@ export class WSProvider implements CanActivate{
     }
 
     toolate = false;
-    private SERVER_URL = "";// "http://192.168.1.16:3000/";//pour les tests
+    SERVER_URL = "";// "http://192.168.1.16:3000/";//pour les tests
 
 
     constructor(private _http:Http, private _route:Router){

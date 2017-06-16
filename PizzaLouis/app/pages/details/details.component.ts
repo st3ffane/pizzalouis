@@ -5,14 +5,14 @@ import {Router} from "@angular/router";
 import {Page} from "ui/page";
 
 @Component({
-    selector:"pizza-main",
-    templateUrl:`pages/main/main.html`,
-  styleUrls: ["pages/main/main.css"]
+    selector:"pizza-details",
+    templateUrl:`pages/details/details.html`,
+  styleUrls: ["pages/details/details.css"]
 })
-export class MainComponent implements OnInit{
+export class DetailsComponent implements OnInit{
 
   
-    pizzas:Array<any> = [];
+    pizza:any;
     is_processing:boolean = false;
 
     constructor(page:Page, private _ws:WSProvider, private _router:Router ){
@@ -22,18 +22,8 @@ export class MainComponent implements OnInit{
   ngOnInit(){
     this.is_processing = true;
     //recupere la liste des pizzas
-    this._ws.getPizzasList().then(dt=>{
-      this.is_processing = false;
-      this.pizzas = dt;
-
-    }).catch(err=>{
-      console.log(err);//TODO
-      this.is_processing = false;
-    })
-  }
-
-  showPizzaDetails(evt){
     
   }
+
   
 }
