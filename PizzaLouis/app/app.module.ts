@@ -3,10 +3,17 @@ import { NativeScriptModule } from "nativescript-angular/nativescript.module";
 import { NativeScriptFormsModule } from "nativescript-angular/forms";
 import { NativeScriptHttpModule } from "nativescript-angular/http";
 import { NativeScriptRouterModule } from "nativescript-angular/router";
+
+import { Border } from "tns-core-modules/ui/border";
+
+
+
 import { routes, navigableComponents } from "./app.routing";
 
 import {CitationPipe} from "./pipes/citation.pipe";
 import {ToUrlPipe} from "./pipes/to.url.pipe";
+import {ReadableDatePipe} from "./pipes/date";
+
 
 import { AppComponent } from "./app.component";
 
@@ -24,6 +31,7 @@ import { WSProvider } from "./shared/ws/ws.provider";
   declarations: [AppComponent,
           CitationPipe,
           ToUrlPipe,
+          ReadableDatePipe,
           ...navigableComponents],
   providers:[WSProvider],
   bootstrap: [AppComponent]

@@ -1,0 +1,60 @@
+.details{
+    margin-bottom: 50px;
+}
+
+
+.ingredients{
+    border: 1px solid #E3E3E3;
+    width: 80%;
+}
+.ingredients .name{
+    font-size: 20px;
+    font-family: "SourceSansPro-Bold";
+}
+.infos-label{
+    color: #65d269;
+    font-size: 20px;
+    text-align: left;
+    margin-top: 40px;
+    padding-left: 10px;
+}
+.comments{
+    width: 80%;
+    margin: 10px;
+    margin-top: 40px;
+}
+.comments .comment{
+    font-size: 20px;
+    text-align:left;
+}
+.comments .auteur{
+    font-family: "SourceSansPro-Bold";
+    padding-right: 10px;
+}
+.comments .date{
+    font-family: "SourceSansPro-Italic";
+}
+.stars{
+    width: 100%;
+    text-align: right;
+}
+.stars Image{
+    width: 48px;
+    height: 48px;
+    padding: 5px;
+}
+.comment-form{
+    width: 80%;
+    margin-top: 100px;
+}
+
+button {
+    color: #65d269;
+    background-color: white;
+  font-family: "SourceSansPro-Bold";
+  margin-top: 20;
+  font-size: 20px;
+}
+button:active{
+    background-color: #377539;
+}

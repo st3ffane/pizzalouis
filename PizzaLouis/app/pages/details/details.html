@@ -1,0 +1,85 @@
+<ScrollView>
+		<StackLayout class="details">
+            
+			<ActivityIndicator [busy]="is_processing" [visibility]="is_processing ? 'visible' : 'collapse'" row="1" horizontalAlignment="center" verticalAlignment="center"></ActivityIndicator>
+    
+			
+                
+                    <StackLayout *ngIf="pizza">
+                        <Image   height="auto" width="100%"  [src]="pizza.picture |tourl" class="thumb p-16"></Image>
+                        
+                            <Label [text]="pizza.nom" class="name"></Label>
+                            <StackLayout class="line small"></StackLayout>
+                            <StackLayout horizontalAlignment="center" class="stars" width="100%" orientation="horizontal">
+                                
+                                <Image class="icon-star"  src="~/images/star.png" *ngIf='pizza.note>0'></Image>
+								<Image class="icon-star"  src="~/images/star.png" *ngIf='pizza.note>1'></Image>
+								<Image class="icon-star" src="~/images/star.png" *ngIf='pizza.note>2'></Image>
+								<Image class="icon-star"  src="~/images/star.png" *ngIf='pizza.note>3'></Image>
+								<Image class="icon-star" src="~/images/star.png" *ngIf='pizza.note>4'></Image>
+								
+                            </StackLayout>
+                            
+                            
+                            <Label textWrap="true" row="1" col="0" class="slogan citation" [text]="pizza.slogan | citation"></Label>   
+                             <Label textWrap="true" row="1" col="0" [text]="pizza.lon_desc"></Label> 
+                            <!-- les ingrédients -->
+                        <StackLayout>
+                            <StackLayout class="ingredients">
+                                <Label [text]="pizza.base.nom" class="name"></Label>
+                                <StackLayout class="line small"></StackLayout>
+                                <Label textWrap="true"  [text]="pizza.base.description"></Label> 
+                            </StackLayout>
+                            <StackLayout class="ingredients" *ngFor="let ingredient of pizza.ingredients">
+                                <Label [text]="ingredient.nom" class="name"></Label>
+                                <StackLayout class="line small"></StackLayout>
+                                <Label textWrap="true"  [text]="ingredient.description"></Label> 
+                            </StackLayout>
+                        </StackLayout>
+                            <!-- les comments -->
+                        
+                        <StackLayout *ngIf="pizza.comments.length > 0">
+                            <Label class="infos-label" text="Les derniers commentaires"></Label>
+                            <StackLayout class="comments" *ngFor="let comment of pizza.comments">
+                                <Label textWrap="true" class="comment" [text]="comment.texte"></Label>
+                            <StackLayout horizontalAlignment="right" class="stars" width="100%" orientation="horizontal">
+                                <Image class="icon-star"  src="~/images/star.png" *ngIf='comment.note>0'></Image>
+								<Image class="icon-star"  src="~/images/star.png" *ngIf='comment.note>1'></Image>
+								<Image class="icon-star" src="~/images/star.png" *ngIf='comment.note>2'></Image>
+								<Image class="icon-star"  src="~/images/star.png" *ngIf='comment.note>3'></Image>
+								<Image class="icon-star" src="~/images/star.png" *ngIf='comment.note>4'></Image>
+								
+                            </StackLayout>
+                                <StackLayout orientation="horizontal">
+                                    <Label textWrap="true" class="auteur" [text]="comment.user.nom"></Label>
+                                    <Label textWrap="true" class="date" [text]="comment.date | readableDate"></Label>
+                                </StackLayout>
+                            </StackLayout>
+                        </StackLayout>
+                        
+
+                            <!-- formulaire de comment -->
+                            <StackLayout class="comment-form">
+                                <Label *ngIf="pizza.comments == 0" textWrap="true" class="infos-label" text="Soyez le premier a poster un commentaire!"></Label>
+                                <Label *ngIf="pizza.comments > 0" textWrap="true" class="infos-label" text="Vous avez la parole!"></Label>
+                                
+                                
+                                <TextView [(ngModel)]="message" hint="Laissez nous un message" 
+                                    class="input input-border" height="100px"></TextView>
+                                <Label class="infos-label" textWrap="true" text="Vous avez aimé cette recette, donnez lui une appréciation!"></Label>
+                                <ListPicker [items]="notes" selectedIndex="4" (selectedIndexChange)="selectedIndexChanged($event)" class="p-15"></ListPicker>
+                                
+                                
+                                <ActivityIndicator [busy]="is_sending" [visibility]="is_processing ? 'visible' : 'collapse'" row="1" horizontalAlignment="center" verticalAlignment="center"></ActivityIndicator>
+    
+                                <Button [visibility]="!is_sending ? 'visible' : 'collapse'"  text="Postez votre message" (tap)="sendMessage()"></Button>
+                            </StackLayout>
+                    </StackLayout>
+                
+            
+
+            
+		</StackLayout>
+</ScrollView>
+	
+	
