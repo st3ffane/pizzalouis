@@ -41,3 +41,13 @@ Pour tester l'appli (juste une note pour pas oublier le process!), l'ordinateur 
 en théorie, tout marche!
 
 *A tester avec un réseau crée par le téléphone lui même...*
+
+# Pizzaapp
+Application html5/css3/Angular4 empaquetée dans une appli cordova
+* Probleme erreurs js: utilise crosswalk pour embarquer un chrome dans l'appli
+* router: suppression base href dans la page principale (mise en place via le service dans app.module)
+* probleme de path pour les ressources: quand possible (petites icones principalement), embarque les icones en base64
+* qqs problemes de css a regler...
+
+**Ajoute un field "serveur IP" dans la  page de login -dev only- pour permettre de tester l'appli en connectant le
+téléphone au même réseau wifi que l'ordi faisant tourner le serveur**
