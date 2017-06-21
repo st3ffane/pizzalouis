@@ -44,7 +44,7 @@
 								<p *ngIf="error" class="alert alert-danger">{{error}}</p>
 								<p *ngIf="success" class="alert alert-success">Nous vous remercions pour votre message</p>
 								<div *ngIf="!is_processing">
-										<input [disabled]="!msg.form.valid" class="btn btn-primary btn-lg full-size" type="submit" value="Postez votre message">
+										<input [disabled]="!msg.form.valid" class="btn btn-primary  full-size" type="submit" value="Postez votre message">
 								</div>
 								<div *ngIf="is_processing">
 									<p>Envoie du message....

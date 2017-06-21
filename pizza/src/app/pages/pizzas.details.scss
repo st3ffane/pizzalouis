@@ -165,7 +165,6 @@ margin:10px;
 }
 
 
-
 $unchecked-star: '\2606';
 $unchecked-color: white;
 $checked-star: '\2605';
@@ -175,7 +174,7 @@ $checked-color: #e7f547;
   /* remove inline-block whitespace */
   font-size: 0;
   * {
-    font-size: 5rem;
+    font-size: 3rem;
   }
   /* flip the order so we can use the + and ~ combinators */
   unicode-bidi: bidi-override;
