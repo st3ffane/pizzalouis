@@ -6,6 +6,9 @@
 @import "./css/bootstrap.css";
 @import "./css/green.css";
 
+html{
+  font-size: 0.9em;
+}
 .js .to-animate,
 .js .to-animate-2,
 .js .single-animate {

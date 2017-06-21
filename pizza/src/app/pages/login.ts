@@ -14,12 +14,15 @@ export default class LoginComponent{
     is_processing:boolean = false;
     error:string = null;
 
+    custom_server:string;
 
     constructor(private _ws:WSProvider, private _route:Router){}
     ngOnInit(){
         this._ws.setAuthInfos(null);
     }
     processAuth(){
+        if(this.custom_server) this.setServerURL();
+        
         this.error = null;
         this.is_processing = true;
         this._ws.login(this.name,this.password).then( (dt)=>{
@@ -33,5 +36,9 @@ export default class LoginComponent{
             this.error = "Erreur d'authentification";
             this.is_processing = false;
         });
+    }
+
+    setServerURL(){
+        this._ws.setServerIP(this.custom_server);
     }
 }

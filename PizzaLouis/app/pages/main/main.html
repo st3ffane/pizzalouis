@@ -31,7 +31,14 @@
 							<Label class="details-title" row="1" col="0" text="Ingrédients:"></Label> <Label class="strong" row="1" textWrap="true" col="1"  [text]='pizza.ingredients'></Label>
 							
 							 </GridLayout>
+
                              <Button class="simple" text="Plus de détails" [nsRouterLink]="['/pizzas',pizza.id]" pageTransition="flip" ></Button>
+
+
+                             <Label text="Pick a pizza"></Label>
+                             <Slider [minValue]="0" [maxValue]="10" [value]="3"></Slider>
+
+
                     </StackLayout>
                 
             </StackLayout>

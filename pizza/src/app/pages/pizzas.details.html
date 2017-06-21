@@ -1,7 +1,7 @@
 <div id="fh5co-testimonials" data-section="testimonials">		
 		<div *ngIf="pizza" class="container">
 			<div class="row">
-				<img class="news-img" [src]="'/images/pizzas/'+pizza.picture">
+				<img class="news-img" [src]="pizza.picture | tourl">
 			</div>
 			<div class="row">
 				

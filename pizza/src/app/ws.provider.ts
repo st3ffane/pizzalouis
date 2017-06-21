@@ -12,6 +12,13 @@ import { CanActivate }    from '@angular/router';
 export class WSProvider implements CanActivate{
     auth_token:string = null;//par defaut, non identifier
     pizzas = [];//pour eviter des les recharger a chaque fois 
+    //en cas de test via telephone, permet de se connecter a un serveur XXXX
+    SERVER_URL = "";// "http://192.168.1.16:3000/";//pour les tests
+
+    setServerIP(ip){
+        this.SERVER_URL = "http://"+ip+":3000";//enregistre @DEV ONLY
+    }
+
     location:any =  {
                 latitude:43.669070,
                 longitude:-1.105356
@@ -160,8 +167,7 @@ export class WSProvider implements CanActivate{
     }
 
 
-    private SERVER_URL = "";// "http://192.168.1.16:3000/";//pour les tests
-
+    
     private sendGetToServer(url,datas?:string){
         let headers =  new Headers({'Content-Type': 'application/json'});
         console.log("Authoticate: "+this.auth_token)

@@ -13,8 +13,7 @@ import { routes, navigableComponents } from "./app.routing";
 import {CitationPipe} from "./pipes/citation.pipe";
 import {ToUrlPipe} from "./pipes/to.url.pipe";
 import {ReadableDatePipe} from "./pipes/date";
-
-
+import {PizzaPickerComponent} from './pages/picker/picker.component';
 import { AppComponent } from "./app.component";
 
 import "./shared/rxjs-operators";
@@ -32,6 +31,8 @@ import { WSProvider } from "./shared/ws/ws.provider";
           CitationPipe,
           ToUrlPipe,
           ReadableDatePipe,
+          
+          
           ...navigableComponents],
   providers:[WSProvider],
   bootstrap: [AppComponent]
